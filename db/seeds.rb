@@ -1,3 +1,6 @@
+=begin
+
+# EndUserのテストデータ
 EndUser.create(
   [
     {
@@ -12,7 +15,7 @@ EndUser.create(
   ]
 )
 
-# Ingredientの作成
+# Ingredientのテストデータ
 [
   [1, '水', 0, 5],
   [10, 'お米', 0, 0],
@@ -65,3 +68,42 @@ EndUser.create(
 ].each do |id, name, unit, html_color|
   Ingredient.create(id: id, name: name, unit: unit, html_color: html_color)
 end
+
+# FridgeItemのテストデータ
+[
+  [1, 100, 800],
+  [1, 1000, 4],
+  [1, 1003, 8],
+  [1, 1009, 14],
+  [1, 10, 120],
+  [1, 3000, 4],
+  [1, 3002, 4],
+  [1, 5000, 9999],
+  [1, 5001, 9999],
+  [1, 5002, 9999],
+  [1, 5004, 9999],
+  [1, 5000, 9999],
+  [1, 5007, 9999],
+  [1, 5008, 9999],
+  [1, 5009, 9999],
+  [1, 5010, 9999],
+].each do |user, ing, amo|
+  FridgeItem.create(end_user_id: user, ingredient_id: ing, amount: amo)
+end
+
+=end
+
+
+
+# seedチェック
+=begin
+
+## FridgeItem
+FridgeItem.all.each do |data|
+  puts ("\n" + data.id.to_s)
+  puts data.end_user.user_name
+  puts data.ingredient.name
+  puts "#{data.amount} #{data.ingredient.unit}"
+end
+
+=end
