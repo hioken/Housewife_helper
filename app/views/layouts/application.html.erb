@@ -14,11 +14,11 @@
     <header>
       <div class="c_head a_flex">
         <h1>Page</h1>
-        <%= link_to "カテゴリー一覧", root_path,class:"b_link__h" %>
-        <%= link_to "レシピをよむ", root_path,class:"b_link__h" %>
-        <%= link_to "日付を進める", root_path,class:"b_link__h" %>
+        <%= link_to "カテゴリー一覧", url: "",class:"b_link__h" %>
+        <%= link_to "レシピをよむ", url: "",class:"b_link__h" %>
+        <%= link_to "日付を進める", url: "",class:"b_link__h" %>
 
-        <%= form_tag(root_path,:method => 'get') do %>
+        <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '料理名・食材でレシピをさがす' %>
         <% end %>
       </div>
@@ -27,7 +27,7 @@
     <% if false %>
       <div class="c_box__announce">
         <div class="c_box__announce_inner c_fadein">
-          <%= form_with url: root_path, method: :get do |f| %>
+          <%= form_with url: "", method: :get do |f| %>
             <% 3.times do %>
               <table class="table c_table__announce">
                 <tbody>
@@ -61,7 +61,7 @@
 
     <footer>
       <div class="c_foot">
-       <%= link_to "概要", root_path,class:"c_link__f" %>
+       <%= link_to "概要", url: "",class:"c_link__f" %>
       </div>
     </footer>
   </body>

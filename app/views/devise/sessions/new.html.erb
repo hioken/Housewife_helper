@@ -13,18 +13,11 @@
         <%= f.password_field :password, autocomplete: "current-password" %>
       </div>
 
-      <% if devise_mapping.rememberable? %>
-        <div class="field">
-          <%= f.check_box :remember_me %>
-          <%= f.label :remember_me %>
-        </div>
-      <% end %>
 
       <div class="a_actions">
         <%= f.submit "Log in" %>
       </div>
     <% end %>
     <p>seedの承認情報を入力済みです</p>
-    <%= render "devise/shared/links" %>
   </div>
 </div>
