@@ -13,7 +13,6 @@
  *= require_tree .
  *= require_self
  */
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -52,14 +51,14 @@
 }
 
 /* リンク */
-.a_link__allrank {
+.a_box__link {
   text-align: center;
   border-radius: 8px;
   background-color: #fff;
   border: 1px #dbb34e solid;
 }
 
-.a_link__allrank:hover {
+.a_box__link:hover {
   cursor: pointer;
   background-color: #c3c7c3;
 }
@@ -406,8 +405,7 @@ input[name="b_item__radio"] {
   margin: 0 auto;
   border-radius: 12px;
 }
-  /* */
-  /* 冷蔵庫 */
+
 .c_text__report {
   width: 240px;
   display: -webkit-box;
@@ -417,7 +415,16 @@ input[name="b_item__radio"] {
   margin: 0 auto;
 }
 
-.c_box__fridge_inner {
+  /* */
+  /* 冷蔵庫 */
+.c_box__fridge{
+  padding-bottom: 32px;
+}
+.c_link__material {
+  width: 160px;
+  height: 32px;
+  margin: 8px 0 32px;
+  line-height: 32px;
 }
 
 .b_box__food {
@@ -437,8 +444,13 @@ input[name="b_item__radio"] {
   text-align: center;
 }
 
+.b_box__material {
+  margin-top: 16px;
+}
+
 .b_count__food {
   width: 100%;
+  margin-bottom: 16px;
   justify-content: center;
   align-items: center;
 }
@@ -447,12 +459,49 @@ input[name="b_item__radio"] {
   margin-right: 8px;
 }
 
-.b_count__food_inner {
+.b_count__material {
+  flex-flow: wrap-reverse;
+  width: 76px;
+}
+
+.b_count__material_inner {
   width: 8px;
   height: 8px;
-  margin: 0 4px;
+  margin: 4px 4px 0;
   border-radius: 50%;
-  background-color: red;
+}
+
+.b_count__material_inner:nth-child(5n) {
+  margin-right: 0;
+}
+
+.b_form__count {
+  margin: 16px;
+}
+
+.b_field__count select {
+  width: 64px;
+  height: 32px;
+  margin-left: 20px;
+  border-radius: 12px;
+}
+
+.b__submit__count input[type="submit"] {
+  width: 49px;
+  height: 32px;
+  margin: 0 8px;
+  border-radius: 12px;
+}
+
+.c_box__cut_back_link {
+  position: absolute;
+  right: 40px;
+}
+
+.c_link__cut_back {
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
 }
 
 /* フッター */
