@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_000051) do
+ActiveRecord::Schema.define(version: 2021_02_18_051040) do
 
   create_table "end_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 2021_02_18_000051) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_end_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_end_users_on_reset_password_token", unique: true
+  end
+
+  create_table "ingredients", primary_key: "code", id: { limit: 4 }, force: :cascade do |t|
+    t.string "name"
+    t.integer "unit"
+    t.integer "html_color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end
