@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
+=begin
 EndUser.create(
   [
     {
@@ -89,3 +89,4 @@ EndUser.create(
 ].each do |code, name, unit, html_color|
   Ingredient.create(code: code, name: name, unit: unit, html_color: html_color)
 end
+=end
