@@ -1,0 +1,469 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+	outline : none;
+}
+
+/* 横並び */
+.a_flex {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+/* カーソル指定 */
+.a_pointer {
+  cursor: pointer;
+}
+
+/* submit */
+.a_actions input[type="submit"] {
+  border-style: none;
+  width: 100%;
+  height: 32px;
+  margin: 8px 0;
+  background-color: #fff;
+  border-radius: 4px;
+  color: #dbb34e;
+  border: 1px #dbb34e solid;
+}
+
+.a_actions input[type="submit"]:hover {
+  cursor: pointer;
+  background-color: #c3c7c3;
+}
+
+/* リンク */
+.a_link__allrank {
+  text-align: center;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px #dbb34e solid;
+}
+
+.a_link__allrank:hover {
+  cursor: pointer;
+  background-color: #c3c7c3;
+}
+
+.a_link {
+  color: #dbb34e;
+}
+
+/* ヘッダー */
+header {
+  border-bottom: 1px #c3c7c3 solid;
+  box-shadow: 0 2px 8px gray;
+  margin-bottom: 28px;
+}
+
+.c_head{
+  margin: 0 auto;
+  width: 90%;
+  height: 64px;
+}
+
+.c_head > h1 {
+  margin-right: 4px;
+}
+
+.b_link__h {
+  margin: 16px 0 0 8px;
+  color: #6e6a65;
+  font-weight: bold;
+}
+
+/* アナウンス */
+.c_box__announce_inner {
+  width: 400px;
+  background-color: #fff;
+  border: 1px #6e6a65 solid;
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 32px;
+}
+
+.c_fadein {
+  opacity: 0;
+  animation: fadein-top 2.5s .3s ease-out forwards;
+}
+@keyframes fadein-top {
+  0% {
+     opacity: 0;
+     transform: translateY(-20px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateY(0);
+  }
+}
+
+.c_table__announce {
+  margin: 0 auto 16px;
+}
+
+
+.c_field__announce select {
+  width: 100px;
+  height: 50px;
+  padding: 0 16px;
+  margin-left: 12px;
+  border-radius: 8px;
+}
+
+.c__submit__announce {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.c__submit__announce input[type="submit"] {
+  border-radius: 24px;
+}
+
+
+/* サインイン・ログイン */
+.c_form {
+  margin: 20px 0 0 12px;
+  width: 440px;
+  text-align: center;
+}
+
+.b_login {
+  margin: 0 auto;
+}
+
+.a_box__user {
+  color: #4b4a49;
+  width: 352px;
+  height: 312px;
+  margin: 64px auto;
+  border-radius: 8px;
+  border: 1px #6e6a65 solid;
+}
+
+.b_space__box {
+  height: 332px;
+}
+
+.a_box__user_inner {
+  padding: 20px 24px;
+}
+
+.field input[type="email"], .field input[type="password"] {
+  border-style: none;
+  width: 100%;
+  height: 32px;
+  border: 1px solid #908d89;
+  border-radius: 4px;
+  padding: 0 8px;
+}
+
+/* recipes#top */
+.c_box__rank {
+  width: 100%;
+}
+
+.c_box__rank_inner {
+  margin: 0 auto;
+  width: 696px;
+}
+
+.c_box__rank_inner > h2 {
+  margin: 8px 24px;
+}
+
+.b_num {
+  font-weight: bold;
+  width: 64px;
+  border-radius: 8px;
+  font-size: 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.c_num1 {
+  background-color: #dbb34e;
+  margin-left: 24px;
+}
+
+.c_num2 {
+  background-color: #c3c7c3;
+  margin-left: 160px;
+}
+
+.c_num3 {
+  background-color: #aa6444;
+  margin-left: 160px;
+}
+
+.c_photo__box_rank {
+  width: 200px;
+  height: 200px;
+  margin: 10px 24px 0 0;
+}
+
+.c_photo__box_rank:first-child {
+  margin-left: 24px;
+}
+
+.c_photo__rank {
+  border-radius: 12px;
+}
+
+.c_link__rank {
+  margin: 24px;
+  font-size: 24px;
+}
+
+.c_link__space {
+  padding-left: 40px;
+}
+
+/* recipes#show */
+
+.c_lack__per {
+  width: 440px;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px #dbb34e solid;
+}
+
+.c_box__recipe_inner {
+  width: 50%;
+  margin: 0 0 72px 24px;
+}
+
+.c_photo__recipe_show {
+  border-radius: 12px;
+}
+
+.c_show {
+  margin-left: 40px;
+}
+
+.c_show2 {
+  margin: 48px 40px 0;
+}
+
+.c_rink__admin {
+  border-radius: 20px;
+  position: fixed;
+  bottom: 48px;
+  width: 45%;
+}
+
+.c_box__lack {
+  width: 50%;
+  margin: 0 24px 0;
+  position: relative;
+}
+
+.b_center__lack {
+  text-align: center;
+}
+
+.c_table__lack {
+  margin-left: 80px ;
+}
+
+.c_form__date {
+  position: absolute;
+  bottom: 0;
+  left: 125px;
+  margin: 0;
+  padding: 0;
+}
+
+.c_form__date_inner {
+  margin: 152px auto 64px;
+  width: 280px;
+}
+
+.c_field__date input[type="date"] {
+  border-style: none;
+  width: 100%;
+  height: 32px;
+  border-radius: 4px;
+  padding: 0 8px;
+  border: 1px #c3c7c3 solid;
+  cursor: pointer;
+}
+
+.c_submit__date input[type="submit"] {
+  width: 80%;
+  height: 28px;
+  margin: 8px 28px;
+  border-radius: 20px;
+}
+
+.c_link__done {
+  width: 100%;
+  height: 28px;
+  margin: 24px auto;
+  border-radius: 20px;
+}
+
+/* end_users#show */
+.c_box__user_inner {
+  margin: 48px;
+}
+
+.c_photo__user {
+  border-radius: 50%;
+  margin-right: 24px;
+}
+
+.c_introduction__user {
+  margin-top: 8px;
+}
+
+  /* 画面切替 */
+.c__radio {
+  background-color: #fff;
+  margin: 0 auto;}
+
+.b_item__radio {
+  width: calc(100%/3);
+  height: 48px;
+  border-top: 1px #908d89 solid;
+  border-bottom: 1px #908d89 solid;
+  line-height: 50px;
+  font-size: 16px;
+  text-align: center;
+  color:  #908d89;
+  display: block;
+  float: left;
+  transition: all 0.2s ease;
+}
+
+.b_item__radio:hover {
+  opacity: 0.75;
+}
+
+input[name="b_item__radio"] {
+  display: none;
+}
+
+.b_content__radio {
+  display: none;
+  padding: 40px 40px 20px;
+  clear: both;
+}
+
+#favorite:checked ~ #favorite_content,
+#report:checked ~ #report_content,
+#fridge:checked ~ #fridge_content {
+  display: block;
+}
+
+.c__radio input:checked + .b_item__radio {
+  color: #dbb34e;
+  border-bottom: 3px #dbb34e solid;
+}
+  /* */
+.b_box__radio {
+  flex-flow: wrap;
+}
+
+  /* お気に入り&&れぽーと */
+.b_box__radio_inner {
+  width: calc(100%/3);
+  margin-bottom: 20px;
+}
+
+.b_link__radio {
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+
+.b_box__radio_inner:nth-child(3n+1):nth-last-child(-n+3),
+.b_box__radio_inner:nth-child(3n+1):nth-last-child(-n+3) ~ .b_box__radio_inner {
+  margin-bottom: 0;
+}
+
+.b_photo__radio {
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+  /* */
+  /* 冷蔵庫 */
+.c_text__report {
+  width: 240px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.c_box__fridge_inner {
+}
+
+.b_box__food {
+  width: calc(100%/3);
+}
+
+.b_box__food > p {
+  width: 200px;
+  text-align: center;
+}
+
+.b_box__food_inner {
+  border: 1px #908d89 solid;
+  border-radius: 12px;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.b_count__food {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.b_count__food > p {
+  margin-right: 8px;
+}
+
+.b_count__food_inner {
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+/* フッター */
+footer {
+  background-color: #6e6a65;
+}
+
+.c_foot {
+  text-align: center;
+}
+
+.c_link__f {
+  color: #fff;
+}
