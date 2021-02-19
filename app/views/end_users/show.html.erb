@@ -19,7 +19,7 @@
 
   <div class="b_content__radio" id="favorite_content">
     <div class="a_flex b_box__radio">
-      <% 4.times do %>
+      <% 2.times do %>
         <div class="b_box__radio_inner">
           <%= link_to(root_path, class:"b_link__radio") do %>
             <%= image_tag "cake.jpg", size: "240x240",class:"b_photo__radio" %>
@@ -32,7 +32,7 @@
 
   <div class="b_content__radio" id="report_content">
     <div class="a_flex b_box__radio">
-      <% 8.times do %>
+      <% 3.times do %>
         <div class="b_box__radio_inner">
           <%= link_to(root_path, class:"b_link__radio") do %>
             <%= image_tag "cake.jpg", size: "240x240",class:"b_photo__radio" %>
@@ -55,14 +55,14 @@
             <div class="b_box__food">
               <p>肉/魚</p>
               <div class="b_box__food_inner">
-                <% @neats_fishes.each do |ingredient| %>
+                <% @meats_fishes.each do |name, amount, html_color| %>
                   <div class="b_box__material">
-                    <h3>素材名</h3>
+                    <h3><%= name %></h3>
                     <div class="a_flex b_count__food">
                       <p>食材の数</p>
                       <div class="a_flex b_count__material">
-                        <% 4.times do %>
-                          <div class="b_count__material_inner" style="background-color:blue;">
+                        <% (amount.regam[1] / 100).times do %>
+                          <div class="b_count__material_inner" style="background-color: <%= html_color %>;">
                           </div>
                         <% end %>
                       </div>
@@ -85,14 +85,14 @@
             <div class="b_box__food">
                 <p>野菜</p>
                 <div class="b_box__food_inner">
-                  <% 1.times do %>
+                  <% @vegetables.each do |name, amount, html_color| %>
                     <div class="b_box__material">
-                      <h3>素材名</h3>
+                      <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
                         <p>食材の数</p>
                         <div class="a_flex b_count__material">
-                          <% 6.times do %>
-                            <div class="b_count__material_inner" style="background-color:blue;">
+                          <% amount.regam[1].times do %>
+                            <div class="b_count__material_inner" style="background-color:<%= html_color %>;">
                             </div>
                           <% end %>
                         </div>
@@ -115,14 +115,14 @@
             <div class="b_box__food">
                 <p>その他</p>
                 <div class="b_box__food_inner">
-                  <% 1.times do %>
+                  <% @others.each do |name, amount, html_color| %>
                     <div class="b_box__material">
-                      <h3>素材名</h3>
+                      <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
                         <p>食材の数</p>
                         <div class="a_flex b_count__material">
-                          <% 6.times do %>
-                            <div class="b_count__material_inner" style="background-color:blue;">
+                          <% amount.regam[1].times do %>
+                            <div class="b_count__material_inner" style="background-color:<%= html_color %>;">
                             </div>
                           <% end %>
                         </div>
@@ -145,16 +145,14 @@
             <div class="b_box__food">
                 <p>調味料</p>
                 <div class="b_box__food_inner">
-                  <% 2.times do %>
+                  <% @seasonings.each do |name, amount, html_color| %>
                     <div class="b_box__material">
-                      <h3>素材名</h3>
+                      <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
                         <p>食材の数</p>
                         <div class="a_flex b_count__material">
-                          <% 9.times do %>
-                            <div class="b_count__material_inner" style="background-color:blue;">
-                            </div>
-                          <% end %>
+                          <div class="b_count__material_inner" style="background-color:<%= html_color %>;">
+                          </div>
                         </div>
                       </div>
                       <%= form_with url: root_path, method: :get do |f| %>

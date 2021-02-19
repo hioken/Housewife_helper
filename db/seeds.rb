@@ -1,4 +1,5 @@
 
+=begin
 # EndUserのテストデータ
 EndUser.create(
   [
@@ -94,7 +95,6 @@ end
 
 
 # seedチェック
-=begin
 
 ## FridgeItem
 FridgeItem.all.each do |data|
@@ -104,6 +104,7 @@ FridgeItem.all.each do |data|
   puts "#{data.amount} #{data.ingredient.unit}"
 end
 
+user = EndUser.find(1)
 user.fridge_items.joins(:ingredient).pluck(:amount, :name) do |data|
   p amount
   p name
