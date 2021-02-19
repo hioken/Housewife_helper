@@ -1,4 +1,3 @@
-=begin
 
 # EndUserのテストデータ
 EndUser.create(
@@ -82,16 +81,15 @@ end
   [1, 5001, 9999],
   [1, 5002, 9999],
   [1, 5004, 9999],
-  [1, 5000, 9999],
   [1, 5007, 9999],
   [1, 5008, 9999],
   [1, 5009, 9999],
   [1, 5010, 9999],
+  [1, 5011, 9999]
 ].each do |user, ing, amo|
   FridgeItem.create(end_user_id: user, ingredient_id: ing, amount: amo)
 end
 
-=end
 
 
 
@@ -106,4 +104,8 @@ FridgeItem.all.each do |data|
   puts "#{data.amount} #{data.ingredient.unit}"
 end
 
+user.fridge_items.joins(:ingredient).pluck(:amount, :name) do |data|
+  p amount
+  p name
+end
 =end

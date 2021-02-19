@@ -1,6 +1,7 @@
 class EndUsersController < ApplicationController
   before_action :authenticate_end_user!
   def show
+    @meats_fishes = current_user.fridge_items.where(ingredient_id: )
   end
   
   def update

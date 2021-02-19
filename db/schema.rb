@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_02_18_184451) do
     t.integer "amount", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["end_user_id"], name: "index_fridge_items_on_end_user_id"
+    t.index ["end_user_id", "ingredient_id"], name: "index_fridge_items_on_end_user_id_and_ingredient_id", unique: true
   end
 
   create_table "ingredients", id: { limit: 4 }, force: :cascade do |t|
