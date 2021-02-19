@@ -13,6 +13,7 @@
  *= require_tree .
  *= require_self
  */
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -128,12 +129,12 @@ header {
   border-radius: 8px;
 }
 
-.c__submit__announce {
+.c_submit__announce {
   width: 40%;
   margin: 0 auto;
 }
 
-.c__submit__announce input[type="submit"] {
+.c_submit__announce input[type="submit"] {
   border-radius: 24px;
 }
 
@@ -336,7 +337,7 @@ header {
 }
 
   /* 画面切替 */
-.c__radio {
+.c_radio {
   background-color: #fff;
   margin: 0 auto;}
 
@@ -366,6 +367,7 @@ input[name="b_item__radio"] {
   display: none;
   padding: 40px 40px 20px;
   clear: both;
+  position: relative;
 }
 
 #favorite:checked ~ #favorite_content,
@@ -374,7 +376,7 @@ input[name="b_item__radio"] {
   display: block;
 }
 
-.c__radio input:checked + .b_item__radio {
+.c_radio input:checked + .b_item__radio {
   color: #dbb34e;
   border-bottom: 3px #dbb34e solid;
 }
@@ -434,13 +436,14 @@ input[name="b_item__radio"] {
 .b_box__food > p {
   width: 200px;
   text-align: center;
+  margin: 0 auto 4px;
 }
 
 .b_box__food_inner {
   border: 1px #908d89 solid;
   border-radius: 12px;
   width: 200px;
-  margin: 0 auto;
+  margin: 0 auto 240px;
   text-align: center;
 }
 
@@ -484,24 +487,51 @@ input[name="b_item__radio"] {
   height: 32px;
   margin-left: 20px;
   border-radius: 12px;
+  background-color: #fff;
 }
 
-.b__submit__count input[type="submit"] {
-  width: 49px;
+.b_submit__count input[type="submit"] {
+  width: 48px;
   height: 32px;
   margin: 0 8px;
   border-radius: 12px;
 }
 
-.c_box__cut_back_link {
+.c_box__setting_inner {
+  width: 80%;
   position: absolute;
-  right: 40px;
+  bottom: 32px;
+  left: 120px;
+  margin: 0;
 }
 
-.c_link__cut_back {
+.c_form__setting {
+  position: relative;
+}
+
+.c_form__setting_inner {
+  width: 160px;
+}
+
+.b_field__setting select {
+  width: 90%;
+  height: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.b_text__setting {
+  margin: 16px 0 8px;
+}
+
+.b_submit__setting  input[type="submit"] {
   width: 120px;
   height: 32px;
-  line-height: 32px;
+  border-radius: 12px;
+  position: absolute;
+  bottom: 0;
+  right: 80px;
+  margin: 0;
 }
 
 /* フッター */
