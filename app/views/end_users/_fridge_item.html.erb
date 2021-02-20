@@ -5,12 +5,10 @@
     <div class="a_flex b_count__material">
       <% regam = (unit == 'g' ? amount / 400 : amount / 4) %>
       <% regam.times do %>
-        <div class="b_count__material_inner" style="background-color: <%= html_color %>;">
-        </div>
+        <div class="b_count__material_inner" style="background-color: <%= html_color %>;"></div>
       <% end %>
       <% unless amount.divisible?(4) or unit == 'g' %>
-        <div class="b_count__material_inner_half" style="background-color:<%= html_color %>;" >
-        </div>
+        <div class="b_count__material_inner_half" style="background-color:<%= html_color %>;" ></div>
       <% end %>
     </div>
   </div>
@@ -43,7 +41,7 @@
   <div class="a_flex b_count__food">
     <p>あります</p>
   </div>
-  <%= form_with url: root_path, method: :get do |f| %>
+  <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
     <div class="a_flex b_form__count">
       <div class="a_actions a_pointer b_submit__count">
         <%= f.hidden_field :ingredient_id, value: ingredient_id %>
@@ -53,3 +51,9 @@
     </div>
   <% end %>
 <% end %>
+
+<!--メソッドリスト-->
+
+<!--divisible?: app/contorollers/application_controller.rb-->
+<!--amount_select: app/contorollers/application_controller.rb-->
+<!--gram_select: app/contorollers/application_controller.rb-->

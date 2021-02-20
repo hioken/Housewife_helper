@@ -7,7 +7,12 @@ class FridgeItemsController < ApplicationController
   
   def update
     @fridge_item = FridgeItem.find(params[:id])
-    @fridge_item.update(fridge_item_params)
+    if params[:fridge_item][:amount] != 0 
+      @fridge_item.update(fridge_item_params)
+    else
+      @fridge_item.destroy
+      render :destroy
+    end
   end
   
   private

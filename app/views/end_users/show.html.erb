@@ -50,13 +50,21 @@
         <div class="a_box__link c_link__material">
           <%= link_to "食材を追加", root_path, class:"a_pointer a_link" %>
         </div>
-          <div class="a_flex c_box__fridge_inner">
- 
-            <%= render 'fridge_items.html.erb', food_genre: '肉/魚', foods: @meats_fishes %>
-            <%= render 'fridge_items.html.erb', food_genre: '野菜', foods: @vegetables %>
-            <%= render 'fridge_items.html.erb', food_genre: 'その他', foods: @others %>
-            <%= render 'fridge_items.html.erb', food_genre: '調味料', foods: @seasonings %>
 
+        <div class="a_flex c_box__fridge_inner">
+          <div id="meats_fishes">
+            <%= render 'fridge_items.html.erb', food_genre: '肉/魚', foods: @meats_fishes %>
+          </div>
+          <div id="vegetables">
+            <%= render 'fridge_items.html.erb', food_genre: '野菜', foods: @vegetables %>
+          </div>
+          <div id="others">
+            <%= render 'fridge_items.html.erb', food_genre: 'その他', foods: @others %>
+          </div>
+          <div id="seasonings">
+            <%= render 'fridge_items.html.erb', food_genre: '調味料', foods: @seasonings %>
+          </div>
+        </div>
 
         <div class="c_box__setting">
           <div class="c_box__setting_inner">
@@ -86,7 +94,3 @@
   </div>
 </div>
 
-<!--メソッドリスト-->
-<!--divisible?: app/contorollers/application_controller.rb-->
-<!--amount_select: app/contorollers/application_controller.rb-->
-<!--gram_select: app/contorollers/application_controller.rb-->
