@@ -55,7 +55,7 @@
             <div class="b_box__food">
               <p>肉/魚</p>
               <div class="b_box__food_inner">
-                <% @meats_fishes.each do |name, amount, unit, html_color| %>
+                <% @meats_fishes.each do |id, name, amount, unit, html_color| %>
                   <div class="b_box__material">
                     <h3><%= name %></h3>
                     <div class="a_flex b_count__food">
@@ -85,7 +85,7 @@
             <div class="b_box__food">
                 <p>野菜</p>
                 <div class="b_box__food_inner">
-                  <% @vegetables.each do |name, amount, unit, html_color| %>
+                  <% @vegetables.each do |id, name, amount, unit, html_color| %>
                     <div class="b_box__material">
                       <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
@@ -115,7 +115,7 @@
             <div class="b_box__food">
                 <p>その他</p>
                 <div class="b_box__food_inner">
-                  <% @others.each do |name, amount, unit, html_color| %>
+                  <% @others.each do |id, name, amount, unit, html_color| %>
                     <div class="b_box__material">
                       <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
@@ -145,7 +145,7 @@
             <div class="b_box__food">
                 <p>調味料</p>
                 <div class="b_box__food_inner">
-                  <% @seasonings.each do |name, amount, unit, html_color| %>
+                  <% @seasonings.each do |id, name, amount, unit, html_color| %>
                     <div class="b_box__material">
                       <h3><%= name %></h3>
                       <div class="a_flex b_count__food">
