@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  resource :end_users, only: [:show, :update]
   devise_for :end_users, skip: :password
   
-  resource :end_users, only: [:show, :update]
   root 'end_users#show'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -27,6 +27,6 @@ class EndUsersController < ApplicationController
   
   private
     def end_user_params
-      params.require(:end_user).permit(:famiry_size, :cooking_time_limit)
+      params.require(:end_user).permit(:family_size, :cooking_time_limit)
     end
 end
