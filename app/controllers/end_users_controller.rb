@@ -2,7 +2,7 @@ class EndUsersController < ApplicationController
   before_action :authenticate_end_user!
   def show
     # ユーザーの冷蔵庫の情報を配列で取得、SQLを減らすために一括受取
-    foods = current_end_user.fridge_items.joins(:ingredient).pluck(:ingredient_id, :name, :amount, :unit, :html_color)
+    foods = current_end_user.fridge_items.joins(:ingredient).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
     # ジャンル別に分割
     @meats_fishes = []
     @vegetables = []
