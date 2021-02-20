@@ -1,5 +1,5 @@
 <h3><%= name %></h3>
-<% if ingredient_id < 5000 %>
+<% if ingredient_id.between?(100, 4999) %>
   <div class="a_flex b_count__food">
     <p>食材の数</p>
     <div class="a_flex b_count__material">

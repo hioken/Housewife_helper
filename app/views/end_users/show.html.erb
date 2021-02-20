@@ -52,17 +52,17 @@
         </div>
 
         <div class="a_flex c_box__fridge_inner">
-          <div id="meats_fishes">
+          <div id="meats_fishes" class="b_box__food">
             <%= render 'fridge_items.html.erb', food_genre: '肉/魚', foods: @meats_fishes %>
           </div>
-          <div id="vegetables">
+          <div id="vegetables" class="b_box__food">
             <%= render 'fridge_items.html.erb', food_genre: '野菜', foods: @vegetables %>
           </div>
-          <div id="others">
+          <div id="others" class="b_box__food">
             <%= render 'fridge_items.html.erb', food_genre: 'その他', foods: @others %>
           </div>
-          <div id="seasonings">
-            <%= render 'fridge_items.html.erb', food_genre: '調味料', foods: @seasonings %>
+          <div id="seasonings" class="b_box__food">
+            <%= render 'fridge_items.html.erb', food_genre: '調味料と穀物', foods: @seasonings %>
           </div>
         </div>
 

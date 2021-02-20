@@ -1,1 +1,1 @@
-$("#b_box__material_<%= @fridge_item.id %>").html("<%= j(render 'end_users/fridge_item', ingredient_id: @fridge_item.ingredient_id, name: @fridge_item.ingredient.name, amount: @fridge_item.amount, unit: @fridge_item.ingredient.unit, html_color: @fridge_item.ingredient.html_color, id: @fridge_item.id ) %>");
+$("#<%= @food_box_id %>").html("<%= j(render 'end_users/fridge_items', foods: @foods, food_genre: @food_genre ) %>");

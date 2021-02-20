@@ -9,7 +9,7 @@ class EndUsersController < ApplicationController
     @others = []
     @seasonings = [] 
     foods.each do |food|
-      if food[0] > 4999
+      if food[0] > 4999 or food[0] < 100
         @seasonings << food
       elsif food[0] > 2999
         @others << food
@@ -17,6 +17,8 @@ class EndUsersController < ApplicationController
         @vegetables << food
       elsif food[0] > 99
         @meats_fishes << food
+      else
+        raise "想定されていない食材コードです#{code}"
       end
     end
   end

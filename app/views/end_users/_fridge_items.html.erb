@@ -1,10 +1,8 @@
-<div class="b_box__food">
-  <p><%= food_genre %></p>
-  <div class="b_box__food_inner">
-    <% foods.each do |ingredient_id, name, amount, unit, html_color, id| %>
-      <div id="b_box__material_<%= id %>" class="b_box__material">
-        <%= render 'fridge_item', ingredient_id: ingredient_id, name: name, amount: amount, unit: unit, html_color: html_color, id: id %>
-      </div>
-    <% end %>
-  </div>
+<p><%= food_genre %></p>
+<div class="b_box__food_inner">
+  <% foods.each do |ingredient_id, name, amount, unit, html_color, id| %>
+    <div id="b_box__material_<%= id %>" class="b_box__material">
+      <%= render 'fridge_item', ingredient_id: ingredient_id, name: name, amount: amount, unit: unit, html_color: html_color, id: id %>
+    </div>
+  <% end %>
 </div>
