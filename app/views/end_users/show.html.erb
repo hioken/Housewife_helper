@@ -192,7 +192,7 @@
           <div class="c_box__setting_inner">
             <h3>設定の変更</h3>
             <div>
-              <%= form_with url: root_path, method: :get do |f| %>
+              <%= form_with model: current_end_user, url: end_users_path, method: :patch do |f| %>
                 <div class="a_flex c_form__setting">
                 <div class="c_form__setting_inner">
                   <p class="b_text__setting">ご家庭の人数</p>

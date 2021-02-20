@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2021_02_18_184451) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.string "user_name", default: "kenta", null: false
-    t.integer "famity_size", default: 2, null: false
+    t.integer "family_size", default: 2, null: false
     t.integer "cooking_time_limit"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

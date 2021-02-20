@@ -33,7 +33,7 @@ class DeviseCreateEndUsers < ActiveRecord::Migration[6.1]
       # t.datetime :locked_at
 
       t.string :user_name, null: false, default: 'kenta'
-      t.integer :famity_size, null: false, default: 2
+      t.integer :family_size, null: false, default: 2
       t.integer :cooking_time_limit
 
       t.timestamps null: false

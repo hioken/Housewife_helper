@@ -1,5 +1,4 @@
 
-=begin
 # EndUserのテストデータ
 EndUser.create(
   [
@@ -93,6 +92,7 @@ end
 
 
 
+=begin
 
 # seedチェック
 
