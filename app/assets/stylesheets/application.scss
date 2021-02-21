@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
-
+ 
 * {
   box-sizing: border-box;
   padding: 0;
@@ -566,16 +566,20 @@ input[name="b_item__radio"] {
   margin: 0 auto;
 }
 
+.c_box__fridge_new_inner > div {
+  margin-bottom: 24px;
+}
+
+.c_box__fridge_new_inner > div:nth-child(5) {
+  margin-bottom: 0;
+}
+
 .b_box__fridge_item {
   width: 50%;
 }
 
 .b_box__fridge_item > p {
   margin-bottom: 4px;
-}
-
-.b_box__fridge_item:first-child, .b_box__fridge_item:nth-child(2) {
-  margin-bottom: 24px;
 }
 
 .b_field__fridge_item select {
