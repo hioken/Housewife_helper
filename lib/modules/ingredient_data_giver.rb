@@ -12,7 +12,7 @@ module IngredientDataGiber
 	def pick(genre_scope, *columns)
 		table = 
 			if self.is_a?(EndUser)
-				constraint = {user_id: self.id}
+				constraint = {'fridge_items.end_user_id' => self.id}
 				:fridge_items
 			else
 				raise RunTimeError, 'moduleが無効なモデルにincludeされています、モジュールの定義を確認してください'

@@ -11,21 +11,22 @@ class FridgeItemsController < ApplicationController
       @fridge_item.update(fridge_item_params)
     else
       code = @fridge_item.ingredient_id
+      columns = [:id, :name, :amount, :unit, :html_color, 'fridge_items.id']
       @fridge_item.destroy
       if code > 4999 or code < 100
-        @foods = current_end_user.fridge_items.joins(:ingredient).where(ingredient_id: 5000..9999).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
+        @foods = current_end_user.pick(:grain_seasoning, *columns)
         @food_box_id = 'seasonings'
         @food_genre = '調味料/穀物'
       elsif code > 2999
-        @foods = current_end_user.fridge_items.joins(:ingredient).where(ingredient_id: 2999..4999).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
+        @foods = current_end_user.pick(:other, *columns)
         @food_box_id = 'others'
         @food_genre = 'その他' 
       elsif code > 999
-        @foods = current_end_user.fridge_items.joins(:ingredient).where(ingredient_id: 1000..1999).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
+        @foods = current_end_user.pick(:vegetable, *columns)
         @food_box_id = 'vegetables'
         @food_genre = '野菜'
       elsif code > 99
-        @foods = current_end_user.fridge_items.joins(:ingredient).where(ingredient_id: 100..999).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
+        @foods = current_end_user.pick(:meat_fish, *columns)
         @food_box_id = 'meats_fishes'
         @food_genre = '肉/魚'
       else
