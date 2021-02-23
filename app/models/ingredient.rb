@@ -7,4 +7,12 @@ class Ingredient < ApplicationRecord
   
   # Methods
   scope :genre_scope, -> (genre) { where(id: GENRE_SCOPE[genre]) }
+  
+  def name_unit
+    unless GENRE_SCOPE[:grain_seasoning].include?(self.id)
+      "#{self.name} 単位:#{self.unit}"
+    else
+      name
+    end
+  end
 end

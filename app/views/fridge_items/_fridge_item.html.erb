@@ -1,7 +1,7 @@
 <div class="b_field__fridge_item">
   <div>
-    <%= f.collection_select "fridge_items[value_#{value_num}[ingredient_id]]", ingredients, :id, :name, include_blank: genre %>
-    <%= f.select "fridge_items[value_#{value_num}[amount]]", amounts, include_blank: "個" %>
+    <%= f.collection_select "fridge_items[value_#{value_num}[ingredient_id]]", foods, :id, :name_unit, include_blank: genre %>
+    <%= f.select "fridge_items[value_#{value_num}[amount]]", amounts, include_blank: '数量' %>
     <input type="button" value="＋" class="add b_input__fridge">
     <input type="button" value="－" class="delete b_input__fridge">
   </div>

@@ -15,10 +15,11 @@ class FridgeItemsController < ApplicationController
     params[:fridge_items].each do |key, values|
       next if (values[:ingredient_id] == '' or values[:amount] == '')
       code = values[:ingredient_id].to_i
+      amount = values[:amount].to_i * 4
       if ingredient_data[code]
-        ingredient_data[code] += values[:amount].to_i unless ingredient_data[code] == 9999
+        ingredient_data[code] += amount unless ingredient_data[code] == 9999
       else
-        ingredient_data[code] = values[:amount].to_i
+        ingredient_data[code] = amount
       end
     end
     FridgeItem.manage(ingredient_data, current_end_user.id, mode: :add)
