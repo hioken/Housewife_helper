@@ -1,6 +1,13 @@
+require 'modules/ingredient_data_giver.rb'
 class EndUser < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # setting
+  include RelationIngredientDataGiber
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+         
+  has_many :fridge_items
+  
+  
+  # Methods
 end

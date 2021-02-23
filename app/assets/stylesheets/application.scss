@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
-
+ 
 * {
   box-sizing: border-box;
   padding: 0;
@@ -52,14 +52,14 @@
 }
 
 /* リンク */
-.a_link__allrank {
+.a_box__link {
   text-align: center;
   border-radius: 8px;
   background-color: #fff;
   border: 1px #dbb34e solid;
 }
 
-.a_link__allrank:hover {
+.a_box__link:hover {
   cursor: pointer;
   background-color: #c3c7c3;
 }
@@ -129,12 +129,12 @@ header {
   border-radius: 8px;
 }
 
-.c__submit__announce {
+.c_submit__announce {
   width: 40%;
   margin: 0 auto;
 }
 
-.c__submit__announce input[type="submit"] {
+.c_submit__announce input[type="submit"] {
   border-radius: 24px;
 }
 
@@ -300,12 +300,12 @@ header {
 
 .c_field__date input[type="date"] {
   border-style: none;
+  background-color: #fff;
   width: 100%;
   height: 32px;
   border-radius: 4px;
   padding: 0 8px;
   border: 1px #c3c7c3 solid;
-  cursor: pointer;
 }
 
 .c_submit__date input[type="submit"] {
@@ -337,7 +337,7 @@ header {
 }
 
   /* 画面切替 */
-.c__radio {
+.c_radio {
   background-color: #fff;
   margin: 0 auto;}
 
@@ -367,6 +367,7 @@ input[name="b_item__radio"] {
   display: none;
   padding: 40px 40px 20px;
   clear: both;
+  position: relative;
 }
 
 #favorite:checked ~ #favorite_content,
@@ -375,7 +376,7 @@ input[name="b_item__radio"] {
   display: block;
 }
 
-.c__radio input:checked + .b_item__radio {
+.c_radio input:checked + .b_item__radio {
   color: #dbb34e;
   border-bottom: 3px #dbb34e solid;
 }
@@ -406,8 +407,7 @@ input[name="b_item__radio"] {
   margin: 0 auto;
   border-radius: 12px;
 }
-  /* */
-  /* 冷蔵庫 */
+
 .c_text__report {
   width: 240px;
   display: -webkit-box;
@@ -417,28 +417,44 @@ input[name="b_item__radio"] {
   margin: 0 auto;
 }
 
-.c_box__fridge_inner {
+  /* */
+  /* 冷蔵庫 */
+.c_box__fridge{
+  padding-bottom: 32px;
+}
+
+.c_link__material {
+  width: 160px;
+  height: 32px;
+  margin: 8px 0 32px;
+  line-height: 32px;
 }
 
 .b_box__food {
-  width: calc(100%/3);
+  width: calc(100%/4);
 }
 
 .b_box__food > p {
   width: 200px;
   text-align: center;
+  margin: 0 auto 4px;
 }
 
 .b_box__food_inner {
   border: 1px #908d89 solid;
   border-radius: 12px;
-  width: 200px;
-  margin: 0 auto;
+  width: 280px;
+  margin: 0 auto 240px;
   text-align: center;
+}
+
+.b_box__material {
+  margin-top: 16px;
 }
 
 .b_count__food {
   width: 100%;
+  margin-bottom: 16px;
   justify-content: center;
   align-items: center;
 }
@@ -447,12 +463,159 @@ input[name="b_item__radio"] {
   margin-right: 8px;
 }
 
-.b_count__food_inner {
+.b_count__material {
+  flex-flow: wrap;
+  width: 76px;
+}
+
+.b_count__material_inner {
   width: 8px;
   height: 8px;
-  margin: 0 4px;
+  margin: 4px 4px 0;
   border-radius: 50%;
-  background-color: red;
+}
+
+.b_count__material_inner:nth-child(5n) {
+  margin-right: 0;
+}
+
+.b_count__material_inner_half {
+  width: 4px;
+  height: 8px;
+  margin: 4px 4px 0;
+  border-radius: 100px 0 0 100px;
+}
+
+.b_form__count {
+  margin: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.b_form__count > p {
+  display: block;
+  margin: 0 auto;
+}
+
+.b_field__count select {
+  width: 124px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 0 4px;
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.b_submit__count input[type="submit"] {
+  width: 48px;
+  height: 32px;
+  margin: 0 8px;
+  border-radius: 12px;
+}
+
+.c_box__setting_inner {
+  width: 80%;
+  position: absolute;
+  bottom: 32px;
+  left: 120px;
+  margin: 0;
+}
+
+.c_form__setting {
+  position: relative;
+}
+
+.c_form__setting_inner {
+  width: 160px;
+}
+
+.b_field__setting select {
+  width: 90%;
+  height: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.b_text__setting {
+  margin: 16px 0 8px;
+}
+
+.b_submit__setting input[type="submit"] {
+  width: 120px;
+  height: 32px;
+  border-radius: 12px;
+  position: absolute;
+  bottom: 0;
+  right: 80px;
+  margin: 0;
+}
+
+/* fridge_items#new */
+.c_box__fridge_new {
+  margin: 32px;
+  padding: 0;
+}
+
+.c_box__fridge_new > h3 {
+  margin-bottom: 16px;
+}
+
+.c_box__fridge_new_inner{
+  flex-flow: wrap;
+  width: calc(100% - 320px /2);
+  margin: 0 auto;
+}
+
+.c_box__fridge_new_inner > div {
+  margin-bottom: 24px;
+}
+
+.c_box__fridge_new_inner > div:nth-child(5) {
+  margin-bottom: 0;
+}
+
+.b_box__fridge_item {
+  width: 50%;
+}
+
+.b_box__fridge_item > p {
+  margin-bottom: 4px;
+}
+
+.b_field__fridge_item select {
+  background-color: #fff;
+  height: 24px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.b_field__fridge_item select:first-child {
+  width: 50%;
+}
+
+.b_field__fridge_item select:nth-child(2) {
+  width: 20%;
+}
+
+.b_input__fridge {
+  color: #4b4a49;
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  line-height: 100%;
+  border: none;
+  font-weight: bold;
+}
+
+.c_submit__fridge_item {
+  width: 120px;
+  margin: 32px 0 0 auto;
+}
+
+.c_submit__fridge_item input[type="submit"] {
+  width: 56px;
+  margin-right: 80px;
+  border-radius: 12px;
 }
 
 /* フッター */
