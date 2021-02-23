@@ -12,3 +12,5 @@ module UserIngredientManager
     end
   end
 end
+
+# 4の倍数調整

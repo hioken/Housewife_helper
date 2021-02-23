@@ -31,7 +31,7 @@ class FridgeItemsController < ApplicationController
       @fridge_item.update(fridge_item_params)
     else
       code = @fridge_item.ingredient_id
-      columns = [:id, :name, :amount, :unit, :html_color, 'fridge_items.id']
+      columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']
       @fridge_item.destroy
       if code > 4999 or code < 100
         @foods = current_end_user.pick(:grain_seasoning, *columns)
