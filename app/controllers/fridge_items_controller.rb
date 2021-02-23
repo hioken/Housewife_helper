@@ -13,16 +13,16 @@ class FridgeItemsController < ApplicationController
   def create
     ingredient_data = {}
     params[:fridge_items].each do |key, values|
-      next unless (values[:ingredient_id] == '' or values[:amount] == '')
+      next if (values[:ingredient_id] == '' or values[:amount] == '')
       code = values[:ingredient_id].to_i
       if ingredient_data[code]
-        ingredient_data[code] += values[:amount].to_i if ingredient_data[code] == 9999
+        ingredient_data[code] += values[:amount].to_i unless ingredient_data[code] == 9999
       else
-        ingredient_data[values[:ingredient_id].to_i] = values[:amount].to_i
+        ingredient_data[code] = values[:amount].to_i
       end
     end
     FridgeItem.manage(ingredient_data, current_end_user.id, mode: :add)
-    p 3333333333333333333333
+    redirect_to end_users_path
   end
 
   def update
