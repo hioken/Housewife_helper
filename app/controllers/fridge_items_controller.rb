@@ -8,9 +8,20 @@ class FridgeItemsController < ApplicationController
     @amounts = (1..20).to_a
     @grams = @amounts.map { |num| num * 100 }
     @haves = [['追加', 9999]]
+    binding.pry if params[:fridge_items]
   end
 
   def create
+    ingredient_data = {}
+    params[:fridge_items].each do |key, values|
+      code = values[:ingredient_id].to_i
+      if ingredient_data[code]
+        ingredient_data[code] += values[:amount].to_i if ingredient_data[code] == 9999
+      else
+        ingredient_data[values[:ingredient_id].to_i] = values[:amount].to_i if values[]
+      end
+    end
+    FridgeItem.manage(ingredient_data, current_end_user.id, :add)
   end
 
   def update
