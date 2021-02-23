@@ -69,6 +69,7 @@ EndUser.create(
 end
 
 # FridgeItemのテストデータ
+=begin
 [
   [1, 100, 800],
   [1, 1000, 4],
@@ -92,7 +93,6 @@ end
 
 
 
-=begin
 
 # seedチェック
 
