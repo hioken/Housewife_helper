@@ -1,5 +1,13 @@
 class FridgeItemsController < ApplicationController
   def new
+    @meats = Ingredient.genre_scope(:meat)
+    @fishes = Ingredient.genre_scope(:fish)
+    @vegetables = Ingredient.genre_scope(:vegetable)
+    @others = Ingredient.genre_scope(:other)
+    @grains_seasonings = Ingredient.genre_scope(:grain_seasoning)
+    @amounts = (1..20).to_a
+    @grams = @amounts.map { |num| num * 100 }
+    @haves = [['追加', 9999]]
   end
 
   def create
