@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_184451) do
+ActiveRecord::Schema.define(version: 2021_02_24_072741) do
 
   create_table "end_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2021_02_18_184451) do
     t.index ["end_user_id", "ingredient_id"], name: "index_fridge_items_on_end_user_id_and_ingredient_id", unique: true
   end
 
-  create_table "ingredients", id: { limit: 4 }, force: :cascade do |t|
+  create_table "ingredients", id: :bigint, default: nil, force: :cascade do |t|
     t.string "name", null: false
     t.integer "unit", null: false
     t.integer "html_color", null: false
@@ -44,6 +44,26 @@ ActiveRecord::Schema.define(version: 2021_02_18_184451) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "recipe_ingredients", force: :cascade do |t|
+    t.integer "recipe_id", null: false
+    t.integer "ingredient_id", null: false
+    t.integer "amount", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recipe_id", "ingredient_id"], name: "index_recipe_ingredients_on_recipe_id_and_ingredient_id", unique: true
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "cooking_time", null: false
+    t.boolean "is_old", default: false, null: false
+    t.integer "new_menu_recode", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "fridge_items", "end_users"
   add_foreign_key "fridge_items", "ingredients"
+  add_foreign_key "recipe_ingredients", "ingredients"
+  add_foreign_key "recipe_ingredients", "recipes"
 end

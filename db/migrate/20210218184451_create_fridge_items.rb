@@ -7,6 +7,6 @@ class CreateFridgeItems < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
-  add_index :fridge_items, [:end_user_id, :ingredient_id], unique: true
+    add_index :fridge_items, [:end_user_id, :ingredient_id], unique: true
   end
 end
