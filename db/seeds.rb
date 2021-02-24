@@ -91,6 +91,15 @@ end
 end
 
 
+[
+  ['肉じゃが', 30],
+  ['チキン', 30],
+].each do |name, cookent_time|
+end
+  
+[
+].each do |recipe, ingredient, amount|
+end
 
 
 =begin
