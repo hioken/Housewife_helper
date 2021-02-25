@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_072741) do
     t.integer "recipe_id", null: false
     t.integer "ingredient_id", null: false
     t.integer "amount", null: false
+    t.integer "mark"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["recipe_id", "ingredient_id"], name: "index_recipe_ingredients_on_recipe_id_and_ingredient_id", unique: true
@@ -58,7 +59,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_072741) do
     t.string "name", null: false
     t.integer "cooking_time", null: false
     t.boolean "is_old", default: false, null: false
-    t.integer "new_menu_recode", null: false
+    t.integer "new_menu_recode"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -4,7 +4,7 @@ class CreateRecipes < ActiveRecord::Migration[6.1]
       t.string :name, null: false
       t.integer :cooking_time, null: false
       t.boolean :is_old, null: false, default: false
-      t.integer :new_menu_recode, null: false
+      t.integer :new_menu_recode
 
       t.timestamps
     end
