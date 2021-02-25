@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_072741) do
     t.integer "end_user_id", null: false
     t.integer "ingredient_id", null: false
     t.integer "amount", null: false
+    t.integer "mark"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["end_user_id", "ingredient_id"], name: "index_fridge_items_on_end_user_id_and_ingredient_id", unique: true
