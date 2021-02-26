@@ -1,0 +1,93 @@
+<div>
+  <div class="c_lack__per">
+    <h2>~%の材料を冷蔵庫で賄えます！</h2>
+  </div>
+  <br/>
+  <div class="c_box__recipe a_flex">
+    <div class="c_box__recipe_inner">
+      <div class="c_box__title a_flex">
+        <%= image_tag 'cake.jpg', size: '200x200', class:"c_photo__recipe_show" %>
+        <div class="c_show">
+          <h2>タイトル</h2>
+          <h2>材料</h2>
+          <h4>10個分</h4>
+          <p>ミルクチョコレート<p>
+          <p>生クリーム</p>
+          <p>ココアパウダー</p>
+        </div>
+      </div>
+      <br/>
+      <h2>手順</h2>
+      <ul>
+        <li>
+          <p><strong>準備.</strong>ここに文字が入ります。</p>
+        </li>
+        <li>
+          <p><strong>1.</strong>ここに文字が入ります。</p>
+        </li>
+        <li>
+
+          <p><strong>2.</strong>ここに文字が入ります。</p>
+        </li>
+        <li>
+          <p><strong>3.</strong>ここに文字が入ります。</p>
+        </li>
+        <li>
+          <p><strong>4.</strong>ここに文字が入ります。</p>
+        </li>
+      </ul>
+      <br/>
+      <h2>コツ・ポイント</h2>
+      <p>ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
+      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
+      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
+      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
+      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。</p>
+
+      <div class="a_box__link c_link__admin">
+        <%= link_to "管理者として、このレシピを更新/削除", root_path, class:"a_link" %>
+      </div>
+    </div>
+
+      <div class="c_box__lack">
+        <% if true %>
+          <div class="c_box__lack_inner">
+            <h2 class="b_center__lack">不足材料一覧</h2>
+            <br/>
+            <table class="table c_table__lack" width="60%">
+              <thead>
+                  <tr class="active">
+                      <th>材料</th>
+                      <th>数量</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <% 10.times do %>
+                <tr>
+                  <td class="b_center__lack">ミルクチョコレート</td>
+                  <td class="b_center__lack">2個</td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+      <div class="c_form__date">
+        <div class="c_form__date_inner">
+          <%= form_with url: root_path, method: :get do |f| %>
+            <div class="c_field__date">
+              <%= f.date_field :dammy %>
+            </div>
+            <div class="a_actions a_pointer c_submit__date">
+              <%= f.submit "上記の日の献立に設定" %>
+            </div>
+          <% end %>
+          <div class="a_box__link c_link__done">
+            <%= link_to "料理を作成した",root_path, class:"a_link" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
