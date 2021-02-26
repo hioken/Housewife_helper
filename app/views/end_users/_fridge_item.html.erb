@@ -12,31 +12,17 @@
       <% end %>
     </div>
   </div>
-  <% if unit != 'g' %>
-    <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
-      <div class="a_flex b_form__count">
-        <div class="b_field__count">
-          <%= f.select :amount, amount.amount_select %>
-        </div>
-        <div class="a_actions a_pointer b_submit__count">
-          <%= f.hidden_field :ingredient_id, value: ingredient_id %>
-          <%= f.submit "使用" %>
-        </div>
+  <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
+    <div class="a_flex b_form__count">
+      <div class="b_field__count">
+        <%= f.select :amount, amount.amount_select(unit) %>
       </div>
-    <% end %>
-  <% else %>
-    <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
-      <div class="a_flex b_form__count">
-        <div class="b_field__count">
-          <%= f.select :amount, amount.gram_select %>
-        </div>
-        <div class="a_actions a_pointer b_submit__count">
-          <%= f.hidden_field :ingredient_id, value: ingredient_id %>
-          <%= f.submit "使用" %>
-        </div>
+      <div class="a_actions a_pointer b_submit__count">
+        <%= f.hidden_field :ingredient_id, value: ingredient_id %>
+        <%= f.submit "使用" %>
       </div>
+    </div>
     <% end %>
-  <% end %>
 <% else %>
   <div class="a_flex b_count__food">
     <p>あります</p>
