@@ -13,6 +13,28 @@
  *= require_tree .
  *= require_self
  */
+ 
+ /*
+ .c_pop{
+  position: relative;
+  padding: 20px;
+  width: 130px;
+  height: 120px;
+  line-height: 100%;
+  border-radius: 50%;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.2em;
+  font-size: 14px;
+  background-color: #ff9800;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  font-size: 16px;
+}
+*/
+ 
 * {
   box-sizing: border-box;
   padding: 0;
@@ -363,7 +385,7 @@ header {
   padding: 20px;
   width: 130px;
   height: 120px;
-  line-height: 170%;
+  line-height: 100%;
   border-radius: 50%;
   text-align: center;
   color: #ffffff;

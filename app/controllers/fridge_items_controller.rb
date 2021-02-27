@@ -14,7 +14,6 @@ class FridgeItemsController < ApplicationController
     params[:fridge_items].each do |key, values|
       next if (values[:id_unit] == '' or values[:amount] == '')
       id_unit = values[:id_unit].split(',')
-      binding.pry
       code = id_unit[0].to_i
       amount = values[:amount].to_i * 4
       amount *= 100 if id_unit[1] == 'g'
