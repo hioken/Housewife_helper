@@ -15,11 +15,12 @@
       <div class="c_head a_flex">
         <h1>Page</h1>
         <%= link_to "マイページへ", end_users_path, class:"b_link__h" %>
-        <%= link_to "献立を決定", url: "",class:"b_link__h" %>
-        <%= link_to "日付を進める", url: "",class:"b_link__h" %>
+        <%= link_to "献立を決定", root_path, class:"b_link__h" %>
+        <%= link_to "メニュー一覧", recipes_path, class:"b_link__h" %>
+        <%= link_to "日付を進める", root_path, class:"b_link__h" %>
 
         <%= form_tag(url: "",:method => 'get') do %>
-          <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '料理名・食材でレシピをさがす' %>
+          <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
       </div>
     </header>
