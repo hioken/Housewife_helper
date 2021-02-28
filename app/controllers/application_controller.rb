@@ -9,6 +9,22 @@ class Integer
     self % number == 0
   end
   
+  #amountのユーザー向け表記を返す
+  def regular_amount(unit)
+    if unit == 'g'
+      self / 4
+    else
+      result = self.divmod(4)
+      if result[1] == 0
+        result[0]
+      elsif result == 2
+        "#{result[0]}と1/2"
+      else
+        "#{result[0]}と#{result[1]}/4"
+      end
+    end
+  end
+  
   # form_select用の配列を返す
   def amount_select(unit)
     ret = []

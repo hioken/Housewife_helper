@@ -17,13 +17,19 @@
                   </tr>
               </thead>
               <tbody>
-              <% @recipe_ingredients.each do |ingredient| %>
+              <% @recipe_ingredients.each do |recipe_ingredient| %>
                 <tr>
-                  <td class="b_center__lack"><%= ingredient[0] %></td>
-                  <td class="b_center__lack"><%= ingredient[1] %></td>
-                  <td class="b_center__lack"><%= ingredient[2] %></td>
+                  <td class="b_center__lack"><%= recipe_ingredient.ingredient.name %></td>
+                  <td class="b_center__lack"><%= recipe_ingredient.amount.regular_amount(recipe_ingredient.ingredient.unit) %></td>
+                  <td class="b_center__lack">
+                    <% if recipe_ingredient.seasoning_unit %>
+                      <%= recipe_ingredient.seasoning_unit %>
+                    <% else %>
+                      <%= recipe_ingredient.ingredient.unit %>
+                    <% end %>
+                  </td>
                 </tr>
-                <% end %>
+              <% end %>
               </tbody>
             </table>
           </div>
@@ -59,7 +65,7 @@
     </div>
 
       <div class="c_box__lack">
-        <% if true %>
+        <% if @lack_ingredients %>
           <div class="c_box__lack_food_inner">
             <h2 class="b_center__lack">不足材料一覧</h2>
             <br/>
