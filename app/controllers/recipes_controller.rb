@@ -8,10 +8,9 @@ class RecipesController < ApplicationController
 
   def show
     @recipe = Recipe.find(params[:id])
-    @recipe_ingredients = @recipe.recipe_ingredients.preload(:ingredient)
+    @recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
     @size = current_end_user.family_size
-    
-    @lack_ingredients = RecipeIngredient.lack_ingredients(current_end_user, @recipe_ingredients.pluck(:name, :amount, :unit))
+    @lack_ingredients = RecipeIngredient.lack_ingredients(current_end_user, @recipe_ingredients.pluck(:name, :amount, :unit).each {|data| data[1] *= @size})
   end
 
   def new

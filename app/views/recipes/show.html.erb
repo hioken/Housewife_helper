@@ -19,8 +19,12 @@
               <tbody>
               <% @recipe_ingredients.each do |recipe_ingredient| %>
                 <tr>
-                  <td class="b_center__lack"><%= recipe_ingredient.ingredient.name %></td>
-                  <td class="b_center__lack"><%= recipe_ingredient.amount.regular_amount(recipe_ingredient.ingredient.unit) %></td>
+                  <td class="b_center__lack"><%= recipe_ingredient.mark %><%= recipe_ingredient.ingredient.name %></td>
+                  <td class="b_center__lack">
+                    <% if recipe_ingredient.seasoning_unit != '適量' %>
+                      <%= (recipe_ingredient.amount * @size).regular_amount(recipe_ingredient.ingredient.unit) %>
+                    <% end %>
+                  </td>
                   <td class="b_center__lack">
                     <% if recipe_ingredient.seasoning_unit %>
                       <%= recipe_ingredient.seasoning_unit %>
@@ -81,8 +85,10 @@
                 <% @lack_ingredients.each do |ingredient| %>
                 <tr>
                   <td class="b_center__lack"><%= ingredient[0] %></td>
-                  <td class="b_center__lack"><%= ingredient[1] %></td>
-                  <td class="b_center__lack"><%= ingredient[2] %></td>
+                  <% if ingredient[2] != 'option' %>
+                    <td class="b_center__lack"><%= ingredient[1].regular_amount(ingredient[2]) %></td>
+                    <td class="b_center__lack"><%= ingredient[2] %></td>
+                  <% end %>
                 </tr>
                 <% end %>
               </tbody>

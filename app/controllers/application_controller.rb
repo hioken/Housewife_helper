@@ -17,10 +17,10 @@ class Integer
       result = self.divmod(4)
       if result[1] == 0
         result[0]
-      elsif result == 2
-        "#{result[0]}と1/2"
+      elsif result[1] == 2
+        result[0] > 0 ? "#{result[0]}と1/2" : '1/2'
       else
-        "#{result[0]}と#{result[1]}/4"
+        result[0] > 0 ? "#{result[0]}と#{result[1]}/4" : "#{result[1]}/4"
       end
     end
   end
