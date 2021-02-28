@@ -4,9 +4,10 @@ class Recipe < ApplicationRecord
   
   # Methods
   def self.lack_ingredients(user, recipe_ingredients)
-    ingredient_names = recipe_ingredients.map { |name, amount, unit| name }
+    recipe_ingredients_copy = recipe_ingredients.map {|data| data[0..2] }
+    ingredient_names = recipe_ingredients_copy.map { |name, amount, unit| name }
     fridge_items = user.fridge_items.joins(:ingredient).where('ingredients.name': ingredient_names).pluck('ingredients.name', :amount).to_h
-    recipe_ingredients.each { |data| data[1] -= fridge_items[name] if fridge_items[name] }.select { |data| data[1] > 0 }.to_a
+    recipe_ingredients_copy.each { |data| data[1] -= fridge_items[data[0]] if fridge_items[data[0]] }.select { |data| data[1] > 0 }
   end
   
   def how_mach_already(user)

@@ -8,7 +8,9 @@ class RecipesController < ApplicationController
 
   def show
     @recipe = Recipe.find(params[:id])
-    @recipe_ingredients= @recipe.recipe_ingredients.joins(:ingredient).pluck('ingredients.name', :amount, 'ingredients.unit')
+    @recipe_ingredients = @recipe.recipe_ingredients.joins(:ingredient).pluck('ingredients.name', :amount, 'ingredients.unit', :mark)
+    @size = current_end_user.family_size
+    @recipe_ingredients.each { |data| data[1] *= @size }
     @lack_ingredients = Recipe.lack_ingredients(current_end_user, @recipe_ingredients)
   end
 

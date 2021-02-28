@@ -62,6 +62,19 @@
   padding: 3%;
 }
 
+.c_photo__recipe_show {
+  margin-top: 16px;
+}
+
+.c_box__recipe_inner {
+  width: 60%;
+  margin: 0 0 72px 24px;
+}
+
+.c_show {
+  width: 400px;
+  margin-left: 40px;
+}
 */
  
 * {
@@ -279,6 +292,10 @@ header {
   margin-left: 160px;
 }
 
+.c_photo__recipe_show {
+  margin-top: 16px;
+}
+
 .c_photo__box_rank {
   width: 200px;
   height: 200px;
@@ -322,7 +339,7 @@ header {
 }
 
 .c_box__recipe_inner {
-  width: 50%;
+  width: 60%;
   margin: 0 0 72px 24px;
 }
 
@@ -331,6 +348,7 @@ header {
 }
 
 .c_show {
+  width: 400px;
   margin-left: 40px;
 }
 
