@@ -1,48 +1,57 @@
 <div>
-  <div class="c_lack__per">
-    <h2>~%の材料を冷蔵庫で賄えます！</h2>
-  </div>
-  <br/>
-  <div class="c_box__recipe a_flex">
+  <div class="c_box__recipe c_lack__flex">
     <div class="c_box__recipe_inner">
       <div class="c_box__title a_flex">
         <%= image_tag 'cake.jpg', size: '200x200', class:"c_photo__recipe_show" %>
         <div class="c_show">
-          <h2>タイトル</h2>
-          <h2>材料</h2>
-          <h4>10個分</h4>
-          <p>ミルクチョコレート<p>
-          <p>生クリーム</p>
-          <p>ココアパウダー</p>
+          <h2><%= @recipe.name %></h2>
+          <div class="c_box__lack_food_inner">
+            <h2>材料</h2>
+            <h4>1人前</h4>
+            <table class="table c_table__lack">
+              <thead>
+                  <tr class="active">
+                      <th style="width: 20%;">材料</th>
+                      <th style="width: 10%;">数量</th>
+                      <th style="width: 10%;"></th>
+                  </tr>
+              </thead>
+              <tbody>
+              <% @recipe_ingredients.each do |ingredient| %>
+                <tr>
+                  <td class="b_center__lack"><%= ingredient[0] %></td>
+                  <td class="b_center__lack"><%= ingredient[1] %></td>
+                  <td class="b_center__lack"><%= ingredient[2] %></td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <br/>
       <h2>手順</h2>
       <ul>
         <li>
-          <p><strong>準備.</strong>ここに文字が入ります。</p>
+          <p><strong>準備.</strong>気合を入れます。</p>
         </li>
         <li>
-          <p><strong>1.</strong>ここに文字が入ります。</p>
+          <p><strong>1.</strong>真心を込めます。</p>
         </li>
         <li>
 
-          <p><strong>2.</strong>ここに文字が入ります。</p>
+          <p><strong>2.</strong>実家の母の優しさを思い出しましょう。</p>
         </li>
         <li>
-          <p><strong>3.</strong>ここに文字が入ります。</p>
+          <p><strong>3.</strong>実家の父の背中のようにたくましく混ぜましょう。</p>
         </li>
         <li>
-          <p><strong>4.</strong>ここに文字が入ります。</p>
+          <p><strong>4.</strong>完成です。</p>
         </li>
       </ul>
       <br/>
       <h2>コツ・ポイント</h2>
-      <p>ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
-      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
-      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
-      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。<br/>
-      ここに文字が入ります。ここに文字が入ります。ここに文字が入ります。</p>
+      <p>ここに説明文が入る予定です。今回は割愛しています。</p>
 
       <div class="a_box__link c_link__admin">
         <%= link_to "管理者として、このレシピを更新/削除", root_path, class:"a_link" %>
@@ -51,21 +60,23 @@
 
       <div class="c_box__lack">
         <% if true %>
-          <div class="c_box__lack_inner">
+          <div class="c_box__lack_food_inner">
             <h2 class="b_center__lack">不足材料一覧</h2>
             <br/>
-            <table class="table c_table__lack" width="60%">
+            <table class="table c_table__lack">
               <thead>
                   <tr class="active">
-                      <th>材料</th>
-                      <th>数量</th>
+                      <th style="width: 20%;">材料</th>
+                      <th style="width: 10%;">数量</th>
+                      <th style="width: 10%;"></th>
                   </tr>
               </thead>
               <tbody>
-                <% 10.times do %>
+                <% @lack_ingredients.each do |ingredient| %>
                 <tr>
-                  <td class="b_center__lack">ミルクチョコレート</td>
-                  <td class="b_center__lack">2個</td>
+                  <td class="b_center__lack"><%= ingredient[0] %></td>
+                  <td class="b_center__lack"><%= ingredient[1] %></td>
+                  <td class="b_center__lack"><%= ingredient[2] %></td>
                 </tr>
                 <% end %>
               </tbody>

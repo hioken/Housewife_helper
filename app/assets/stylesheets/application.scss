@@ -33,6 +33,35 @@
   z-index: 100;
   font-size: 16px;
 }
+
+.c_table__lack {
+  margin: auto ;
+  width: 100% ;
+}
+
+.c_form__date {
+  bottom: 0;
+  left: 125px;
+  margin: auto;
+  padding: 0;
+}
+
+.c_box__lack {
+  width: 30%;
+  margin: 0 24px 0;
+  position: relative;
+}
+
+.c_lack__flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.c_box__recipe {
+  padding: 3%;
+}
+
 */
  
 * {
@@ -274,6 +303,16 @@ header {
 }
 
 /* recipes#show */
+.c_lack__flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.c_box__recipe {
+  padding: 3%;
+}
+
 .c_lack__per {
   width: 440px;
   margin: 0 auto;
@@ -307,7 +346,7 @@ header {
 }
 
 .c_box__lack {
-  width: 50%;
+  width: 30%;
   margin: 0 24px 0;
   position: relative;
 }
@@ -317,14 +356,15 @@ header {
 }
 
 .c_table__lack {
-  margin-left: 80px ;
+  margin: auto ;
+  width: 100% ;
 }
 
 .c_form__date {
   position: absolute;
   bottom: 0;
   left: 125px;
-  margin: 0;
+  margin: auto;
   padding: 0;
 }
 

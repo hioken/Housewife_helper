@@ -7,9 +7,9 @@ class RecipesController < ApplicationController
   end
 
   def show
-    @recipes = false
-    # recipeの材料の差の計算
-    # recipeの材料一覧
+    @recipe = Recipe.find(params[:id])
+    @recipe_ingredients= @recipe.recipe_ingredients.joins(:ingredient).pluck('ingredients.name', :amount, 'ingredients.unit')
+    @lack_ingredients = Recipe.lack_ingredients(current_end_user, @recipe_ingredients)
   end
 
   def new
