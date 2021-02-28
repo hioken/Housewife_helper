@@ -1,0 +1,36 @@
+<div>
+  <div>
+    <div class="a_box__add_new">
+      <h3>テストデータを追加</h3>
+      <%= form_with url: root_path, method: :get do |f| %>
+        <div class="a_flex a_box__add_new_inner">
+          <div class="a_box__add_item">
+            <p>肉/魚</p>
+            <%= render "new_item", f:f %>
+          </div>
+          <div class="a_box__add_item">
+            <p>その他</p>
+            <%= render "new_item", f:f %>
+          </div>
+          <div class="a_box__add_item">
+            <p>野菜</p>
+            <%= render "new_item", f:f %>
+          </div>
+          <div class="a_box__add_item">
+            <p>調味料</p>
+            <%= render "new_item", f:f %>
+          </div>
+          <div class="a_box__add_item">
+            <p>調味料</p>
+            <%= render "new_item", f:f %>
+          </div>
+          <div class="a_actions a_pointer a_submit__add_item">
+            <%= f.submit "追加" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render "layouts/script" %>

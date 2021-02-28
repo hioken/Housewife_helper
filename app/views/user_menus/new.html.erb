@@ -1,0 +1,32 @@
+<div class="c_box__menu_new">
+  <div class="a_flex c_box__menu_new_inner">
+    <div class="b_box__menu_new_item">
+      <%= render "new_item" %>
+    </div>
+    <div class="b_box__menu_new_item">
+      <%= render "new_item" %>
+    </div>
+    <div class="b_box__menu_new_item">
+      <%= render "new_item" %>
+    </div>
+    <div class="b_box__menu_new_item">
+      <%= render "new_item" %>
+    </div>
+  </div>
+  <div class="c_box__menu_new_bottom">
+    <%= form_with url: root_path, method: :get do |f| %>
+      <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner">
+          <%= f.select :dammy, [1,2,3,4,5,6,7,8,9,10] %>
+          <%= f.submit "日分の献立をおまかせ" %>
+      </div>
+    <% end %>
+    <div class="a_flex c_box__decide">
+      <%= link_to(root_path, class:"a_link__black") do %>
+      <p>本日の献立は決定済です</p>
+      <div class="a_box__link">
+        <%= link_to "確認", root_path, class:"a_link" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

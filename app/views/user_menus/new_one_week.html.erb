@@ -1,0 +1,44 @@
+<div>
+  <%= form_with url: root_path, method: :get do |f| %>
+    <div>
+      <div class="c_box__one_week_top">
+        <div class="a_flex c_box__one_week_top_inner">
+          <div class="c_text_one_week_top_inner">
+            <h3>今日:</h3>
+          </div>
+          <div class="c_item_one_week_top_inner">
+            <%= render "new_item" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="c_box__one_week_main">
+        <div class="a_flex c_box__one_week_main_inner">
+          <% 6.times do %>
+            <div class="b_box__one_week_item">
+              <p>~日後の日付</p>
+              <div class="b_box__one_week_item_inner">
+                <%= render "new_week_item" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="c_box__one_week_bottom">
+        <h3>足りない食材一覧</h3>
+        <div class="a_flex c_box__one_week_bottom_inner">
+          <% 5.times do %>
+            <div class="c_box__week_lack_food">
+              <p>ほうれん草</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <div class="a_actions a_pointer c_button_decided_week_menu">
+      <%= f.submit "今週の献立決定" %>
+    </div>
+  <% end %>
+</div>

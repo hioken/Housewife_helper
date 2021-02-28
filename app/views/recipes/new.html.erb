@@ -1,0 +1,33 @@
+<div>
+  <div class="a_box__add_new">
+    <h3>テストデータを追加</h3>
+    <%= form_with url: root_path, method: :get do |f| %>
+      <div class="a_flex a_box__add_new_inner">
+        <div class="b_box__add_new_item">
+          <p>メニュー名</p>
+          <%= f.text_field :dammy %>
+        </div>
+        <div class="b_box__add_new_item">
+          <p>調理時間</p>
+          <%= f.select :dammy, [1,2,3,4,5,6,7,8,9,10], include_blank: "調理時間" %>
+        </div>
+        <div class="b_box__add_new_item">
+          <p>食材名/食材個数</p>
+          <div class="a_flex c_field__new_item">
+            <div class="a_flex c_field__new_item_inner">
+            <%= f.text_field :dammy %>
+            <%= f.select :dammy, [1,2,3,4,5,6,7,8,9,10], include_blank: "食材個数" %>
+            </div>
+            <input type="button" value="＋" class="add a_input__add">
+            <input type="button" value="－" class="delete a_input__add">
+          </div>
+        </div>
+      </div>
+      <div class="a_actions a_pointer a_submit__add_item">
+        <%= f.submit "追加" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "layouts/script" %>
