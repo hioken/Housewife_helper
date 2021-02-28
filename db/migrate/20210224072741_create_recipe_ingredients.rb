@@ -5,6 +5,7 @@ class CreateRecipeIngredients < ActiveRecord::Migration[6.1]
       t.references :ingredient, null: false, foreign_key: true, index: false
       t.integer :amount, null: false
       t.integer :mark
+      t.integer :seasoning_unit
 
       t.timestamps
     end
