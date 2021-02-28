@@ -14,6 +14,69 @@
  *= require_self
  */
  
+ /*
+ .c_pop{
+  position: relative;
+  padding: 20px;
+  width: 130px;
+  height: 120px;
+  line-height: 100%;
+  border-radius: 50%;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.2em;
+  font-size: 14px;
+  background-color: #ff9800;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  font-size: 16px;
+}
+
+.c_table__lack {
+  margin: auto ;
+  width: 100% ;
+}
+
+.c_form__date {
+  bottom: 0;
+  left: 125px;
+  margin: auto;
+  padding: 0;
+}
+
+.c_box__lack {
+  width: 30%;
+  margin: 0 24px 0;
+  position: relative;
+}
+
+.c_lack__flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.c_box__recipe {
+  padding: 3%;
+}
+
+.c_photo__recipe_show {
+  margin-top: 16px;
+}
+
+.c_box__recipe_inner {
+  width: 60%;
+  margin: 0 0 72px 24px;
+}
+
+.c_show {
+  width: 400px;
+  margin-left: 40px;
+}
+*/
+ 
 * {
   box-sizing: border-box;
   padding: 0;
@@ -48,7 +111,8 @@
 
 .a_actions input[type="submit"]:hover {
   cursor: pointer;
-  background-color: #c3c7c3;
+  background-color: #dbb34e;
+  color: #fff;
 }
 
 /* リンク */
@@ -66,6 +130,20 @@
 
 .a_link {
   color: #dbb34e;
+}
+
+.a_link__black {
+  color: black;
+}
+
+/* 文章省略 */
+.a_text__abbreviation {
+  width: 240px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 /* ヘッダー */
@@ -120,13 +198,13 @@ header {
   margin: 0 auto 16px;
 }
 
-
 .c_field__announce select {
   width: 100px;
   height: 50px;
   padding: 0 16px;
   margin-left: 12px;
   border-radius: 8px;
+  background-color: #fff;
 }
 
 .c_submit__announce {
@@ -214,6 +292,10 @@ header {
   margin-left: 160px;
 }
 
+.c_photo__recipe_show {
+  margin-top: 16px;
+}
+
 .c_photo__box_rank {
   width: 200px;
   height: 200px;
@@ -238,6 +320,15 @@ header {
 }
 
 /* recipes#show */
+.c_lack__flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.c_box__recipe {
+  padding: 3%;
+}
 
 .c_lack__per {
   width: 440px;
@@ -248,7 +339,7 @@ header {
 }
 
 .c_box__recipe_inner {
-  width: 50%;
+  width: 60%;
   margin: 0 0 72px 24px;
 }
 
@@ -257,6 +348,7 @@ header {
 }
 
 .c_show {
+  width: 400px;
   margin-left: 40px;
 }
 
@@ -264,7 +356,7 @@ header {
   margin: 48px 40px 0;
 }
 
-.c_rink__admin {
+.c_link__admin {
   border-radius: 20px;
   position: fixed;
   bottom: 48px;
@@ -272,7 +364,7 @@ header {
 }
 
 .c_box__lack {
-  width: 50%;
+  width: 30%;
   margin: 0 24px 0;
   position: relative;
 }
@@ -282,14 +374,15 @@ header {
 }
 
 .c_table__lack {
-  margin-left: 80px ;
+  margin: auto ;
+  width: 100% ;
 }
 
 .c_form__date {
   position: absolute;
   bottom: 0;
   left: 125px;
-  margin: 0;
+  margin: auto;
   padding: 0;
 }
 
@@ -321,6 +414,150 @@ header {
   margin: 24px auto;
   border-radius: 20px;
 }
+
+/* recipes#index */
+.c_box__ranking_all > h2 {
+  margin: 0 auto;
+  width: 70%;
+  border-bottom: 2px #dbb34e solid;
+}
+
+.c_box__ranking_inner {
+  flex-flow: wrap;
+  margin: 32px 120px;
+}
+
+.c_box__ranking_item {
+  width: calc(100%/3);
+  margin-bottom: 40px;
+  counter-increment: number;
+  position: relative;
+}
+
+.c_box__ranking_item:nth-child(n+51) {
+  display: none;
+}
+
+.c_pop{
+  position: relative;
+  padding: 20px;
+  width: 130px;
+  height: 120px;
+  line-height: 100%;
+  border-radius: 50%;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.2em;
+  font-size: 14px;
+  background-color: #ff9800;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  font-size: 16px;
+}
+
+.c_pop::before{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: 2px;
+  top: 2px;
+  border-right: 20px solid #ff9800;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transform: rotate(45deg);
+  z-index: 100;
+}
+
+.c_box__ranking_item:nth-child(3n+1):nth-last-child(-n+3),
+.c_box__ranking_item:nth-child(3n+1):nth-last-child(-n+3) ~ .c_box__ranking_item {
+  margin-bottom: 0;
+}
+
+.c_link__ranking_item {
+  text-align: center;
+}
+
+.c_box__photo_ranking {
+  width: 240px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.c_photo__ranking_item {
+  display: block;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.c_num__ranking {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #dbb34e;
+}
+
+.c_num__ranking > h2::before {
+  content: counter(number);
+  line-height: 56px;
+  color: #fff;
+}
+
+/* recipes#edit */
+.c_box__recipes_edit_item {
+  width: 50%;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.c_box__recipes_edit_inner {
+  width: 320px;
+  margin: 0 auto 0 0;
+  border: 1px #6e6a65 solid;
+  border-radius: 12px;
+  padding: 8px 0;
+}
+
+.c_form__recipes_edit {
+  margin: 16px;
+}
+
+
+.c_form__recipes_edit_inner {
+  margin: 0 auto;
+  width: 200px;
+}
+
+.c_form__recipes_edit_inner > p {
+  margin-left: 16px;
+  line-height: 32px;
+}
+
+.c_form__recipes_edit_inner select {
+  width: 64px;
+  height: 32px;
+  background-color: #fff;
+  margin-left: 72px;
+  border-radius: 8px;
+}
+
+.c_submit__recipes_edit {
+  width: 100px;
+  margin: auto 0 0;
+}
+
+.c_submit__recipes_edit  input[type="submit"] {
+  width: 80px;
+  height: 32px;
+  margin: 0 8px;
+  border-radius: 12px;
+}
+
 
 /* end_users#show */
 .c_box__user_inner {
@@ -381,6 +618,7 @@ input[name="b_item__radio"] {
   border-bottom: 3px #dbb34e solid;
 }
   /* */
+
 .b_box__radio {
   flex-flow: wrap;
 }
@@ -393,8 +631,6 @@ input[name="b_item__radio"] {
 
 .b_link__radio {
   text-align: center;
-  text-decoration: none;
-  color: black;
 }
 
 .b_box__radio_inner:nth-child(3n+1):nth-last-child(-n+3),
@@ -408,19 +644,10 @@ input[name="b_item__radio"] {
   border-radius: 12px;
 }
 
-.c_text__report {
-  width: 240px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
   /* */
   /* 冷蔵庫 */
 .c_box__fridge{
-  padding-bottom: 32px;
+  padding-bottom: 240px;
 }
 
 .c_link__material {
@@ -444,7 +671,7 @@ input[name="b_item__radio"] {
   border: 1px #908d89 solid;
   border-radius: 12px;
   width: 280px;
-  margin: 0 auto 240px;
+  margin: 0 auto 24px;
   text-align: center;
 }
 
@@ -615,6 +842,313 @@ input[name="b_item__radio"] {
 .c_submit__fridge_item input[type="submit"] {
   width: 56px;
   margin-right: 80px;
+  border-radius: 12px;
+}
+
+/* user_menus#index */
+.c_box__menu_index {
+  margin: 0 5%;
+  height: 580px;
+}
+
+.c_box__left {
+  overflow: hidden scroll;
+  width: 60%;
+  margin-right: 16px;
+}
+
+.c_box__left::-webkit-scrollbar{
+  width: 10px;
+}
+
+.c_box__left::-webkit-scrollbar-track{
+  background: #e0d4b5;
+  border: none;
+  border-radius: 10px;
+}
+.c_box__left::-webkit-scrollbar-thumb{
+  background: #dbb34e;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.c_box__menu {
+  padding: 32px;
+  padding-right: 24px;
+}
+
+.c_box__menu_inner > h2 {
+  margin-bottom: 16px;
+}
+
+.c_photo__menu_index {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+.c_box__update_num {
+  width: 50%;
+}
+
+.c_box__update_num_inner {
+  position: relative;
+  height: 32px;
+}
+
+.c_box__update_num_inner select {
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 8px;
+  border:1px #c3c7c3 solid;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.c_box__update_num_inner input[type="submit"] {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 95%;
+  height: 32px;
+  text-align: right;
+  padding-right: 30%;
+  margin: 0;
+}
+
+.c_box__link_menu {
+  width: 50%;
+}
+
+.c_link__menu_index {
+  width: 95%;
+  margin-left: 5%;
+  height: 32px;
+  border-radius: 12px;
+  line-height: 32px;
+}
+
+.c_link__menu_index:first-child {
+  margin-bottom: 8px;
+}
+
+.c_box__right {
+  width: 40%;
+  position: relative;
+}
+
+.c_box__lack_food {
+  padding: 32px;
+}
+
+.c_box__lack_food_inner {
+  border: 1px #6e6a65 solid;
+  border-radius: 12px;
+  margin: 16px;
+  text-align: center;
+  padding: 16px;
+}
+
+.c_box__lack_food_inner > div {
+  margin-bottom: 8px;
+}
+
+.c_box__lack_food_inner > div:nth-child(n+11) {
+  display: none;
+}
+
+.c_box__lack_food_inner > div:last-child {
+  margin-bottom: 0;
+}
+
+.c_link__list_of_shopping {
+  position: absolute;
+  right: 36px;
+  bottom: 64px;
+  width: 80%;
+}
+
+/* user_menus#new */
+.c_box__menu_new {
+  width: 640px;
+  margin: 0 auto;
+}
+.c_box__menu_new_inner {
+  flex-wrap: wrap;
+  margin: 120px auto 50px;
+}
+
+.b_box__menu_new_item:first-child, .b_box__menu_new_item:nth-child(2) {
+  margin-bottom: 32px;
+}
+
+.b_box__menu_new_item:nth-child(2n) {
+  margin: 0 0 0 auto;
+}
+
+.b_photo__menu_new {
+  border-radius: 12px;
+}
+
+.c_box__menu_new_bottom_inner {
+  width: 208px;
+  margin: 0 0 0 auto;
+}
+
+.c_box__menu_new_bottom_inner select {
+  height: 32px;
+  border-radius: 8px;
+}
+
+.c_box__menu_new_bottom_inner input[type="submit"] {
+  width: 160px;
+  margin: 0 0 0 auto;
+  border-radius: 8px;
+}
+
+.c_box__decided {
+  width: 248px;
+  margin: 24px 0 50px auto;
+}
+
+.c_box__decided > div {
+  width: 63px;
+  margin-left: 8px;
+}
+
+/* user_menus#new_one_week */
+.c_box__one_week_top_inner {
+  width: 560px;
+  margin: 0 auto;
+}
+.c_text_one_week_top_inner {
+  width: 240px;
+  height: 320px;
+  text-align: center;
+  line-height: 280px;
+}
+
+.c_box__one_week_main_inner {
+  flex-wrap: wrap;
+}
+
+.b_box__one_week_item {
+  width: calc(100%/3);
+}
+
+.b_box__one_week_item > p {
+  font-size: 32px;
+  text-align: center;
+  border-top: 1px #dbb34e solid;
+  border-bottom: 1px #dbb34e solid;
+  margin: 48px 0;
+}
+
+.b_box__one_week_item_inner {
+  width: 240px;
+  margin: 0 auto;
+}
+
+.c_select__one_week_item {
+  margin: 32px 40px;
+  text-align: center;
+}
+
+.c_select__one_week_item select {
+  width: 120px;
+  height: 32px;
+  border-radius: 8px;
+  margin-right: 8px;
+  background-color: #fff;
+}
+
+.c_select__one_week_item > p {
+  line-height: 32px;
+}
+
+.c_submit__one_week_item input[type="submit"] {
+  border-radius: 12px;
+}
+
+.c_box__one_week_bottom {
+  width: 40%;
+  margin: 56px auto;
+}
+
+.c_box__one_week_bottom_inner {
+  margin-top: 16px;
+  border: 1px #6e6a65 solid;
+  border-radius: 20px;
+  padding: 24px 24px 16px;
+  flex-flow: wrap;
+}
+
+.c_box__week_lack_food {
+  width: 49%;
+  margin-bottom: 8px;
+  margin-right: 2%;
+}
+
+.c_box__week_lack_food:nth-child(2n) {
+  margin-right: 0;
+}
+
+.c_box__week_lack_food > p {
+  text-align: center;
+}
+
+.c_button_decided_week_menu {
+  margin: 0 auto 48px;
+  width: 50%;
+}
+
+.c_button_decided_week_menu input[type="submit"] {
+  background-color: #dbb34e;
+  color: #fff;
+  border-radius: 12px;
+}
+
+.c_button_decided_week_menu input[type="submit"]:hover {
+  background-color: #fff;
+  color: #dbb34e;
+}
+
+/* need_ingredients#index */
+.c_box__shopping_list_inner {
+  margin: 80px 48px;
+}
+
+.c_box__shopping_list_item {
+  border-bottom: 1px #dbb34e dashed;
+  margin-top: 8px;
+}
+
+.c_box__shopping_list_item_inner {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.c_box__shopping_list_item_inner > p {
+  width: 210px;
+  line-height: 32px;
+  margin: 8px 0 8px 85px;
+  text-align: center;
+}
+
+.c_submit__buy {
+  width: 210px;
+}
+
+.c_submit__buy input[type="submit"] {
+  width: 50%;
+  border-radius: 12px;
+}
+
+.c_link__part_add {
+  width: 90%;
+  margin: 48px auto;
   border-radius: 12px;
 }
 

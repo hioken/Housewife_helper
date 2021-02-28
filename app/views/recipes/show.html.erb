@@ -1,0 +1,131 @@
+<div>
+  <div class="c_box__recipe c_lack__flex">
+    <div class="c_box__recipe_inner">
+          <h2><%= @recipe.name %></h2>
+      <div class="c_box__title a_flex">
+        <%= image_tag 'cake.jpg', size: '200x200', class:"c_photo__recipe_show" %>
+        <div class="c_show">
+          <div class="c_box__lack_food_inner">
+            <h2>材料</h2>
+            <h4><%= @size %>人前</h4>
+            <table class="table c_table__lack">
+              <thead>
+                  <tr class="active">
+                      <th style="width: 20%;">材料</th>
+                      <th style="width: 10%;">数量</th>
+                      <th style="width: 10%;"></th>
+                  </tr>
+              </thead>
+              <tbody>
+              <% @recipe_ingredients.each do |recipe_ingredient| %>
+                <tr>
+                  <td class="b_center__lack"><%= recipe_ingredient.mark %><%= recipe_ingredient.ingredient.name %></td>
+                  <td class="b_center__lack">
+                    <% if recipe_ingredient.seasoning_unit != '適量' %>
+                      <%= (recipe_ingredient.amount * @size).regular_amount(recipe_ingredient.ingredient.unit) %>
+                    <% end %>
+                  </td>
+                  <td class="b_center__lack">
+                    <% if recipe_ingredient.seasoning_unit %>
+                      <%= recipe_ingredient.seasoning_unit %>
+                    <% else %>
+                      <%= recipe_ingredient.ingredient.unit %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <br/>
+            <div>
+              <%= form_with(url: recipe_path(@recipe), method: :get) do |f| %>
+                <div class="a_flex c_form__setting">
+                <div class="c_form__setting_inner">
+                  <h2>人数を変更</h2>
+                  <div class="b_field__setting">
+                    <%= f.select :size, [["1人", 1], ["2人", 2], ["3人", 3], ["4人", 4], ["5人", 5], ["6人", 6], ["7人", 7], ["8人", 8], ["9人", 9], ["10人", 10], ["11人", 11], ["12人", 12]] %>
+                  </div>
+                </div>
+                <div class="a_actions a_pointer b_submit__setting">
+                  <%= f.submit "変更", name: nil, style: "left: 240px" %>
+                </div>
+                </div>
+              <% end %>
+            </div>
+      <h2>手順</h2>
+      <ul>
+        <li>
+          <p><strong>準備.</strong>気合を入れます。</p>
+        </li>
+        <li>
+          <p><strong>1.</strong>真心を込めます。</p>
+        </li>
+        <li>
+
+          <p><strong>2.</strong>実家の父の背中のようにたくましく炒めましょう。</p>
+        </li>
+        <li>
+          <p><strong>3.</strong>実家の母の優しさを思い出しながら混ぜましょう。</p>
+        </li>
+        <li>
+          <p><strong>4.</strong>完成です。</p>
+        </li>
+      </ul>
+      <br/>
+      <h2>コツ・ポイント</h2>
+      <p>ここに説明文が入る予定です。今回は割愛しています。</p>
+
+      <div class="a_box__link c_link__admin">
+        <%= link_to "管理者として、このレシピを更新/削除", root_path, class:"a_link" %>
+      </div>
+    </div>
+
+      <div class="c_box__lack">
+        <% if @lack_ingredients %>
+          <div class="c_box__lack_food_inner">
+            <h2 class="b_center__lack">不足材料一覧</h2>
+            <br/>
+            <table class="table c_table__lack">
+              <thead>
+                  <tr class="active">
+                      <th style="width: 20%;">材料</th>
+                      <th style="width: 10%;">数量</th>
+                      <th style="width: 10%;"></th>
+                  </tr>
+              </thead>
+              <tbody>
+                <% @lack_ingredients.each do |ingredient| %>
+                <tr>
+                  <td class="b_center__lack"><%= ingredient[0] %></td>
+                  <% if ingredient[2] != 'option' %>
+                    <td class="b_center__lack"><%= ingredient[1].regular_amount(ingredient[2]) %></td>
+                    <td class="b_center__lack"><%= ingredient[2] %></td>
+                  <% end %>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+      <div class="c_form__date">
+        <div class="c_form__date_inner">
+          <%= form_with url: root_path, method: :get do |f| %>
+            <div class="c_field__date">
+              <%= f.date_field :dammy %>
+            </div>
+            <div class="a_actions a_pointer c_submit__date">
+              <%= f.submit "上記の日の献立に設定" %>
+            </div>
+          <% end %>
+          <div class="a_box__link c_link__done">
+            <%= link_to "料理を作成した",root_path, class:"a_link" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

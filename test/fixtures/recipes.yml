@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  cooking_time: 1
+  is_old: false
+  new_menu_recode: 1
+
+two:
+  name: MyString
+  cooking_time: 1
+  is_old: false
+  new_menu_recode: 1

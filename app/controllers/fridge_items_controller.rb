@@ -6,16 +6,17 @@ class FridgeItemsController < ApplicationController
     @others = Ingredient.genre_scope(:other)
     @grains_seasonings = Ingredient.genre_scope(:grain_seasoning)
     @amounts = (1..20).to_a
-    @grams = @amounts.map { |num| num * 100 }
     @haves = [['追加', 9999]]
   end
 
   def create
     ingredient_data = {}
     params[:fridge_items].each do |key, values|
-      next if (values[:ingredient_id] == '' or values[:amount] == '')
-      code = values[:ingredient_id].to_i
+      next if (values[:id_unit] == '' or values[:amount] == '')
+      id_unit = values[:id_unit].split(',')
+      code = id_unit[0].to_i
       amount = values[:amount].to_i * 4
+      amount *= 100 if id_unit[1] == 'g'
       if ingredient_data[code]
         ingredient_data[code] += amount unless ingredient_data[code] == 9999
       else

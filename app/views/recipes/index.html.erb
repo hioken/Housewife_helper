@@ -1,0 +1,28 @@
+<div class="c_box__ranking_all">
+  <h2>ランキング</h2>
+  <div class="c_box__ranking">
+    <div class="a_flex c_box__ranking_inner">
+      <% @recipes.each do |recipe| %>
+        <div class="c_box__ranking_item">
+          <div class="c_box__ranking_item_inner">
+            <% if percentage = recipe.how_mach_already(current_end_user) %>
+              <div class="c_pop">
+                <p style="font-size: 8px;">レシピ<%= current_end_user.family_size %>人前を<b><%= percentage %>%</b>を<br/>冷蔵庫内で<br/>賄えます!<br/>※調味料除く</p>
+              </div>
+            <% end %>
+            <%= link_to(recipe_path(recipe), class:"a_link__black c_link__ranking_item") do %>
+              <div class="c_box__photo_ranking">
+                <%= image_tag "cake.jpg", size: "240x240",class:"c_photo__ranking_item" %>
+                <div class="c_num__ranking">
+                  <h2></h2>
+                </div>
+              </div>
+              <h3><%= recipe.name %></h3>
+              <p class="a_text__abbreviation c_text__ranking">本来はここにレシピの紹介が入る予定ですが、本アプリケーションの趣旨には関係ないので割愛しています。</p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -2,11 +2,11 @@
   <div>
     <div class="c_box__fridge_new">
       <h3>食材を追加</h3>
-      <%= form_with url: fridge_items_path, method: :post do |f| %>
+      <%= form_with  url: fridge_items_path, method: :post do |f| %> 
         <div class="a_flex c_box__fridge_new_inner">
           <div class="b_box__fridge_item">
             <p>肉</p>
-            <%= render "fridge_item", f: f, foods: @meats, amounts: @grams, genre: '肉一覧', value_num: '0' %>
+            <%= render "fridge_item", f: f, foods: @meats, amounts: @amounts, genre: '肉一覧', value_num: '0' %>
           </div>
           <div class="b_box__fridge_item">
             <p>海鮮</p>
@@ -40,7 +40,7 @@
     var add_num = String(column_num);
     $(this).parent().clone(true).insertAfter($(this).parent().parent().find('div:last'));
     var select = $(this).parent().parent().find('div:last').find('select')
-    $(select[0]).attr('name', `fridge_items[value_${add_num}[ingredient_id]]`);
+    $(select[0]).attr('name', `fridge_items[value_${add_num}[id_unit]]`);
     $(select[1]).attr('name', `fridge_items[value_${add_num}[amount]]`);
   });
   $(document).on("click", ".delete", function() {
