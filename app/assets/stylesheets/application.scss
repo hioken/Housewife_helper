@@ -13,69 +13,7 @@
  *= require_tree .
  *= require_self
  */
- 
- /*
- .c_pop{
-  position: relative;
-  padding: 20px;
-  width: 130px;
-  height: 120px;
-  line-height: 100%;
-  border-radius: 50%;
-  text-align: center;
-  color: #ffffff;
-  letter-spacing: 0.2em;
-  font-size: 14px;
-  background-color: #ff9800;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  z-index: 100;
-  font-size: 16px;
-}
 
-.c_table__lack {
-  margin: auto ;
-  width: 100% ;
-}
-
-.c_form__date {
-  bottom: 0;
-  left: 125px;
-  margin: auto;
-  padding: 0;
-}
-
-.c_box__lack {
-  width: 30%;
-  margin: 0 24px 0;
-  position: relative;
-}
-
-.c_lack__flex {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-}
-
-.c_box__recipe {
-  padding: 3%;
-}
-
-.c_photo__recipe_show {
-  margin-top: 16px;
-}
-
-.c_box__recipe_inner {
-  width: 60%;
-  margin: 0 0 72px 24px;
-}
-
-.c_show {
-  width: 400px;
-  margin-left: 40px;
-}
-*/
 * {
   box-sizing: border-box;
   padding: 0;
@@ -351,6 +289,16 @@ header {
 /*  */
 
 /* recipes#show */
+.c_lack__flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.c_box__recipe {
+  padding: 3%;
+}
+
 .c_lack__per {
   width: 440px;
   margin: 0 auto;
@@ -360,15 +308,17 @@ header {
 }
 
 .c_box__recipe_inner {
-  width: 50%;
+  width: 60%;
   margin: 0 0 72px 24px;
 }
 
 .c_photo__recipe_show {
   border-radius: 12px;
+  margin-top: 16px;
 }
 
 .c_show {
+  width: 400px;
   margin-left: 40px;
 }
 
@@ -384,8 +334,8 @@ header {
 }
 
 .c_box__lack {
-  width: 50%;
-  margin: 0 24px 0;
+  width: 30%;
+  margin: 0 8% 0;
   position: relative;
 }
 
@@ -394,15 +344,21 @@ header {
 }
 
 .c_table__lack {
-  margin-left: 80px ;
+  margin: auto ;
+  width: 100% ;
 }
 
 .c_form__date {
   position: absolute;
   bottom: 0;
-  left: 125px;
+  left: 10%;
   margin: 0;
   padding: 0;
+  
+  // bottom: 0;
+  // left: 125px;
+  // margin: auto;
+  // padding: 0;
 }
 
 .c_form__date_inner {
@@ -462,7 +418,7 @@ header {
   padding: 20px;
   width: 130px;
   height: 120px;
-  line-height: 170%;
+  line-height: 100%;
   border-radius: 50%;
   text-align: center;
   color: #ffffff;
