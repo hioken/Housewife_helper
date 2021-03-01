@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_072741) do
+ActiveRecord::Schema.define(version: 2021_03_01_194346) do
 
   create_table "end_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -65,8 +65,21 @@ ActiveRecord::Schema.define(version: 2021_02_24_072741) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_menus", force: :cascade do |t|
+    t.integer "end_user_id", null: false
+    t.integer "recipe_id", null: false
+    t.date "cooking_date", null: false
+    t.integer "sarve", null: false
+    t.boolean "is_cooked", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["end_user_id"], name: "index_user_menus_on_end_user_id"
+  end
+
   add_foreign_key "fridge_items", "end_users"
   add_foreign_key "fridge_items", "ingredients"
   add_foreign_key "recipe_ingredients", "ingredients"
   add_foreign_key "recipe_ingredients", "recipes"
+  add_foreign_key "user_menus", "end_users"
+  add_foreign_key "user_menus", "recipes"
 end
