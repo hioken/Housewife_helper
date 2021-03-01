@@ -76,7 +76,6 @@
   margin-left: 40px;
 }
 */
- 
 * {
   box-sizing: border-box;
   padding: 0;
@@ -125,11 +124,15 @@
 
 .a_box__link:hover {
   cursor: pointer;
-  background-color: #c3c7c3;
+  background-color: #dbb34e;
 }
 
 .a_link {
   color: #dbb34e;
+}
+
+.a_link:hover {
+  color: #fff;
 }
 
 .a_link__black {
@@ -292,10 +295,6 @@ header {
   margin-left: 160px;
 }
 
-.c_photo__recipe_show {
-  margin-top: 16px;
-}
-
 .c_photo__box_rank {
   width: 200px;
   height: 200px;
@@ -319,17 +318,39 @@ header {
   padding-left: 40px;
 }
 
+/* recipes#new */
+.b_box__add_new_item {
+  width: 346px;
+}
+
+.b_box__add_new_item:first-child {
+  margin-right: 48px;
+}
+
+.b_box__add_new_item:nth-child(3) {
+  width: 732px;
+}
+
+.b_box__add_new_item select, .b_box__add_new_item input[type="text"] {
+  height: 24px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  width: 288px;
+}
+
+.b_box__add_new_item input[type="text"] {
+  border: 1px #6e6a65 solid;
+  width: 288px;
+  margin-right: 104px;
+}
+
+.c_field__new_item > .a_input__add {
+  margin: 4px 0 0 16px;
+}
+
+/*  */
+
 /* recipes#show */
-.c_lack__flex {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-}
-
-.c_box__recipe {
-  padding: 3%;
-}
-
 .c_lack__per {
   width: 440px;
   margin: 0 auto;
@@ -339,7 +360,7 @@ header {
 }
 
 .c_box__recipe_inner {
-  width: 60%;
+  width: 50%;
   margin: 0 0 72px 24px;
 }
 
@@ -348,7 +369,6 @@ header {
 }
 
 .c_show {
-  width: 400px;
   margin-left: 40px;
 }
 
@@ -364,7 +384,7 @@ header {
 }
 
 .c_box__lack {
-  width: 30%;
+  width: 50%;
   margin: 0 24px 0;
   position: relative;
 }
@@ -374,15 +394,14 @@ header {
 }
 
 .c_table__lack {
-  margin: auto ;
-  width: 100% ;
+  margin-left: 80px ;
 }
 
 .c_form__date {
   position: absolute;
   bottom: 0;
   left: 125px;
-  margin: auto;
+  margin: 0;
   padding: 0;
 }
 
@@ -443,7 +462,7 @@ header {
   padding: 20px;
   width: 130px;
   height: 120px;
-  line-height: 100%;
+  line-height: 170%;
   border-radius: 50%;
   text-align: center;
   color: #ffffff;
@@ -778,36 +797,61 @@ input[name="b_item__radio"] {
 }
 
 /* fridge_items#new */
-.c_box__fridge_new {
+  /*  ingredients#new と共通 */
+    /*  recipes#new と共通 */
+.a_box__add_new {
   margin: 32px;
   padding: 0;
 }
 
-.c_box__fridge_new > h3 {
+.a_box__add_new > h3 {
   margin-bottom: 16px;
 }
 
-.c_box__fridge_new_inner{
+.a_box__add_new_inner{
   flex-flow: wrap;
   width: calc(100% - 320px /2);
   margin: 0 auto;
 }
 
-.c_box__fridge_new_inner > div {
+.a_box__add_new_inner > div {
   margin-bottom: 24px;
 }
 
-.c_box__fridge_new_inner > div:nth-child(5) {
+.a_box__add_new_inner > div:nth-child(5) {
   margin-bottom: 0;
 }
 
-.b_box__fridge_item {
+.a_input__add {
+  color: #4b4a49;
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  line-height: 100%;
+  border: none;
+  font-weight: bold;
+}
+
+.a_submit__add_item {
+  width: 120px;
+  margin: 32px 0 0 auto;
+}
+
+.a_submit__add_item input[type="submit"] {
+  width: 56px;
+  margin-right: 80px;
+  border-radius: 12px;
+}
+    /*  */
+
+.a_box__add_item {
   width: 50%;
 }
 
-.b_box__fridge_item > p {
+.a_box__add_item > p {
   margin-bottom: 4px;
 }
+  /*  */
 
 .b_field__fridge_item select {
   background-color: #fff;
@@ -822,27 +866,6 @@ input[name="b_item__radio"] {
 
 .b_field__fridge_item select:nth-child(2) {
   width: 20%;
-}
-
-.b_input__fridge {
-  color: #4b4a49;
-  background-color: #fff;
-  width: 16px;
-  height: 16px;
-  line-height: 100%;
-  border: none;
-  font-weight: bold;
-}
-
-.c_submit__fridge_item {
-  width: 120px;
-  margin: 32px 0 0 auto;
-}
-
-.c_submit__fridge_item input[type="submit"] {
-  width: 56px;
-  margin-right: 80px;
-  border-radius: 12px;
 }
 
 /* user_menus#index */
@@ -1151,6 +1174,43 @@ input[name="b_item__radio"] {
   margin: 48px auto;
   border-radius: 12px;
 }
+
+/* ingredients#new */
+.b_field__test_item select {
+  width: 25%;
+  background-color: #fff;
+  height: 24px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+/*  */
+
+/* testers#show */
+.c_box__test_link {
+  margin: 48px;
+}
+
+.b_link__tester {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.b_link__test {
+  width: 100%;
+  display: inline-block;
+}
+
+.c_border__test {
+  border: 1px #6e6a65 solid;
+  border-radius: 20px;
+  width: 80%;
+  margin: 48px auto;
+}
+
+.c_border__test_inner {
+  margin: 24px;
+}
+/*  */
 
 /* フッター */
 footer {
