@@ -8,6 +8,7 @@ class EndUser < ApplicationRecord
          
   has_many :fridge_items
   has_many :user_menus
+  has_many :need_ingredients
   
   # Methods
 end

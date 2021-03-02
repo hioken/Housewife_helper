@@ -4,7 +4,6 @@ class CreateFridgeItems < ActiveRecord::Migration[6.1]
       t.references :end_user, null: false, foreign_key: true, index: false
       t.references :ingredient, null: false, foreign_key: true, index: false
       t.integer :amount, null: false
-      t.integer :mark
 
       t.timestamps
     end
