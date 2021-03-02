@@ -7,7 +7,7 @@ class EndUser < ApplicationRecord
          :recoverable, :rememberable, :validatable
          
   has_many :fridge_items
-  
+  has_many :user_menus
   
   # Methods
 end

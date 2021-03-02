@@ -18,5 +18,6 @@ class FridgeItem < ApplicationRecord
   belongs_to :ingredient
   
   validates :amount, amount: true
+  # Methods
 end
 

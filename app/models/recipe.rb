@@ -1,6 +1,7 @@
 class Recipe < ApplicationRecord
   # Setting
   has_many :recipe_ingredients
+  has_many :user_menus
   
   # Methods
   def how_mach_already(user)
