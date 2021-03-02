@@ -19,5 +19,12 @@ class FridgeItem < ApplicationRecord
   
   validates :amount, amount: true
   # Methods
+  def self.lack_ingredients(user, ingredients, size = 1)
+    lacks = ingredients.pluck(:name, :amount, :unit).each {|data| data[1] *= size}
+    names = lacks.map { |data| data[0] }
+    fridge_items = user.fridge_items.joins(:ingredient).where('ingredients.name': names).pluck('ingredients.name', :amount).to_h
+    lacks.each { |data| data[1] -= fridge_items[data[0]] if fridge_items[data[0]] }.delete_if { |data| data[1] < 1 }
+  end
+  
 end
 
