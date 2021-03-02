@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 2021_03_02_164147) do
     t.boolean "is_cooked", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["end_user_id"], name: "index_user_menus_on_end_user_id"
+    t.index ["end_user_id", "cooking_date"], name: "index_user_menus_on_end_user_id_and_cooking_date", unique: true
   end
 
   add_foreign_key "fridge_items", "end_users"

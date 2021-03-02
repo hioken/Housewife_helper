@@ -348,22 +348,36 @@ header {
   width: 100% ;
 }
 
-.c_form__date {
+.c_form__sarve {
   position: absolute;
-  bottom: 0;
+  bottom: 320px;
   left: 10%;
   margin: 0;
   padding: 0;
+  height: 120px;
+}
+
+.c_field__sarve select{
+  width: 80%;
+  height: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+  z-index: 2;
+}
   
-  // bottom: 0;
-  // left: 125px;
-  // margin: auto;
-  // padding: 0;
+.c_form__date {
+  position: absolute;
+  bottom: 240px;
+  left: 10%;
+  margin: 0;
+  padding: 0;
+  height: 80px;
 }
 
 .c_form__date_inner {
   margin: 152px auto 64px;
   width: 280px;
+  height: 80px;
 }
 
 .c_field__date input[type="date"] {
