@@ -1,5 +1,6 @@
 module UserIngredientManager
   def manage(ingredients, end_user_id, mode: :add)
+    raise unless ingredients && end_user_id && mode
     if mode == :add
       ingredients.each do |id, amount|
         next unless self::GENRE_SCOPE[:semi_all].include?(id)
@@ -9,6 +10,10 @@ module UserIngredientManager
           self.new(end_user_id: end_user_id, ingredient_id: id, amount: amount).save
         end
       end
+    end
+    
+    if mode == :cut
+      raise
     end
   end
 end

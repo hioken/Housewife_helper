@@ -3,13 +3,19 @@ class UserMenusController < ApplicationController
 	end
 	
 	def create
-		user_menu = curret_end_user.user_menus.new(user_menu_params)
+		user_menu = current_end_user.user_menus.new(user_menu_params)
 		recipe = Recipe.find(user_menu.recipe_id)
-		if duplicate = current_end_user.user_menus.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
+		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
 			duplicate.destroy
+			NeedIngredient.manage(recipe.recipe_ingredients, user_menu.end_user_id, mode: :cut)
 		end
 		user_menu.save
-		NeedIngredient.manage(recipe.ingredients, user_menu.end_user_id, mode: :add)
+		needs = {}
+		recipe.recipe_ingredients.each do |ingredient|
+			needs[ingredient.ingredient_id] = ingredient.amount * user_menu.sarve
+		end
+		NeedIngredient.manage(needs, user_menu.end_user_id, mode: :add)
+		redirect_to root_path
 	end
 	
 	private

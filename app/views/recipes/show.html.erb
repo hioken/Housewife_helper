@@ -115,7 +115,7 @@
       </div>
       <div class="c_form__date">
         <div class="c_form__date_inner">
-          <%= form_with model: UserMenu.new, url: root_path, method: :get do |f| %>
+          <%= form_with model: UserMenu.new do |f| %>
             <div class="c_field__date">
               <%= f.date_field :cooking_date, value: Date.today + 1 %>
               <%= f.hidden_field :sarve, value: @size %>
