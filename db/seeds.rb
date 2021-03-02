@@ -1,5 +1,4 @@
-count = 0
-
+p ApplicationRecord::BOOLEAN_AMOUNT
 # EndUserのテストデータ
 EndUser.create(
   [
@@ -96,15 +95,15 @@ end
   [1, 3000, 4],
   [1, 3002, 4],
   [1, 5000, 120],
-  [1, 5500, 9999],
-  [1, 5501, 9999],
-  [1, 5502, 9999],
-  [1, 5504, 9999],
-  [1, 5507, 9999],
-  [1, 5508, 9999],
-  [1, 5509, 9999],
-  [1, 5510, 9999],
-  [1, 5511, 9999]
+  [1, 5500, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5501, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5502, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5504, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5507, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5508, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5509, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5510, ApplicationRecord::BOOLEAN_AMOUNT],
+  [1, 5511, ApplicationRecord::BOOLEAN_AMOUNT]
 ].each do |user, ing, amo|
   FridgeItem.create(end_user_id: user, ingredient_id: ing, amount: amo)
 end
@@ -312,7 +311,6 @@ end
   [30, 5504, 8, nil, 0],
   [30, 5501, 4, nil, 0]
 ].each do |recipe, ingredient, amount, mark, unit_2|
-  p count += 1
   RecipeIngredient.create(recipe_id: recipe, ingredient_id: ingredient, amount: amount, mark: mark, seasoning_unit: unit_2)
 end
 

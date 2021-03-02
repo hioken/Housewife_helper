@@ -6,7 +6,7 @@ class FridgeItemsController < ApplicationController
     @others = Ingredient.genre_scope(:other)
     @grains_seasonings = Ingredient.genre_scope(:grain_seasoning)
     @amounts = (1..20).to_a
-    @haves = [['追加', 9999]]
+    @haves = [['追加', ApplicationRecord::BOOLEAN_AMOUNT]]
   end
 
   def create
@@ -18,7 +18,7 @@ class FridgeItemsController < ApplicationController
       amount = values[:amount].to_i * 4
       amount *= 100 if id_unit[1] == 'g'
       if ingredient_data[code]
-        ingredient_data[code] += amount unless ingredient_data[code] == 9999
+        ingredient_data[code] += amount unless ingredient_data[code] == ApplicationRecord::BOOLEAN_AMOUNT
       else
         ingredient_data[code] = amount
       end
