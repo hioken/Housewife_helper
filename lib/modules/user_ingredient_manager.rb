@@ -1,9 +1,9 @@
 module UserIngredientManager
   def manage(ingredients, end_user_id, mode: :add)
     raise unless ingredients && end_user_id
-    existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
     
     if mode == :add
+      existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
       existings.each do |existing|
         existing.update(amount: (existing.amount + ingredients[existing.ingredient_id])) unless self::GENRE_SCOPE[:grain_seasoning].include?(existing.ingredient_id)
         ingredients.delete(existing.ingredient_id)
@@ -17,7 +17,18 @@ module UserIngredientManager
     end
     
     if mode == :cut
-      raise
+      ingredients.delete_if{ |key, value| self::GENRE_SCOPE[:grain_seasoning].include?(key) }
+      existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
+      existings.each do |existing|
+        existing.amount -= ingredients[existing.ingredient_id]
+        # 後で3項に書き直す
+        if existing.amount <= 0
+          existing.destroy 
+        else
+          existing.save
+        end  
+      end
+      
     end
   end
 end

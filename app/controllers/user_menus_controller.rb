@@ -6,7 +6,8 @@ class UserMenusController < ApplicationController
 		user_menu = current_end_user.user_menus.new(user_menu_params)
 		recipe = Recipe.find(user_menu.recipe_id)
 		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
-			NeedIngredient.manage(duplicate.recipe.recipe_ingredients.pluck(:ingredient_id, :amount).to_h, user_menu.end_user_id, mode: :cut)
+			destroy_ingredients = duplicate.recipe.recipe_ingredients.pluck(:ingredient_id, :amount).delete_if{ |data| data[1] *= duplicate.sarve; !(NeedIngredient::GENRE_SCOPE[:semi_all].include?(data[0])) }.to_h
+			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
 			duplicate.destroy
 		end
 		user_menu.save
