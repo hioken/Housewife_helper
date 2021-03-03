@@ -1,5 +1,7 @@
 class UserMenusController < ApplicationController
 	def index
+		@user_menus = current_end_user.user_menus.eager_load(:recipe)
+		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients)
 	end
 	
 	def create

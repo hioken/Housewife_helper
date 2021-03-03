@@ -21,14 +21,8 @@ module UserIngredientManager
       existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
       existings.each do |existing|
         existing.amount -= ingredients[existing.ingredient_id]
-        # 後で3項に書き直す
-        if existing.amount <= 0
-          existing.destroy 
-        else
-          existing.save
-        end  
+        existing.amount <= 0 ? existing.destroy : existing.save
       end
-      
     end
   end
 end

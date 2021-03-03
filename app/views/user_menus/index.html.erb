@@ -1,16 +1,16 @@
 <div class="a_flex c_box__menu_index">
   <div class="c_box__left">
-    <% 24.times do %>
+    <% @user_menus.each do |user_menu| %>
       <div class="c_box__menu">
         <h3>日付</h3>
         <div class="c_box__menu_inner">
           <%= image_tag 'cake.jpg', size: '400x320', class:"c_photo__menu_index" %>
-          <h2>メニュー名</h2>
+          <h2><%= user_menu.recipe.name %></h2>
           <div class="a_flex c_box__menu_button">
             <div class="  c_box__update_num">
-              <%= form_with url: root_path, method: :get do |f| %>
+              <%= form_with model: user_menu do |f| %>
                 <div class="a_actions a_pointer a_flex c_box__update_num_inner">
-                  <%= f.select :dammy, [1,2,3,4,5,6,7,8,9,10], include_blank: "数" %>
+                  <%= f.select :sarve, [1,2,3,4,5,6,7,8,9,10,11,12] %>
                   <%= f.submit "人に変更" %>
                 </div>
               <% end %>
@@ -32,9 +32,9 @@
     <div class="c_box__lack_food">
       <h3>足りない食材</h3>
       <div class="c_box__lack_food_inner">
-        <% 14.times do %>
+        <% @lacks.each do |lack| %>
           <div>
-            <p>食材名</p>
+            <p><%= lack[0] %></p>
           </div>
         <% end %>
       </div>
