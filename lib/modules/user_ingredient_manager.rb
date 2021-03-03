@@ -1,7 +1,6 @@
 module UserIngredientManager
   def manage(ingredients, end_user_id, mode: :add)
     raise unless ingredients && end_user_id
-    
     if mode == :add
       existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
       existings.each do |existing|
