@@ -20,7 +20,7 @@
                 <%= link_to "料理済み", root_path, method: :put, class:"a_link" %>
               </div>
               <div class="a_box__link c_link__menu_index">
-                <%= link_to "取り消し", root_path, method: :delete, class:"a_link" %>
+                <%= link_to "取り消し", user_menu_path(user_menu), method: :delete, class:"a_link" %>
               </div>
             </div>
           </div>

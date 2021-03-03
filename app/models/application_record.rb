@@ -11,5 +11,5 @@ class ApplicationRecord < ActiveRecord::Base
   	grain: 5000..5499, seasoning: 5500..6999, grain_seasoning: 5000..6999
   }
   
-	 BOOLEAN_AMOUNT = 32765 
+	 BOOLEAN_AMOUNT = 2147483646 
 end

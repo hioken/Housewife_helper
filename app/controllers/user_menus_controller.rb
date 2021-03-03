@@ -37,7 +37,11 @@ class UserMenusController < ApplicationController
 	
 	def destroy
 		user_menu = UserMenu.find(params[:id])
-		user_menu.recipe.recipe_ingredients.each {}
+		ingredients = {}
+		user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.ingredient_id] = data.amount * user_menu.sarve }
+		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
+		user_menu.destroy
+		redirect_to user_menus_path
 	end
 	
 	private
