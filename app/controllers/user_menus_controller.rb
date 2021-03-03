@@ -21,6 +21,20 @@ class UserMenusController < ApplicationController
 		redirect_to root_path
 	end
 	
+	def update
+		user_menu = UserMenu.find(params[:id])
+		if user_menu.sarve != params[:user_menu][:sarve].to_i
+			old_sarve = user_menu.sarve
+			user_menu.update(user_menu_params)
+			mode = (old_sarve > user_menu.sarve ? :cut : :add)
+			remainder = (old_sarve - user_menu.sarve).abs
+			ingredients = {}
+			user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.id] = data.amount * remainder }
+			NeedIngredient.manage(ingredients, current_end_user.id, mode: mode)
+		end
+			redirect_to user_menus_path
+	end
+	
 	private
 		def user_menu_params
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
