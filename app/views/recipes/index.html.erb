@@ -5,7 +5,7 @@
       <% @recipes.each do |recipe| %>
         <div class="c_box__ranking_item">
           <div class="c_box__ranking_item_inner">
-            <% if percentage = recipe.how_mach_already(current_end_user) %>
+            <% if percentage = Recipe.how_mach_already(@ingredients[recipe.id], @fridge_items, current_end_user.family_size) %>
               <div class="c_pop">
                 <p style="font-size: 8px;">レシピ<%= current_end_user.family_size %>人前を<b><%= percentage %>%</b>を<br/>冷蔵庫内で<br/>賄えます!<br/>※調味料除く</p>
               </div>
