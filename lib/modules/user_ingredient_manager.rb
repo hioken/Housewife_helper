@@ -4,7 +4,7 @@ module UserIngredientManager
     if mode == :add
       existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
       existings.each do |existing|
-        existing.update(amount: (existing.amount + ingredients[existing.ingredient_id])) unless self::GENRE_SCOPE[:grain_seasoning].include?(existing.ingredient_id)
+        existing.update(amount: (existing.amount + ingredients[existing.ingredient_id]))
         ingredients.delete(existing.ingredient_id)
       end
       

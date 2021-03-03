@@ -12,7 +12,7 @@ class FridgeItemsController < ApplicationController
   def create
     ingredient_data = {}
     if params[:from] == 'single'
-      ingredient_data = {params[:ingredient_id] => params[:amount]}
+      ingredient_data = {params[:ingredient_id].to_i => params[:amount].to_i}
       @delete_html = params[:ingredient_id]
     else
       params[:fridge_items].each do |key, values|
