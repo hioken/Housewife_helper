@@ -29,10 +29,15 @@ class UserMenusController < ApplicationController
 			mode = (old_sarve > user_menu.sarve ? :cut : :add)
 			remainder = (old_sarve - user_menu.sarve).abs
 			ingredients = {}
-			user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.id] = data.amount * remainder }
+			user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.ingredient_id] = data.amount * remainder }
 			NeedIngredient.manage(ingredients, current_end_user.id, mode: mode)
 		end
 			redirect_to user_menus_path
+	end
+	
+	def destroy
+		user_menu = UserMenu.find(params[:id])
+		user_menu.recipe.recipe_ingredients.each {}
 	end
 	
 	private
