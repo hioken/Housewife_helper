@@ -14,6 +14,7 @@ class FridgeItemsController < ApplicationController
     if params[:from] == 'single'
       ingredient_data = {params[:ingredient_id].to_i => params[:amount].to_i}
       @delete_html = params[:ingredient_id]
+    elsif false
     else
       params[:fridge_items].each do |key, values|
         next if (values[:id_unit] == '' or values[:amount] == '')

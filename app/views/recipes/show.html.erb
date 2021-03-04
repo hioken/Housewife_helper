@@ -126,7 +126,11 @@
             </div>
           <% end %>
           <div class="a_box__link c_link__done">
-            <%= link_to "料理を作成した",root_path, class:"a_link" %>
+            <% if @today_menu == Date.today %>
+              <%= link_to "本日の献立です /調理済みにする/", cooked_user_menu_path(@todays_menu), method: :patch, class:"a_link" %>
+            <% else %>
+              <%= link_to "料理した(冷蔵庫からこのレシピの食材を削除)", fridge_items_path(fridge_items: @paramaters), method: :post, class:"a_link" %>
+            <% end %>
           </div>
         </div>
       </div>
