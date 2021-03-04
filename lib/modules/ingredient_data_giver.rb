@@ -5,6 +5,9 @@ module RelationIngredientDataGiber
 			if self.is_a?(EndUser)
 				constraint = {end_user_id: self.id}
 				FridgeItem
+			elsif self.is_a?(Recipe)
+				constraint = {recipe_id: self.id}
+				:recipe_ingredients
 			else
 				raise RunTimeError, 'moduleが無効なモデルにincludeされています、モジュールの定義を確認してください'
 			end
@@ -13,6 +16,3 @@ module RelationIngredientDataGiber
 	end
 end
 
-			#elsif self.is_a?(Recipe)
-			#	constraint = {recipe_id: self.id}
-			#	:recipe_ingredients
