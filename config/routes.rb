@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   root 'recipes#top'
   resources :recipes, except: [:destroy]
-  resource :end_users, only: [:show, :update]
   resources :fridge_items, only: [:new, :create, :update]
+  resource :end_users, only: [:show, :update]
+  patch 'user_menu/:id/cooked', to: 'user_menus#cooked', as: :cooked_user_menu
   resources :user_menus, except: [:show, :edit]
   resource :need_ingredients, only: [:show]
   

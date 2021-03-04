@@ -1,6 +1,6 @@
 class UserMenusController < ApplicationController
 	def index
-		@user_menus = current_end_user.user_menus.eager_load(:recipe)
+		@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
 		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients)
 	end
 	
@@ -39,12 +39,19 @@ class UserMenusController < ApplicationController
 	end
 
 	def cooked
-		if false
+		if false # アナウンス
 		ingredients = {}
 		else
-			user_meun = UserMenu.find(params[:id])
-			ingredients = user_menu.menu_ingredients
+			# 献立の取得と、manageの引数を作成
+			user_menu = UserMenu.find(params[:id])
+			ingredients = user_menu.menu_ingredients(user_menu.sarve)
+			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
+			NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
+			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
+			# 献立を調理済みに更新
+			user_menu.update(is_cooked: true)
 		end
+		redirect_back fallback_location: end_users_path
 	end
 
 	private
