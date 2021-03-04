@@ -9,7 +9,7 @@ class UserMenu < ApplicationRecord
   #Methods
   def menu_ingredients(sarve = 1)
 		ingredients = {}
-		self.recipe.recipe_ingredients.each { |data| ingredients[data.ingredient_id] = data.amount * sarve }
+		self.recipe.recipe_ingredients.where(ingredient_id: self.class::GENRE_SCOPE[:semi_all]).each { |data| ingredients[data.ingredient_id] = data.amount * sarve }
 		ingredients
   end
 end
