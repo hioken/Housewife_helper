@@ -6,25 +6,30 @@ class FridgeItemsController < ApplicationController
     @others = Ingredient.genre_scope(:other)
     @grains_seasonings = Ingredient.genre_scope(:grain_seasoning)
     @amounts = (1..20).to_a
-    @haves = [['追加', 9999]]
+    @haves = [['追加', ApplicationRecord::BOOLEAN_AMOUNT]]
   end
 
   def create
     ingredient_data = {}
-    params[:fridge_items].each do |key, values|
-      next if (values[:id_unit] == '' or values[:amount] == '')
-      id_unit = values[:id_unit].split(',')
-      code = id_unit[0].to_i
-      amount = values[:amount].to_i * 4
-      amount *= 100 if id_unit[1] == 'g'
-      if ingredient_data[code]
-        ingredient_data[code] += amount unless ingredient_data[code] == 9999
-      else
-        ingredient_data[code] = amount
+    if params[:from] == 'single'
+      ingredient_data = {params[:ingredient_id].to_i => params[:amount].to_i}
+      @delete_html = params[:ingredient_id]
+    else
+      params[:fridge_items].each do |key, values|
+        next if (values[:id_unit] == '' or values[:amount] == '')
+        id_unit = values[:id_unit].split(',')
+        code = id_unit[0].to_i
+        amount = values[:amount].to_i * 4
+        amount *= 100 if id_unit[1] == 'g'
+        if ingredient_data[code]
+          ingredient_data[code] += amount unless ingredient_data[code] == ApplicationRecord::BOOLEAN_AMOUNT
+        else
+          ingredient_data[code] = amount
+        end
       end
+      redirect_to end_users_path
     end
     FridgeItem.manage(ingredient_data, current_end_user.id, mode: :add)
-    redirect_to end_users_path
   end
 
   def update

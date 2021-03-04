@@ -2,6 +2,7 @@ class Ingredient < ApplicationRecord
   # Setting
   has_many :fridge_items
   has_many :recipe_ingredients
+  has_many :need_ingredients
   
   enum unit: [:合, :g, :切れ, :個, :本, :玉, :枚, :粒, :パック, :option]
   enum html_color: [:silver, :red, :orange, :green, :lime, :black]

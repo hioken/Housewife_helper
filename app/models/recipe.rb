@@ -1,14 +1,16 @@
 class Recipe < ApplicationRecord
   # Setting
   has_many :recipe_ingredients
+  has_many :user_menus
   
   # Methods
-  def how_mach_already(user)
-    recipe_ingredients = self.recipe_ingredients.where(ingredient_id: GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
-    ingredient_ids = recipe_ingredients.map { |key, value| key }
-    fridge_items = user.fridge_items.where(ingredient_id: ingredient_ids).pluck(:ingredient_id, :amount)
-    fridge_items.select! { |id, amount| amount - recipe_ingredients[id] * user.family_size > 0 }
-    ret = (fridge_items.size * 100 / ingredient_ids.size)
+  def self.how_mach_already(recipe_ingredients, fridge_items, family_size)
+    recipe_size = recipe_ingredients.size
+    cover_size = 0
+    recipe_ingredients.each do |id, amount|
+      cover_size += 1 if fridge_items[id] && fridge_items[id] - amount * family_size >= 0
+    end
+    ret = (cover_size * 100 / recipe_size)
     ret > 40 ? ret : nil
   end
 end
