@@ -4,6 +4,12 @@ class UserMenusController < ApplicationController
 		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients)
 	end
 	
+	def new
+	end
+	
+	def new_week
+	end
+	
 	def create
 		user_menu = current_end_user.user_menus.new(user_menu_params)
 		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
