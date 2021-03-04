@@ -10,13 +10,12 @@ module UserIngredientManager
       
       ingredients.each do |id, amount|
         next unless self::GENRE_SCOPE[:semi_all].include?(id)
-        amount = self::BOOLEAN_AMOUNT if self::GENRE_SCOPE[:grain_seasoning].include?(id)
         self.new(end_user_id: end_user_id, ingredient_id: id, amount: amount).save
       end
     end
     
     if mode == :cut
-      ingredients.delete_if{ |key, value| self::GENRE_SCOPE[:grain_seasoning].include?(key) }
+      ingredients.delete_if{ |key, value| self::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
       existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
       existings.each do |existing|
         existing.amount -= ingredients[existing.ingredient_id]

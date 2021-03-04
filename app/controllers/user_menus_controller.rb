@@ -6,19 +6,15 @@ class UserMenusController < ApplicationController
 	
 	def create
 		user_menu = current_end_user.user_menus.new(user_menu_params)
-		recipe = Recipe.find(user_menu.recipe_id)
 		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
 			destroy_ingredients = duplicate.recipe.recipe_ingredients.pluck(:ingredient_id, :amount).delete_if{ |data| data[1] *= duplicate.sarve; !(NeedIngredient::GENRE_SCOPE[:semi_all].include?(data[0])) }.to_h
 			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
 			duplicate.destroy
 		end
 		user_menu.save
-		needs = {}
-		recipe.recipe_ingredients.each do |ingredient|
-			needs[ingredient.ingredient_id] = ingredient.amount * user_menu.sarve
-		end
-		NeedIngredient.manage(needs, user_menu.end_user_id, mode: :add)
-		redirect_to root_path
+		ingredients = user_menu.menu_ingredients(user_menu.sarve)
+		NeedIngredient.manage(ingredients, user_menu.end_user_id, mode: :add)
+		redirect_to user_menus_path
 	end
 	
 	def update
@@ -28,8 +24,7 @@ class UserMenusController < ApplicationController
 			user_menu.update(user_menu_params)
 			mode = (old_sarve > user_menu.sarve ? :cut : :add)
 			remainder = (old_sarve - user_menu.sarve).abs
-			ingredients = {}
-			user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.ingredient_id] = data.amount * remainder }
+			ingredients = user_menu.menu_ingredients(remainder)
 			NeedIngredient.manage(ingredients, current_end_user.id, mode: mode)
 		end
 			redirect_to user_menus_path
@@ -37,13 +32,21 @@ class UserMenusController < ApplicationController
 	
 	def destroy
 		user_menu = UserMenu.find(params[:id])
-		ingredients = {}
-		user_menu.recipe.recipe_ingredients.each { |data| ingredients[data.ingredient_id] = data.amount * user_menu.sarve }
+		ingredients = user_menu.menu_ingredients(user_menu.sarve)
 		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
 		user_menu.destroy
 		redirect_to user_menus_path
 	end
-	
+
+	def cooked
+		if false
+		ingredients = {}
+		else
+			user_meun = UserMenu.find(params[:id])
+			ingredients = user_menu.menu_ingredients
+		end
+	end
+
 	private
 		def user_menu_params
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)

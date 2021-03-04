@@ -38,9 +38,11 @@
           </div>
         <% end %>
       </div>
-      <div class="a_box__link c_link__list_of_shopping">
-        <%= link_to "買い物リスト", need_ingredients_path, class:"a_link" %>
-      </div>
+      <%= link_to need_ingredients_path do %>
+        <div class="a_box__link c_link__list_of_shopping">
+          <p class="a_link">買い物リスト</p>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
