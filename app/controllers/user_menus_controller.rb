@@ -56,10 +56,13 @@ class UserMenusController < ApplicationController
 			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
 			duplicate.destroy
 		end
-		user_menu.save
-		ingredients = user_menu.menu_ingredients(user_menu.sarve)
-		NeedIngredient.manage(ingredients, user_menu.end_user_id, mode: :add)
-		redirect_to user_menus_path
+		if user_menu.save
+			ingredients = user_menu.menu_ingredients(user_menu.sarve)
+			NeedIngredient.manage(ingredients, user_menu.end_user_id, mode: :add)
+			redirect_to user_menus_path
+		else
+			redirect_back fallback_location: end_users_path
+		end
 	end
 	
 	def update

@@ -26,7 +26,8 @@
 /* 横並び */
 .a_flex {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
+  align-items: flex-start;
 }
 
 /* カーソル指定 */
@@ -964,13 +965,28 @@ input[name="b_item__radio"] {
 }
 
 /* user_menus#new */
+.c_flex__recommend {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 16px;
+  border: thick double yellow;
+}
+
+.c_box__menu_new_item_inner {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  width: 50%;
+  margin: 24px 0;
+}
+
 .c_box__menu_new {
-  width: 640px;
+  width: 800px;
   margin: 0 auto;
 }
 .c_box__menu_new_inner {
   flex-wrap: wrap;
-  margin: 120px auto 50px;
+  margin: 32px auto;
 }
 
 .b_box__menu_new_item:first-child, .b_box__menu_new_item:nth-child(2) {
