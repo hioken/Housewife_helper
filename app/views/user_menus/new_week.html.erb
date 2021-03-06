@@ -7,7 +7,7 @@
             <h3>今日:</h3>
           </div>
           <div class="c_item_one_week_top_inner">
-            <%= render "new_item" %>
+            <%= render "new_item", recipe: Recipe.find(1) %>
           </div>
         </div>
       </div>
@@ -18,7 +18,18 @@
             <div class="b_box__one_week_item">
               <p>~日後の日付</p>
               <div class="b_box__one_week_item_inner">
-                <%= render "new_week_item" %>
+                <%= form_with url: root_path, method: :get do |f| %>
+                  <div>
+                    <%= render "new_item", recipe: Recipe.find(1) %>
+                    <div class="a_flex c_select__one_week_item">
+                      <%= f.select :dammy, [1,2,3,4,5,6,7,8,9,10] %>
+                      <p>人</p>
+                    </div>
+                    <div class="a_actions a_pointer c_submit__one_week_item">
+                      <%= f.submit "変更" %>
+                    </div>
+                  </div>
+                <% end %>
               </div>
             </div>
           <% end %>
