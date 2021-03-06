@@ -969,7 +969,6 @@ input[name="b_item__radio"] {
   display: flex;
   flex-flow: row wrap;
   padding: 16px;
-  border: thick double yellow;
 }
 
 .c_box__menu_new_item_inner {
@@ -985,8 +984,8 @@ input[name="b_item__radio"] {
   margin: 0 auto;
 }
 .c_box__menu_new_inner {
-  flex-wrap: wrap;
   margin: 32px auto;
+  border: thick double yellow;
 }
 
 .b_box__menu_new_item:first-child, .b_box__menu_new_item:nth-child(2) {

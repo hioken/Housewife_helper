@@ -5,21 +5,13 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new
-		@recipes = recommend(4)
+		@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
+		@recipes = recommend(4, @sarve)
 		# レシピデータを取得
 	end
-=begin
-	処理1
-	全てのレシピデータを取得
-	処理2
-	レシピデータの中から%の多い順に4つ取得して配列に[レシピ, %]
-	処理3
-	レシピデータが4つに満たない場合は、ランダムで選択、配列の大きさから計算
-	
-	雑に
-=end
 	
 	def new_week
+		@recipes = recommend(params[:days] ? params[:days].to_i - 1 : 6)
 		
 	end
 	
@@ -81,7 +73,7 @@ class UserMenusController < ApplicationController
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
     end
     
-    def recommend(quantity = 4, limit: 50, only_recipe: false)
+    def recommend(quantity = 4, sarve = 1, limit: 50, only_recipe: false)
 			# レシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
 			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
@@ -92,7 +84,7 @@ class UserMenusController < ApplicationController
 					id = ingredient.ingredient_id
 					next unless RecipeIngredient::GENRE_SCOPE[:not_seasoning].include?(id)
 					ingredient_cnt += 1
-					cover_cnt += 1 if fridge[id] && fridge[id] - ingredient.amount >= 0
+					cover_cnt += 1 if fridge[id] && fridge[id] - ingredient.amount * sarve >= 0
 				end
     		how = (cover_cnt * 100 / ingredient_cnt)
 				cover_how[recipe.id] = how if how >= 40
