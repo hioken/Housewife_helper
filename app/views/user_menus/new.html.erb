@@ -10,10 +10,10 @@
       <% @recipes.each_with_index do |recipe, i| %>
         <div id="menu_<%= i %>" class="b_box__menu_new_item c_box__menu_new_item_inner" style="width: 50%; margin: 24px 0;">
           <div>
-            <%= render "new_item", recipe: recipe, cover_how: @cover_how %>
+            <%= render "new_item", recipe: recipe[0], cover_how: recipe[1] %>
           </div>
           <div>
-            <%= f.radio_button :recipe_id, recipe.id, checked: (i == 0) %><span><b>このレシピを今日の献立にする</b></span>
+            <%= f.radio_button :recipe_id, recipe[0].id, checked: (i == 0) %><span><b>このレシピを今日の献立にする</b></span>
           </div>
         </div>
       <% end %>

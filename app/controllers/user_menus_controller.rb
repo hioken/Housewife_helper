@@ -5,35 +5,8 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new
-		recipes = Recipe.eager_load(:recipe_ingredients).limit(50)
-		fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
-		@cover_how = {}
-		recipes.each do |recipe|
-			cover_cnt, ingredient_cnt = 0, 0
-			recipe.recipe_ingredients.each do |ingredient|
-				id = ingredient.ingredient_id
-				next unless RecipeIngredient::GENRE_SCOPE[:not_seasoning].include?(id)
-				ingredient_cnt += 1
-				cover_cnt += 1 if fridge[id] && fridge[id] - ingredient.amount >= 0
-			end
-    	how = (cover_cnt * 100 / ingredient_cnt)
-			@cover_how[recipe.id] = how if how >= 40
-		end
-		# ここまでレシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
-		
-		# 上の処理で残ったレシピが4つになるように調整
-		@cover_how = (@cover_how.sort_by { |k, v| v }.reverse)[0..3].to_h
-		if @cover_how.size < 4
-			record_cnt = Recipe.count
-			while (@cover_how.size < 4)
-				id = rand(1..record_cnt)
-				@cover_how[id] = 0 unless @cover_how.key?(id)
-			end
-		end
-		
+		@recipes = recommend(4)
 		# レシピデータを取得
-		@recipes = Recipe.where(id: @cover_how.keys).to_a
-		@recipes = @recipes.sort_by{|data| @cover_how[data.id] }.reverse
 	end
 =begin
 	処理1
@@ -105,5 +78,35 @@ class UserMenusController < ApplicationController
 	private
 		def user_menu_params
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
+    end
+    
+    def recommend(quantity = 4, limit: 50)
+			# レシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
+			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
+			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
+			cover_how = {}
+			recipes.each do |recipe|
+				cover_cnt, ingredient_cnt = 0, 0
+				recipe.recipe_ingredients.each do |ingredient|
+					id = ingredient.ingredient_id
+					next unless RecipeIngredient::GENRE_SCOPE[:not_seasoning].include?(id)
+					ingredient_cnt += 1
+					cover_cnt += 1 if fridge[id] && fridge[id] - ingredient.amount >= 0
+				end
+    		how = (cover_cnt * 100 / ingredient_cnt)
+				cover_how[recipe.id] = how if how >= 40
+			end
+			
+			# 上の処理で残ったレシピが4つになるように調整
+			cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
+			if cover_how.size < quantity
+				record_cnt = Recipe.count
+				while (cover_how.size < quantity)
+					id = rand(1..record_cnt)
+					cover_how[id] = 0 unless cover_how.key?(id)
+				end
+			end
+			recipes = Recipe.where(id: cover_how.keys).to_a
+			recipes.sort_by{|data| cover_how[data.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] }
     end
 end
