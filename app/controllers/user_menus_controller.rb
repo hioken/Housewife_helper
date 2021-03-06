@@ -20,6 +20,7 @@ class UserMenusController < ApplicationController
 =end
 	
 	def new_week
+		
 	end
 	
 	def create
@@ -80,7 +81,7 @@ class UserMenusController < ApplicationController
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
     end
     
-    def recommend(quantity = 4, limit: 50)
+    def recommend(quantity = 4, limit: 50, only_recipe: false)
 			# レシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
 			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
@@ -106,7 +107,7 @@ class UserMenusController < ApplicationController
 					cover_how[id] = 0 unless cover_how.key?(id)
 				end
 			end
-			recipes = Recipe.where(id: cover_how.keys).to_a
-			recipes.sort_by{|data| cover_how[data.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] }
+			recipes = Recipe.where(id: cover_how.keys).to_a.sort_by{|data| cover_how[data.id] }.reverse
+			recipes.map { |recipe| [recipe, cover_how[recipe.id]] } unless only_recipe
     end
 end

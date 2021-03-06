@@ -14,7 +14,7 @@
 
       <div class="c_box__one_week_main">
         <div class="a_flex c_box__one_week_main_inner">
-          <% 6.times do %>
+          <% (params[:days] ? params[:days].to_i - 1 : 6 ).times do %>
             <div class="b_box__one_week_item">
               <p>~日後の日付</p>
               <div class="b_box__one_week_item_inner">
