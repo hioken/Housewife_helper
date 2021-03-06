@@ -5,13 +5,41 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new
-    @ingredients = {}
-    @recipes.each { |recipe| @ingredients[recipe.id] = {}}
-    @recipes.joins(:recipe_ingredients).where('recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:not_seasoning]).pluck(:id, :ingredient_id, :amount).each do |data|
-      @ingredients[data[0]][data[1]] = data[2]
-    end
-    @fridge_items = current_end_user.fridge_items.where(ingredient_id: ApplicationRecord::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
+		recipes = Recipe.eager_load(:recipe_ingredients).limit(50)
+		fridge = current_end_user.fridge_items.pluck(:ingredient_id, :amount).to_h
+		@cover_how = {}
+		recipes.each do |recipe|
+			cover_cnt = 0
+			recipe.recipe_ingredients.each do |ingredient|
+				id = ingredient.ingredient_id
+				cover_cnt += 1 if fridge[id] && fridge[id] - ingredient.amount >= 0
+			end
+    	how = (cover_cnt * 100 / recipe.recipe_ingredients.size)
+			@cover_how[recipe.id] = how if how >= 40
+		end
+		# ここまでレシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
+		
+		# 上の処理で残ったレシピが4つになるように調整
+		@cover_how.sort_by { |k, v| v }.reverse.slice!(4..-1).to_h
+		if @cover_how.size < 4
+			record_cnt = Recipe.count
+			while (@cover_how.size >= 4)
+				id = rand(1..record_cnt)
+				@cover_how[id] = nil unless @cover_how.key?(id)
+			end
+		end
+		@recipes = Recipe.where(id: @cover_how.keys)
 	end
+=begin
+	処理1
+	全てのレシピデータを取得
+	処理2
+	レシピデータの中から%の多い順に4つ取得して配列に[レシピ, %]
+	処理3
+	レシピデータが4つに満たない場合は、ランダムで選択、配列の大きさから計算
+	
+	雑に
+=end
 	
 	def new_week
 	end

@@ -1,16 +1,9 @@
 <div class="c_box__menu_new">
+  <h2>本日の献立を選択してください</h2>
   <div class="a_flex c_box__menu_new_inner">
-    <div id="menu_1" class="b_box__menu_new_item">
-      <%= render "new_item" %>
-    </div>
-    <div id="menu_2" class="b_box__menu_new_item">
-      <%= render "new_item" %>
-    </div>
-    <div id="menu_3" class="b_box__menu_new_item">
-      <%= render "new_item" %>
-    </div>
-    <div id="menu_4" class="b_box__menu_new_item">
-      <%= render "new_item" %>
+    <% @recipes.each_with_index do |recipe, i| %>
+    <div id="menu_<%= i %>" class="b_box__menu_new_item">
+      <%= render "new_item", recipe: recipe, cover_how: @cover_how %>
     </div>
   </div>
   <div class="c_box__menu_new_bottom">
