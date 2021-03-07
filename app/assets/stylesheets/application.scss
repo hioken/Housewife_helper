@@ -1064,7 +1064,7 @@ input[name="b_item__radio"] {
 }
 
 .c_select__one_week_item select {
-  width: 120px;
+  width: 64px;
   height: 32px;
   border-radius: 8px;
   margin-right: 8px;
@@ -1078,6 +1078,28 @@ input[name="b_item__radio"] {
 .c_submit__one_week_item input[type="submit"] {
   border-radius: 12px;
 }
+
+.c_link__one_week_item a {
+  border-radius: 12px;
+}
+
+.c_actions__week > a {
+  border-style: none;
+  width: 100%;
+  height: 32px;
+  margin: 8px 0;
+  background-color: #fff;
+  border-radius: 4px;
+  color: #dbb34e;
+  border: 1px #dbb34e solid;
+}
+
+.c_actions__week > a:hover {
+  cursor: pointer;
+  background-color: #dbb34e;
+  color: #fff;
+}
+
 
 .c_box__one_week_bottom {
   width: 640px;
