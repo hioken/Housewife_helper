@@ -31,14 +31,15 @@ class UserMenusController < ApplicationController
 					lacks_tmp[ingredient.ingredient_id] = ingredient.amount * recipes_h[ingredient.recipe_id]
 				end
 			end
-			current_end_user.fridge_items.pluck(:ingredient_id, :amount).each do |id, amount|
-				lacks_tmp[id] -= amount if lacks_tmp[id]
-			end
-			lacks_tmp.delete_if{ |id, amount| amount <= 0 }
-			@lacks = Ingredient.where(id: lacks_tmp.keys).pluck(:name, :unit, :id)
-			@lacks.each do |data|
-				data.insert(1, lacks_tmp[data[2]])
-			end
+			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			# current_end_user.fridge_items.pluck(:ingredient_id, :amount).each do |id, amount|
+				# lacks_tmp[id] -= amount if lacks_tmp[id]
+			# end
+			# lacks_tmp.delete_if{ |id, amount| amount <= 0 }
+			# @lacks = Ingredient.where(id: lacks_tmp.keys).pluck(:name, :unit, :id)
+			# @lacks.each do |data|
+				# data.insert(1, lacks_tmp[data[2]])
+			# end
 		end
 	end
 	
