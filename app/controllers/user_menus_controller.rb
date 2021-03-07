@@ -100,13 +100,14 @@ class UserMenusController < ApplicationController
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
     end
     
-    def recommend(quantity = 4, sarve = 1, limit: 50, class_relation: false, duplicate: true, recipe_only: false)
-			# レシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
+    def recommend(quantity = 4, sarve = 1, limit: 50, type: :with_rate, duplicate: true, follow_fridge: true)
+			# レシピデータ、冷蔵庫、今週の献立を取得
 			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
-			cover_how = {}
 			week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + 6)).pluck(:recipe_id) # 今週のレシピを取得
 			
+			# 各レシピの冷蔵庫の中身で賄える量を計算、{reicpe: 割合}でcover_howに格納、40%以下(duplicate falseの場合は60%以下)の割合は0とする
+			cover_how = {}
 			recipes.each do |recipe|
 				next if week_menu.include?(recipe.id) # 今週のレシピに含まれているレシピはスルー
 				cover_cnt, ingredient_cnt = 0, 0
@@ -119,7 +120,9 @@ class UserMenusController < ApplicationController
     		how = (cover_cnt * 100 / ingredient_cnt)
     		
     		# メニュー候補追加処理
-    		if duplicate && how >= 40 
+    		if !(follow_fridge)
+    			cover_how[recipe.id] = how
+    		elsif duplicate && how >= 40 
 					cover_how[recipe.id] = how
 				elsif how >= 60 # duplicateがfalseの時は、60%以上を賄えるメニューが見つかるたび、冷蔵庫の中身を減らす
 					cover_how[recipe.id] = how 
@@ -128,21 +131,29 @@ class UserMenusController < ApplicationController
 			end
 			
 			# 上の処理で残ったレシピが4つになるように調整
-			cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
-			if cover_how.size < quantity
-				record_cnt = Recipe.count
-				while (cover_how.size < quantity)
-					id = rand(1..record_cnt)
-					cover_how[id] = 0 unless cover_how.key?(id)
+    	if !(follow_fridge)
+    		selects = (0...recipes.size).to_a.sample(quantity)
+				cover_how.select!{ |id, how| selects.include?(id) }
+    	else
+				cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
+				if cover_how.size < quantity
+					record_cnt = Recipe.count
+					while (cover_how.size < quantity)
+						id = rand(1..record_cnt)
+						cover_how[id] = 0 unless cover_how.key?(id)
+					end
 				end
 			end
 			
-			# class_relationがtrueの時は、レシピデータをRelationで返す、そうでない場合、Arrayで、さらにrecipe_onlyがfalseの場合は賄えている割合付きの２次元配列返す
-			recipes = Recipe.where(id: cover_how.keys)
-			if recipe_only
-				recipes.pluck(:id)
-			elsif !(class_relation)
-				recipes.sort_by{|data| cover_how[data.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] } 
+			# typeが、relationの場合はレシピデータをRelationで返す、arrayの場合はソートした配列で返す、with_rateの場合は賄えている割合付きの２次元配列返す
+			if type == :relation
+				Recipe.where(id: cover_how.keys)
+			elsif type == :recipe_only
+				Recipe.where(id: cover_how.keys).sort_by{|data| cover_how[data.id] }.reverse
+			elsif type == :with_rate
+				Recipe.where(id: cover_how.keys).sort_by{|data| cover_how[data.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] } 
+			else
+				raise '戻り値を正しく選択してください(引数type: )'
 			end
     end
 end
