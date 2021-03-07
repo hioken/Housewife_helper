@@ -15,13 +15,12 @@ class UserMenusController < ApplicationController
 		else
 			days = params[:days] ? params[:days].to_i : 7
 			@recipes = recommend(days, current_end_user.family_size, recipe_only: true)
-			week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1)).pluck(:cooking_date, :recipe_id, :sarve)
-			@sarves = {}
-			week_menu.each do |date, id, sarve|
-				@sarves[id] = sarve
-				@recipe.insert((date - Date.today).to_i, [id, sarve])
+			if week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1)).pluck(:cooking_date, :recipe_id, :sarve) != []
+				week_menu.each do |date, id, sarve|
+					@recipes.insert((date - Date.today).to_i, [id, sarve])
+				end
+				@recipe.slice!(-(week_menu.size)..-1)
 			end
-			@recipe.slice!(-(week_menu.size)...-1)
 			@lacks = {}
 			@recipes.preload(:recipe_ingredients).each do |recipe|
 				sarve = @sarves[recipe.id] ? @sarves[recipe.id] : current_end_user.family_size
