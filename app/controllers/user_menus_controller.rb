@@ -14,24 +14,31 @@ class UserMenusController < ApplicationController
 		if params[:change]
 		else
 			days = params[:days] ? params[:days].to_i : 7
-			@recipes = recommend(days, current_end_user.family_size, recipe_only: true)
-			if week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1)).pluck(:cooking_date, :recipe_id, :sarve) != []
-				week_menu.each do |date, id, sarve|
-					@recipes.insert((date - Date.today).to_i, [id, sarve])
+			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
+			if (week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1))).size > 0
+				week_menu.each do |menu|
+					@recipes.insert((menu.cooking_date - Date.today).to_i, [menu.recipe, menu.sarve])
 				end
-				@recipe.slice!(-(week_menu.size)..-1)
+				@recipes.slice!(-(week_menu.size)..-1)
 			end
-			@lacks = {}
-			@recipes.preload(:recipe_ingredients).each do |recipe|
-				sarve = @sarves[recipe.id] ? @sarves[recipe.id] : current_end_user.family_size
-				recipe.recipe_ingredients.each do |ingredient|
-					@lacks[ingredient.ingredient_id] = @lacks[ingredient.ingredient_id].to_i + ingredient.amount * sarve
+			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
+			lacks_tmp = {}
+			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingredient|
+				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingredient.ingredient_id)
+				if lacks_tmp[ingredient.ingredient_id]
+					lacks_tmp[ingredient.ingredient_id] += ingredient.amount * recipes_h[ingredient.recipe_id]
+				else
+					lacks_tmp[ingredient.ingredient_id] = ingredient.amount * recipes_h[ingredient.recipe_id]
 				end
 			end
 			current_end_user.fridge_items.pluck(:ingredient_id, :amount).each do |id, amount|
-				@lacks[id] -= amount if @lacks[id]
+				lacks_tmp[id] -= amount if lacks_tmp[id]
 			end
-			@lacks.delete_if{ |id, amount| amount <= 0 }
+			lacks_tmp.delete_if{ |id, amount| amount <= 0 }
+			@lacks = Ingredient.where(id: lacks_tmp.keys).pluck(:name, :unit, :id)
+			@lacks.each do |data|
+				data.insert(1, lacks_tmp[data[2]])
+			end
 		end
 	end
 	
