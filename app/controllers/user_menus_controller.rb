@@ -11,7 +11,29 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new_week
-		if params[:change]
+		if params[:menu_change]
+			# 変更前のレシピのsarveを取得
+			sarve = params[:sarve].to_i
+			
+			# 新しいレシピデータの取得
+			ids = flash[:recipes].map(&:to_i)
+			stop_cnt = 0
+			new_id = 
+				loop do
+					ret = rand(1..Recipe.count)
+					break ret if !(ids.include?(ret)) || (stop_cnt += 1) > 20
+				end
+			@recipe =  [Recipe.find(new_id), sarve]
+			
+			# lacksの編集
+			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
+			Recipe_ingredient.where(recipe_id: params[:id].to_i).each { |ingredient| lacks_tmp[ingredient.ingredient.id] -= ingredient.amount * sarve }
+			@recipe[0].recipe_ingredients.each { |ingredient| lacks_tmp[ingredient.ingredient.id] = lacks_tmp[ingredient.ingredient.id].to_i + ingredient.amount * sarve }
+			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			
+			#次のflashのセット
+			flash[:lacks] = lacks_tmp
+			flash[:recipes] = ids << new_id
 		else
 			days = params[:days] ? params[:days].to_i : 7
 			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
@@ -32,14 +54,8 @@ class UserMenusController < ApplicationController
 				end
 			end
 			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
-			# current_end_user.fridge_items.pluck(:ingredient_id, :amount).each do |id, amount|
-				# lacks_tmp[id] -= amount if lacks_tmp[id]
-			# end
-			# lacks_tmp.delete_if{ |id, amount| amount <= 0 }
-			# @lacks = Ingredient.where(id: lacks_tmp.keys).pluck(:name, :unit, :id)
-			# @lacks.each do |data|
-				# data.insert(1, lacks_tmp[data[2]])
-			# end
+			flash[:lacks] = lacks_tmp
+			flash[:recipes] = recipes_h.keys
 		end
 	end
 	
@@ -145,9 +161,10 @@ class UserMenusController < ApplicationController
 				cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
 				if cover_how.size < quantity
 					record_cnt = Recipe.count
+					stop_cnt = 0
 					while (cover_how.size < quantity)
 						id = rand(1..record_cnt)
-						cover_how[id] = 0 unless cover_how.key?(id)
+						cover_how[id] = 0 if !(cover_how.key?(id)) || (stop_cnt += 1) > 20
 					end
 				end
 			end
