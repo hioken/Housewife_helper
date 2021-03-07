@@ -11,12 +11,14 @@ class Integer
   
   #amountのユーザー向け表記を返す
   def regular_amount(unit)
-    if unit == 'g'
-      self / 4
+    if unit == 'option' || unit == '合'
+      ''
+    elsif unit == 'g'
+      (self / 4).to_s
     else
       result = self.divmod(4)
       if result[1] == 0
-        result[0]
+        result[0].to_s
       elsif result[1] == 2
         result[0] > 0 ? "#{result[0]}と1/2" : '1/2'
       else

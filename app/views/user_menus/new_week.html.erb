@@ -8,6 +8,11 @@
           </div>
           <div class="c_item_one_week_top_inner">
             <%= render "new_item", recipe: @recipes.first[0] %>
+            <div class="a_flex c_select__one_week_item">
+              <%= f.select "user_menu_0[sarve]", [1,2,3,4,5,6,7,8,9,10], selected: @recipes.first[1] %>
+              <%= f.hidden_field "user_menu_0[recipe_id]", value: @recipes.first[0].id %>
+              <p>人</p>
+            </div>
           </div>
         </div>
       </div>
@@ -18,18 +23,14 @@
             <div class="b_box__one_week_item">
               <p><%= i %>日後の日付</p>
               <div class="b_box__one_week_item_inner">
-                <%= form_with url: user_menus_path, method: :get do |f_2| %>
-                  <div>
-                    <%= render "new_item", recipe: recipe[0] %>
-                    <div class="a_flex c_select__one_week_item">
-                      <%= f_2.select :dammy, [1,2,3,4,5,6,7,8,9,10] %>
-                      <p>人</p>
-                    </div>
-                    <div class="a_actions a_pointer c_submit__one_week_item">
-                      <%= f.submit "変更" %>
-                    </div>
+                <div>
+                  <%= render "new_item", recipe: recipe[0] %>
+                  <div class="a_flex c_select__one_week_item">
+                    <%= f.select "user_menu_#{i}[sarve]", [1,2,3,4,5,6,7,8,9,10], selected: recipe[1] %>
+                    <%= f.hidden_field "user_menu_#{i}[recipe_id]", value: recipe[0].id %>
+                    <p>人</p>
                   </div>
-                <% end %>
+                </div>
               </div>
             </div>
           <% end %>
@@ -37,11 +38,12 @@
       </div>
 
       <div class="c_box__one_week_bottom">
-        <h3>足りない食材一覧</h3>
+        <h3>足りない食材一覧</h3><span>※人数の変更により、表記にずれが生じることがございます</span>
         <div class="a_flex c_box__one_week_bottom_inner">
           <% @lacks.each do |ingredient| %>
             <div class="c_box__week_lack_food">
-              <p><%= ingredient[0] %></p>
+              <% amounts = (ingredient[2] == 'option' ? '' : "#{ingredient[1].regular_amount(ingredient[2]).to_s.rjust(3, '-')}　#{ingredient[2].rjust(3, '　')}") %>
+              <p><%= ingredient[0].rjust(8, '　') + '　　' + amounts %></p>
             </div>
           <% end %>
         </div>
