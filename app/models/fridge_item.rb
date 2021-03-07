@@ -33,8 +33,8 @@ class FridgeItem < ApplicationRecord
     # WHEREのIN句に使う名前を配列化
     ids = lacks.map { |data| data[3] }
     # 冷蔵庫の対象と同じ素材を、名前とamountで取得
-    fridge_items = user.fridge_items.where(ingredient_id: ids).pluck(:ingredients_id, :amount).to_h
-    lacks.each { |data| data[1] -= fridge_items[data[3]] if fridge_items[data[3]] }.delete_if { |data| data[1] =< 0 }
+    fridge_items = user.fridge_items.where(ingredient_id: ids).pluck(:ingredient_id, :amount).to_h
+    lacks.each { |data| data[1] -= fridge_items[data[3]] if fridge_items[data[3]] }.delete_if { |data| data[1] <= 0 }
   end
   
 end

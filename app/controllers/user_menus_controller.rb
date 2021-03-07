@@ -39,6 +39,7 @@ class UserMenusController < ApplicationController
 	def new_week_change
 		recipe = Recipe.find(params[:recipe])
 		recipe.recipe_ingredients.each do ||
+		end
 	end
 	
 	def create
@@ -99,12 +100,12 @@ class UserMenusController < ApplicationController
       params.require(:user_menu).permit(:cooking_date, :sarve, :recipe_id)
     end
     
-    def recommend(quantity = 4, sarve = 1, limit: 50, class_relation: false, duplicate: true, recipe_only: true)
+    def recommend(quantity = 4, sarve = 1, limit: 50, class_relation: false, duplicate: true, recipe_only: false)
 			# レシピの冷蔵庫の中身で賄える量を計算、40%以上を取得
 			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
 			cover_how = {}
-			week_menu = current_end_user.user_menu.where(cooking_date: (Date.today)..(Date.today + 6)).pluck(:recipe_id) # 今週のレシピを取得
+			week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + 6)).pluck(:recipe_id) # 今週のレシピを取得
 			
 			recipes.each do |recipe|
 				next if week_menu.include?(recipe.id) # 今週のレシピに含まれているレシピはスルー

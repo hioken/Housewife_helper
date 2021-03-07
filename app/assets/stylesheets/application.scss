@@ -26,8 +26,7 @@
 /* 横並び */
 .a_flex {
   display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
+  flex-flow: row nowrap;
 }
 
 /* カーソル指定 */
