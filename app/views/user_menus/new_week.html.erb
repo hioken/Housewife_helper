@@ -6,8 +6,8 @@
           <div class="c_text_one_week_top_inner">
             <h3>今日:</h3>
           </div>
-          <div id="nemu_0" class="c_item_one_week_top_inner">
-            <div id="nemu_render_0"><%= render "new_item", recipe: @recipes.first[0] %></div>
+          <div id="menu_0" class="c_item_one_week_top_inner">
+            <div id="menu_render_0"><%= render "new_item", recipe: @recipes.first[0] %></div>
             <div id="sarve_0" class="a_flex c_select__one_week_item">
               <%= f.select "user_menus[menu_0[sarve]]", [1,2,3,4,5,6,7,8,9,10], selected: @recipes.first[1] %>
               <%= f.hidden_field "user_menus[menu_0[recipe_id]]", value: @recipes.first[0].id %>
@@ -15,7 +15,7 @@
             </div>
             <%= link_to new_week_user_menu_path(menu_change: true, html_id: 0, id: @recipes.first[0].id, old_sarve: @recipes.first[1], sarve: @recipes.first[1]), remote: true, id: "menu_change_0" do %>
               <div class="a_actions a_pointer c_submit__one_week_item">
-                <input type="submit" value="送信する">
+                <input type="submit" value="メニューを変更する">
               </div>
             <% end %>
           </div>
@@ -27,9 +27,9 @@
           <% @recipes[1..-1].each.with_index(1) do |recipe, i| %>
             <div class="b_box__one_week_item">
               <p><%= i %>日後の日付</p>
-              <div id="nemu_<%= i %>" class="b_box__one_week_item_inner">
+              <div id="menu_<%= i %>" class="b_box__one_week_item_inner">
                 <div>
-                  <div id="nemu_render_<%= i %>"><%= render "new_item", recipe: recipe[0] %></div>
+                  <div id="menu_render_<%= i %>"><%= render "new_item", recipe: recipe[0] %></div>
                   <div id="sarve_<%= i %>" class="a_flex c_select__one_week_item">
                     <p>人数変更:　</p>
                     <%= f.select "user_menus[menu_#{i}[sarve]]", [1,2,3,4,5,6,7,8,9,10], selected: recipe[1], style: "width: 24px;" %>
@@ -38,7 +38,7 @@
                   </div>
                   <%= link_to new_week_user_menu_path(menu_change: true, html_id: i, id: recipe[0].id, old_sarve: recipe[1], sarve: recipe[1]), remote: true, id: "menu_change_#{i}" do %>
                     <div class="a_actions a_pointer c_submit__one_week_item">
-                      <input type="submit" value="送信する">
+                      <input type="submit" value="メニューを変更する">
                     </div>
                   <% end %>
                 </div>
@@ -50,7 +50,7 @@
 
       <div class="c_box__one_week_bottom">
         <h3>足りない食材一覧</h3><span>※人数の変更により、表記にずれが生じることがございます</span>
-        <div class="a_flex c_box__one_week_bottom_inner">
+        <div id="week_lacks" class="a_flex c_box__one_week_bottom_inner">
           <%= render "new_week_lack", lacks: @lacks %>
         </div>
       </div>
