@@ -1,0 +1,18 @@
+<div>
+  <%= link_to(recipe_path(recipe[0].id), class:"a_link__black", target: :_blank) do %>
+    <%= image_tag 'cake.jpg', size: '240x240', class:"b_photo__menu_new" %>
+    <h3><%= recipe[0].name %></h3>
+    <p>料理時間: <%= recipe[0].cooking_time.to_s.rjust(3) %>分</p>
+  <% end %>
+  <div id="sarve_<%= i %>" class="a_flex c_select__one_week_item">
+    <p>人数変更:　</p>
+    <%= f.select "user_menus[menu_#{i}[sarve]]", [1,2,3,4,5,6,7,8,9,10], selected: recipe[1], style: "width: 24px;" %>
+    <p>人</p>
+    <%= f.hidden_field "user_menus[menu_#{i}[recipe_id]]", value: recipe[0].id %>
+  </div>
+  <%= link_to new_week_user_menu_path(menu_change: true, html_id: i, id: recipe[0].id, sarve: recipe[1]), id: "menu_change_#{i}" do %>
+    <div class="a_actions a_pointer c_submit__one_week_item">
+      <%= f.submit "メニューを変更する" %>
+    </div>
+  <% end %>
+</div>
