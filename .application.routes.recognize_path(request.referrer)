@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/ubuntu/environment/rails/housewife_helper/app/controllers/user_menus_controller.rb:15 UserMenusController#new_week:
+
+    [1;34m10[0m: 		[1;34m# レシピデータを取得[0m
+    [1;34m11[0m: 	[32mend[0m
+    [1;34m12[0m: 	
+    [1;34m13[0m: 	[32mdef[0m [1;34mnew_week[0m
+    [1;34m14[0m: 		binding.pry
+ => [1;34m15[0m: 		[32mif[0m params[[33m:menu_change[0m]
+    [1;34m16[0m: 			[1;34m# 変更前のレシピのsarveを取得[0m
+    [1;34m17[0m: 			sarve = params[[33m:sarve[0m].to_i
+    [1;34m18[0m: 			
+    [1;34m19[0m: 			[1;34m# 新しいレシピデータの取得[0m
+    [1;34m20[0m: 			ids = flash[[33m:recipes[0m].map(&[33m:to_i[0m)
+

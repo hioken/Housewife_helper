@@ -11,6 +11,7 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new_week
+		binding.pry
 		if params[:menu_change]
 			# 変更前のレシピのsarveを取得
 			sarve = params[:sarve].to_i
@@ -59,14 +60,10 @@ class UserMenusController < ApplicationController
 		end
 	end
 	
-	def new_week_change
-		recipe = Recipe.find(params[:recipe])
-		recipe.recipe_ingredients.each do ||
-		end
-	end
-	
 	def create
-		user_menu = current_end_user.user_menus.new(user_menu_params)
+		if Rails.application.routes.recognize_path(request.referrer)[]
+		end
+		user_menus = [current_end_user.user_menus.new(user_menu_params)]
 		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
 			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve)
 			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
@@ -75,10 +72,10 @@ class UserMenusController < ApplicationController
 		if user_menu.save
 			ingredients = user_menu.menu_ingredients(user_menu.sarve)
 			NeedIngredient.manage(ingredients, user_menu.end_user_id, mode: :add)
-			redirect_to user_menus_path
 		else
 			redirect_back fallback_location: end_users_path
 		end
+		redirect_to user_menus_path
 	end
 	
 	def update
