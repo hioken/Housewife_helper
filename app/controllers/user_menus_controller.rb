@@ -27,7 +27,7 @@ class UserMenusController < ApplicationController
 			
 			# lacksの編集
 			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
-			Recipe_ingredient.where(recipe_id: params[:id].to_i).each { |ingredient| lacks_tmp[ingredient.ingredient.id] -= ingredient.amount * sarve }
+			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingredient| lacks_tmp[ingredient.ingredient.id] -= ingredient.amount * params[:old_sarve].to_i }
 			@recipe[0].recipe_ingredients.each { |ingredient| lacks_tmp[ingredient.ingredient.id] = lacks_tmp[ingredient.ingredient.id].to_i + ingredient.amount * sarve }
 			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
 			
