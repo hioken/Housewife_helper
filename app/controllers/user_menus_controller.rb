@@ -61,9 +61,11 @@ class UserMenusController < ApplicationController
 	end
 	
 	def create
-		if Rails.application.routes.recognize_path(request.referrer)[]
+		if Rails.application.routes.recognize_path(request.referrer)[:action] == "new_week"
+			
+		else
+			user_menus = [current_end_user.user_menus.new(user_menu_params)]
 		end
-		user_menus = [current_end_user.user_menus.new(user_menu_params)]
 		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
 			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve)
 			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
