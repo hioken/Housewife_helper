@@ -1,6 +1,5 @@
 class RecipesController < ApplicationController
   def top
-    p flash[:lacks]
   end
 
   def index

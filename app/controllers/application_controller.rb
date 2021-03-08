@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_end_user!
-  
 end
 
 class Integer
@@ -51,5 +50,18 @@ class Integer
       ret << ["#{(self / 4)}g", 0] if self / 200 == 0
     end
     ret
+  end
+end
+
+class Hash
+  def subtract!(rob, all_key_string: false)
+    if all_key_string
+      h_2 = self.map { |k, v| [k.to_s, v] }.to_h
+      self.delete_if { |k, v| k.class != String }
+      self.merge!(h_2)
+      rob.each { |k, v| self[k.to_s] = self[k.to_s].to_i - v }
+    else
+      rob.each { |k, v| self[k] = self[k].to_i - v }
+    end
   end
 end

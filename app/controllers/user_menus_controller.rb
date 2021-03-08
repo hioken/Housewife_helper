@@ -11,7 +11,6 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new_week
-		binding.pry
 		if params[:menu_change]
 			# 変更前のレシピのsarveを取得
 			sarve = params[:sarve].to_i
@@ -45,15 +44,7 @@ class UserMenusController < ApplicationController
 				@recipes.slice!(-(week_menu.size)..-1)
 			end
 			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
-			lacks_tmp = {}
-			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingredient|
-				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingredient.ingredient_id)
-				if lacks_tmp[ingredient.ingredient_id]
-					lacks_tmp[ingredient.ingredient_id] += ingredient.amount * recipes_h[ingredient.recipe_id]
-				else
-					lacks_tmp[ingredient.ingredient_id] = ingredient.amount * recipes_h[ingredient.recipe_id]
-				end
-			end
+			lacks_tmp = multiple_recipe_ingredients(recipe_h)
 			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
 			flash[:lacks] = lacks_tmp
 			flash[:recipes] = recipes_h.keys
@@ -61,22 +52,39 @@ class UserMenusController < ApplicationController
 	end
 	
 	def create
-		if Rails.application.routes.recognize_path(request.referrer)[:action] == "new_week"
+		before = Rails.application.routes.recognize_path(request.referrer)[:action]
+		if before == "new_week"
+			# paramsから{recipe_id => sarve}を作成
+			recipe_h = {}
+			params[:user_menus].each { |key, values| recipe_s[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
+			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
+			today = Date.today
+			user_menus = []
+			recipe_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipe_h[id]) }
+			need_ingredients = multiple_recipe_ingredients(recipe_h)
+			
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
+			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipe_h.size - 1))
+			duplicates_h = {}
+			duplicates.each { |duplicate| duplicates_h[duplicate.id] = duplicate.sarve }
+			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
 		else
-			user_menus = [current_end_user.user_menus.new(user_menu_params)]
-		end
-		if duplicate = UserMenu.find_by(end_user_id: user_menu.end_user_id, cooking_date: user_menu.cooking_date)
+			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
+			user_menu = current_end_user.user_menus.new(user_menu_params)
+			user_menus = [user_menu]
+			need_ingredients = user_menu.menu_ingredients(user_menu.sarve)
+			
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
+		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
 			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve)
-			NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
-			duplicate.destroy
 		end
-		if user_menu.save
-			ingredients = user_menu.menu_ingredients(user_menu.sarve)
-			NeedIngredient.manage(ingredients, user_menu.end_user_id, mode: :add)
-		else
-			redirect_back fallback_location: end_users_path
-		end
+			
+		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
+		defined?(duplicates) ? duplicates.destroy_all : duplicate.destroy
+		user_menus.each { |user_menu| user_menu.save }
+		NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
+		NeedIngredient.manage(need_ingredients, user_menu.end_user_id, mode: :add)
 		redirect_to user_menus_path
 	end
 	
@@ -178,5 +186,18 @@ class UserMenusController < ApplicationController
 			else
 				raise '戻り値を正しく選択してください(引数type: )'
 			end
+    end
+    
+    def multiple_recipe_ingredients(recipe_h)
+			ret = {}
+			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingredient|
+				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingredient.ingredient_id)
+				if ret[ingredient.ingredient_id]
+					ret[ingredient.ingredient_id] += ingredient.amount * recipes_h[ingredient.recipe_id]
+				else
+					ret[ingredient.ingredient_id] = ingredient.amount * recipes_h[ingredient.recipe_id]
+				end
+			end
+			ret
     end
 end
