@@ -52,11 +52,12 @@ class UserMenusController < ApplicationController
 	end
 	
 	def create
+
 		before = Rails.application.routes.recognize_path(request.referrer)[:action]
 		if before == "new_week"
 			# paramsから{recipe_id => sarve}を作成
 			recipe_h = {}
-		params[:user_menus].each { |key, values| recipe_h[values[:recipe_id].to_i] = values[:sarve].to_i }
+			params[:user_menus].each { |key, values| recipe_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			today = Date.today
@@ -67,7 +68,7 @@ class UserMenusController < ApplicationController
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipe_h.size - 1))
 			duplicates_h = {}
-			duplicates.each { |duplicate| duplicates_h[duplicate.id] = duplicate.sarve }
+			duplicates.each { |duplicate| duplicates_h[duplicate.id] = duplicate.sarve } if duplicates
 			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
 		else
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
@@ -77,14 +78,14 @@ class UserMenusController < ApplicationController
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve)
+			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve) if duplicate
 		end
 			
 		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-		defined?(duplicates) ? duplicates.destroy_all : duplicate.destroy
+		duplicates ? duplicates.destroy_all : duplicate.destroy if duplicate
 		user_menus.each { |user_menu| user_menu.save }
-		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut)
-		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add)
+		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
+		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
 		redirect_to user_menus_path
 	end
 	
