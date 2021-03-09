@@ -1,7 +1,7 @@
 class UserMenusController < ApplicationController
 	def index
 		@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients)
+		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients, ingredient_load: true)
 	end
 	
 	def new
@@ -44,7 +44,7 @@ class UserMenusController < ApplicationController
 				@recipes.slice!(-(week_menu.size)..-1)
 			end
 			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
-			lacks_tmp = multiple_recipe_ingredients(recipe_h)
+			lacks_tmp = multiple_recipe_ingredients(recipes_h)
 			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
 			flash[:lacks] = lacks_tmp
 			flash[:recipes] = recipes_h.keys
@@ -56,7 +56,7 @@ class UserMenusController < ApplicationController
 		if before == "new_week"
 			# paramsから{recipe_id => sarve}を作成
 			recipe_h = {}
-			params[:user_menus].each { |key, values| recipe_s[values[:recipe_id].to_i] = values[:sarve].to_i }
+		params[:user_menus].each { |key, values| recipe_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			today = Date.today
@@ -83,8 +83,8 @@ class UserMenusController < ApplicationController
 		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
 		defined?(duplicates) ? duplicates.destroy_all : duplicate.destroy
 		user_menus.each { |user_menu| user_menu.save }
-		NeedIngredient.manage(destroy_ingredients, user_menu.end_user_id, mode: :cut)
-		NeedIngredient.manage(need_ingredients, user_menu.end_user_id, mode: :add)
+		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut)
+		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add)
 		redirect_to user_menus_path
 	end
 	
@@ -188,7 +188,7 @@ class UserMenusController < ApplicationController
 			end
     end
     
-    def multiple_recipe_ingredients(recipe_h)
+    def multiple_recipe_ingredients(recipes_h)
 			ret = {}
 			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingredient|
 				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingredient.ingredient_id)
