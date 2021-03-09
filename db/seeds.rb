@@ -1,4 +1,3 @@
-p ApplicationRecord::BOOLEAN_AMOUNT
 # EndUserのテストデータ
 EndUser.create(
   [

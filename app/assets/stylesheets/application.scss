@@ -964,13 +964,27 @@ input[name="b_item__radio"] {
 }
 
 /* user_menus#new */
+.c_flex__recommend {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 16px;
+}
+
+.c_box__menu_new_item_inner {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  width: 50%;
+  margin: 24px 0;
+}
+
 .c_box__menu_new {
-  width: 640px;
+  width: 800px;
   margin: 0 auto;
 }
 .c_box__menu_new_inner {
-  flex-wrap: wrap;
-  margin: 120px auto 50px;
+  margin: 32px auto;
+  border: thick double yellow;
 }
 
 .b_box__menu_new_item:first-child, .b_box__menu_new_item:nth-child(2) {
@@ -1050,7 +1064,7 @@ input[name="b_item__radio"] {
 }
 
 .c_select__one_week_item select {
-  width: 120px;
+  width: 64px;
   height: 32px;
   border-radius: 8px;
   margin-right: 8px;
@@ -1065,8 +1079,30 @@ input[name="b_item__radio"] {
   border-radius: 12px;
 }
 
+.c_link__one_week_item a {
+  border-radius: 12px;
+}
+
+.c_actions__week > a {
+  border-style: none;
+  width: 100%;
+  height: 32px;
+  margin: 8px 0;
+  background-color: #fff;
+  border-radius: 4px;
+  color: #dbb34e;
+  border: 1px #dbb34e solid;
+}
+
+.c_actions__week > a:hover {
+  cursor: pointer;
+  background-color: #dbb34e;
+  color: #fff;
+}
+
+
 .c_box__one_week_bottom {
-  width: 40%;
+  width: 640px;
   margin: 56px auto;
 }
 
@@ -1089,7 +1125,7 @@ input[name="b_item__radio"] {
 }
 
 .c_box__week_lack_food > p {
-  text-align: center;
+  text-align: left;
 }
 
 .c_button_decided_week_menu {
