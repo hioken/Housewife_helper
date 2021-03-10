@@ -27,8 +27,8 @@ class UserMenusController < ApplicationController
 			
 			# lacksの編集
 			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
-			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingredient| lacks_tmp[ingredient.ingredient.id] -= ingredient.amount * params[:old_sarve].to_i }
-			@recipe[0].recipe_ingredients.each { |ingredient| lacks_tmp[ingredient.ingredient.id] = lacks_tmp[ingredient.ingredient.id].to_i + ingredient.amount * sarve }
+			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingre| lacks_tmp[ingre.ingredient.id] -= ingre.amount * params[:old_sarve].to_i }
+			@recipe[0].recipe_ingredients.each { |ingre| lacks_tmp[ingre.ingredient.id] = lacks_tmp[ingre.ingredient.id].to_i + ingre.amount * sarve }
 			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
 			
 			#次のflashのセット
@@ -55,17 +55,17 @@ class UserMenusController < ApplicationController
 		before = Rails.application.routes.recognize_path(request.referrer)[:action]
 		if before == "new_week"
 			# paramsから{recipe_id => sarve}を作成
-			recipe_h = {}
-			params[:user_menus].each { |key, values| recipe_h[values[:recipe_id].to_i] = values[:sarve].to_i }
+			recipes_h = {}
+			params[:user_menus].each { |key, values| recipes_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			today = Date.today
 			user_menus = []
-			recipe_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipe_h[id]) }
-			need_ingredients = multiple_recipe_ingredients(recipe_h)
+			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
+			need_ingredients = multiple_recipe_ingredients(recipes_h)
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
-			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipe_h.size - 1))
+			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1))
 			duplicates_h = {}
 			duplicates.each { |duplicate| duplicates_h[duplicate.recipe.id] = duplicate.sarve } if duplicates
 			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
@@ -83,11 +83,10 @@ class UserMenusController < ApplicationController
 		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
 		if duplicates
 			duplicates.delete_all
-			raise 'user_menus destroy_all error' if duplicates.size > 0
+			raise 'user_menus delete_all error' if duplicates.size > 0
 		elsif duplicate
 			duplicate.destroy!
 		end
-		destroy_ingredients.each { |k, v| p "#{k} => #{v} : #{k} => #{need_ingredients[k]}"}
 		user_menus.each { |user_menu| user_menu.save }
 		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
 		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
@@ -191,9 +190,9 @@ class UserMenusController < ApplicationController
 			if type == :relation
 				Recipe.where(id: cover_how.keys)
 			elsif type == :recipe_only
-				Recipe.where(id: cover_how.keys).sort_by{|data| cover_how[data.id] }.reverse
+				Recipe.where(id: cover_how.keys).sort_by{|recipe| cover_how[recipe.id] }.reverse
 			elsif type == :with_rate
-				Recipe.where(id: cover_how.keys).sort_by{|data| cover_how[data.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] } 
+				Recipe.where(id: cover_how.keys).sort_by{|recipe| cover_how[recipe.id] }.reverse.map { |recipe| [recipe, cover_how[recipe.id]] } 
 			else
 				raise '戻り値を正しく選択してください(引数type: )'
 			end
@@ -201,12 +200,12 @@ class UserMenusController < ApplicationController
     
     def multiple_recipe_ingredients(recipes_h)
 			ret = {}
-			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingredient|
-				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingredient.ingredient_id)
-				if ret[ingredient.ingredient_id]
-					ret[ingredient.ingredient_id] += ingredient.amount * recipes_h[ingredient.recipe_id]
+			RecipeIngredient.where(recipe_id: recipes_h.keys).each do |ingre|
+				next unless RecipeIngredient::GENRE_SCOPE[:semi_all].include?(ingre.ingredient_id)
+				if ret[ingre.ingredient_id]
+					ret[ingre.ingredient_id] += ingre.amount * recipes_h[ingre.recipe_id]
 				else
-					ret[ingredient.ingredient_id] = ingredient.amount * recipes_h[ingredient.recipe_id]
+					ret[ingre.ingredient_id] = ingre.amount * recipes_h[ingre.recipe_id]
 				end
 			end
 			ret
