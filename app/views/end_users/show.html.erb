@@ -5,6 +5,15 @@
       <strong>名前</strong>
       <p>自己紹介です。</p>
     </div>
+    <div class="c_box__link_to_menu">
+      <div>
+        <%= link_to "献立一覧", user_menus_path %>
+      </div>
+      <div>
+        <%= link_to "今日の献立を決める", new_user_menu_path %><br>
+        <%= link_to "今週の献立を決める", new_week_user_menu_path %>
+      </div>
+    </div>
   </div>
 </div>
 

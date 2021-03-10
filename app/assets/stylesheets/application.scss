@@ -549,8 +549,17 @@ header {
 
 
 /* end_users#show */
+.c_box__link_to_menu {
+  display: flex;
+  justify-content: space-between;
+  width: 304px;
+  margin: 0 0 0 auto;
+  padding: 8px;
+}
+
 .c_box__user_inner {
   margin: 48px;
+  
 }
 
 .c_photo__user {
@@ -997,6 +1006,17 @@ input[name="b_item__radio"] {
 
 .b_photo__menu_new {
   border-radius: 12px;
+}
+
+.c_box__menu_new_bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 16px 0 16px;
+}
+
+.c_form__to_week {
+  margin: 0 0 0 auto;
 }
 
 .c_box__menu_new_bottom_inner {

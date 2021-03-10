@@ -17,10 +17,12 @@ module UserIngredientManager
     if mode == :cut
       ingredients.delete_if{ |key, value| self::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
       existings = self.where(end_user_id: end_user_id, ingredient_id: ingredients.keys)
+      delete_ids = []
       existings.each do |existing|
         existing.amount -= ingredients[existing.ingredient_id]
-        existing.amount <= 0 ? existing.destroy : existing.save
+        existing.amount <= 0 ? delete_ids << existing.id : existing.save
       end
+      self.where(id: delete_ids).delete_all
     end
   end
 end
