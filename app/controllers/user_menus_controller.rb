@@ -52,7 +52,6 @@ class UserMenusController < ApplicationController
 	end
 	
 	def create
-
 		before = Rails.application.routes.recognize_path(request.referrer)[:action]
 		if before == "new_week"
 			# paramsから{recipe_id => sarve}を作成
@@ -68,7 +67,7 @@ class UserMenusController < ApplicationController
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipe_h.size - 1))
 			duplicates_h = {}
-			duplicates.each { |duplicate| duplicates_h[duplicate.id] = duplicate.sarve } if duplicates
+			duplicates.each { |duplicate| duplicates_h[duplicate.recipe.id] = duplicate.sarve } if duplicates
 			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
 		else
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
@@ -82,7 +81,13 @@ class UserMenusController < ApplicationController
 		end
 			
 		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-		duplicates ? duplicates.destroy_all : duplicate.destroy if duplicate
+		if duplicates
+			duplicates.delete_all
+			raise 'user_menus destroy_all error' if duplicates.size > 0
+		elsif duplicate
+			duplicate.destroy!
+		end
+		destroy_ingredients.each { |k, v| p "#{k} => #{v} : #{k} => #{need_ingredients[k]}"}
 		user_menus.each { |user_menu| user_menu.save }
 		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
 		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
@@ -92,8 +97,13 @@ class UserMenusController < ApplicationController
 	def update
 		user_menu = UserMenu.find(params[:id])
 		if user_menu.sarve != params[:user_menu][:sarve].to_i
+			# アップデートする前に古い人数を取得
 			old_sarve = user_menu.sarve
-			user_menu.update(user_menu_params)
+			# アップデート
+			user_menu.update!(user_menu_params)
+			
+			# メニューの新旧の人数を比較
+			## 増: needを追加 / 減: needを減らす
 			mode = (old_sarve > user_menu.sarve ? :cut : :add)
 			remainder = (old_sarve - user_menu.sarve).abs
 			ingredients = user_menu.menu_ingredients(remainder)
