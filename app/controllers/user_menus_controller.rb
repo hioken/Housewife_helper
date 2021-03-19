@@ -73,11 +73,11 @@ class UserMenusController < ApplicationController
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			user_menu = current_end_user.user_menus.new(user_menu_params)
 			user_menus = [user_menu]
-			need_ingredients = user_menu.menu_ingredients(user_menu.sarve)
+			need_ingredients = user_menu.menu_ingredients
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve) if duplicate
+			destroy_ingredients = duplicate.menu_ingredients if duplicate
 		end
 			
 		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
@@ -113,35 +113,37 @@ class UserMenusController < ApplicationController
 	
 	def destroy
 		user_menu = UserMenu.find(params[:id])
-		ingredients = user_menu.menu_ingredients(user_menu.sarve)
+		ingredients = user_menu.menu_ingredients
 		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
 		user_menu.destroy
 		redirect_to user_menus_path
 	end
 
 	def cooked
-		if false # アナウンス
+		if params[:announce] #アナウンス機能の処理
 			destroy_ids = params[:announce].select { |id, action| action = '0' }.map { |id, action| id.to_i }
 			cooked_ids = params[:announce].select { |id, action| action = '1' }.map { |id, action| id.to_i }
 			destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
-			cooked_u_ms = current_end_user.user_menus.where(id: cooked_ids)
-			ingredients = {}
+			cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
+			recipe_h = {}
 			
 			destroy_u_ms.delete_all
+			
 			cooked_u_ms.each do |user_menu| 
-				add_ingredients = user_menu.menu_ingredients
+				recipe_h[user_menu.recipe.id] = user_menu.sarve
 				user_menu.update(is_cooked: true) 
 			end
-		else
+			ingredients = multiple_recipe_ingredients(recipe_h)
+		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
-			ingredients = user_menu.menu_ingredients(user_menu.sarve)
-			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-			NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
-			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
+			ingredients = user_menu.menu_ingredients
 			# 献立を調理済みに更新
 			user_menu.update(is_cooked: true)
 		end
+		# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
+		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
+		FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
 		redirect_back fallback_location: end_users_path
 	end
 
