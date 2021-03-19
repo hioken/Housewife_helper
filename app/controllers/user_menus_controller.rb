@@ -121,7 +121,17 @@ class UserMenusController < ApplicationController
 
 	def cooked
 		if false # アナウンス
-		ingredients = {}
+			destroy_ids = params[:announce].select { |id, action| action = '0' }.map { |id, action| id.to_i }
+			cooked_ids = params[:announce].select { |id, action| action = '1' }.map { |id, action| id.to_i }
+			destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
+			cooked_u_ms = current_end_user.user_menus.where(id: cooked_ids)
+			ingredients = {}
+			
+			destroy_u_ms.delete_all
+			cooked_u_ms.each do |user_menu| 
+				add_ingredients = user_menu.menu_ingredients
+				user_menu.update(is_cooked: true) 
+			end
 		else
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
