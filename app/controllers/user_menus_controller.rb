@@ -37,9 +37,9 @@ class UserMenusController < ApplicationController
 		else
 			days = params[:days] ? params[:days].to_i : 7
 			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
-			if (week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1))).size > 0
+			if (week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + days - 1))).size > 0
 				week_menu.each do |menu|
-					@recipes.insert((menu.cooking_date - Date.today).to_i, [menu.recipe, menu.sarve])
+					@recipes.insert((menu.cooking_date - @set_today).to_i, [menu.recipe, menu.sarve])
 				end
 				@recipes.slice!(-(week_menu.size)..-1)
 			end
@@ -59,7 +59,7 @@ class UserMenusController < ApplicationController
 			params[:user_menus].each { |key, values| recipes_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
-			today = Date.today
+			today = @set_today
 			user_menus = []
 			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
 			need_ingredients = multiple_recipe_ingredients(recipes_h)
@@ -171,7 +171,7 @@ class UserMenusController < ApplicationController
 			# レシピデータ、冷蔵庫、今週の献立を取得
 			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
-			week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + 6)).pluck(:recipe_id) # 今週のレシピを取得
+			week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + 6)).pluck(:recipe_id) # 今週のレシピを取得
 			
 			# 各レシピの冷蔵庫の中身で賄える量を計算、{reicpe: 割合}でcover_howに格納、40%以下(duplicate falseの場合は60%以下)の割合は0とする
 			cover_how = {}

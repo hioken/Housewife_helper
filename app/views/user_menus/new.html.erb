@@ -26,14 +26,14 @@
         <% end %>
         <div style="width:80%; height: 1px"></div>
         <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner" style="width: 20%;">
-          <%= f.hidden_field :cooking_date, value: Date.today %>
+          <%= f.hidden_field :cooking_date, value: @set_today %>
           <%= f.hidden_field :sarve, value: @sarve %>
           <%= f.submit "決定" %>
         </div>
       <% end %>
     </div>
   <div class="c_box__menu_new_bottom">
-    <% if today_menu = UserMenu.find_by(end_user_id: current_end_user.id, cooking_date: Date.today) %>
+    <% if today_menu = UserMenu.find_by(end_user_id: current_end_user.id, cooking_date: @set_today) %>
       <div class="a_flex" style="border: solid 0.2rem #C0C0C0; padding: 4px;">
         <%= link_to(root_path, class:"a_link__black") do %>
         <p>本日の献立は決定済です</p>
