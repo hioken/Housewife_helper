@@ -4,7 +4,9 @@ class ApplicationController < ActionController::Base
   before_action :check_user_menu
   
   def after_sign_in_path_for(resource)
-    date.destroy if (date = Outline.find_by(user: current_end_user.id))
+    if (date = Outline.find_by(user: current_end_user.id))
+      date.destroy 
+    end
     Outline.create(user: current_end_user.id, today: Date.today)
     time_set
     end_users_path

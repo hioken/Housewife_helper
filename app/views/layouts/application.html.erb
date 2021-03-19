@@ -15,9 +15,9 @@
       <div class="c_head a_flex">
         <h1>Page</h1>
         <%= link_to "マイページへ", end_users_path, class:"b_link__h" %>
-        <%= link_to "献立を決定", root_path, class:"b_link__h" %>
+        <%= link_to "献立を決定", new_user_menu_path , class:"b_link__h" %>
         <%= link_to "メニュー一覧", recipes_path, class:"b_link__h" %>
-        <%= link_to "日付を進める", root_path, class:"b_link__h" %>
+        <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h" %>
 
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
@@ -66,7 +66,7 @@
 
     <footer>
       <div class="c_foot">
-       <%= link_to "概要", url: "",class:"c_link__f" %>
+       <%= link_to "概要", url: outlines_path ,class:"c_link__f" %>
       </div>
     </footer>
   </body>
