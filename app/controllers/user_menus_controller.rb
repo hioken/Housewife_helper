@@ -121,29 +121,44 @@ class UserMenusController < ApplicationController
 
 	def cooked
 		if params[:announce] #アナウンス機能の処理
+			# 削除するidと
 			destroy_ids = params[:announce].select { |id, action| action = '0' }.map { |id, action| id.to_i }
 			cooked_ids = params[:announce].select { |id, action| action = '1' }.map { |id, action| id.to_i }
-			destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
-			cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
+			destroy_h = {}
 			recipe_h = {}
 			
-			destroy_u_ms.delete_all
-			
-			cooked_u_ms.each do |user_menu| 
-				recipe_h[user_menu.recipe.id] = user_menu.sarve
-				user_menu.update(is_cooked: true) 
+			if destroy_ids.size > 0
+				destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
+				destroy_u_ms.each { |user_menu| destroy_h[user_menu.recipe.id] = user_menu.sarve }
+				destroy_u_ms.delete_all
+				d_ingredients = multiple_recipe_ingredients(destroy_h)
 			end
-			ingredients = multiple_recipe_ingredients(recipe_h)
+			
+			if cooked_ids.size > 0
+				cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
+				cooked_u_ms.each do |user_menu| 
+					recipe_h[user_menu.recipe.id] = user_menu.sarve
+					user_menu.update(is_cooked: true) 
+				end
+				c_ingredients = multiple_recipe_ingredients(recipe_h)
+			end
+			
+			d_ingredients.merge!(c_ingredients) { |id, a_1, a_2| a_1 + a_2 }
+			NeedIngredient.manage(d_ingredients, current_end_user.id, mode: :cut) if d_ingredients.size > 0
+			FridgeItem.manage(c_ingredients, current_end_user.id, mode: :cut) if c_ingredients.size > 0
+			
 		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
 			ingredients = user_menu.menu_ingredients
+			
 			# 献立を調理済みに更新
 			user_menu.update(is_cooked: true)
+			
+			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
+			NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
+			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
 		end
-		# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
-		FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
 		redirect_back fallback_location: end_users_path
 	end
 

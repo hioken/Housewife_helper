@@ -22,6 +22,7 @@ module UserIngredientManager
         existing.amount -= ingredients[existing.ingredient_id]
         existing.amount <= 0 ? delete_ids << existing.id : existing.save
       end
+      
       self.where(id: delete_ids).delete_all
     end
   end
