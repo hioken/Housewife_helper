@@ -25,8 +25,12 @@
       </div>
     </header>
 
-    <% if false %>
+    <% if true && end_user_signed_in? %>
       <div class="c_box__announce">
+        <div class="c_box__announce_inner c_fadein">
+          <h3>昨日以降で未確認の献立がございます</h3>
+          <p>調理済みを選択した場合、冷蔵庫からレシピの材料が取り出されます</p>
+        </div>
         <div class="c_box__announce_inner c_fadein">
           <%= form_with url: "", method: :get do |f| %>
             <% 3.times do %>
