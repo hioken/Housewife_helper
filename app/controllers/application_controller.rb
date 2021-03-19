@@ -2,6 +2,12 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_end_user!
   before_action :check_user_menu
   
+  def after_sign_in_path_for(resource)
+    date.destroy if (date = Outline.find_by(user: current_end_user.id))
+    Outline.create(user: current_end_user.id, today: Date.today)
+    end_users_path
+  end
+  
   def check_user_menu
     if end_user_signed_in?
       @unconfirmed = current_end_user.user_menus.eager_load(:recipe).where("is_cooked = ? AND cooking_date < ?", false, Date.today)
