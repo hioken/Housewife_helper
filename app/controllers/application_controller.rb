@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   def check_user_menu
     if end_user_signed_in?
       @unconfirmed = current_end_user.user_menus.eager_load(:recipe).where("is_cooked = ? AND cooking_date < ?", false, Date.today)
+    else
+      @unconfirmed = []
     end
   end
 end

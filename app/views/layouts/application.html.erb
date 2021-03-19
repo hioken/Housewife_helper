@@ -32,7 +32,7 @@
           <p>調理済みを選択した場合、冷蔵庫からレシピの材料が取り出されます</p>
         </div>
         <div class="c_box__announce_inner c_fadein">
-          <%= form_with url: "", method: :get do |f| %>
+          <%= form_with url: cooked_user_menu_path('multiple'), method: :patch do |f| %>
             <% @unconfirmed.each do |user_menu| %>
               <table class="table c_table__announce">
                 <tbody>
@@ -45,7 +45,7 @@
                     </th>
                     <td>
                       <div class="c_field__announce">
-                        <%= f.select "announce[#{user_menu.id.to_s}]", [["調理済", 1],["未調理", 0]] %>
+                        <%= f.select "announce[#{user_menu.id.to_s}]", [["調理済", 1],["取消", 0]] %>
                       </div>
                     </td>
                   </tr>

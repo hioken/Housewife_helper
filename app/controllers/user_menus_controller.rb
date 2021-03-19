@@ -122,10 +122,10 @@ class UserMenusController < ApplicationController
 	def cooked
 		if params[:announce] #アナウンス機能の処理
 			# 削除するidと
-			destroy_ids = params[:announce].select { |id, action| action = '0' }.map { |id, action| id.to_i }
-			cooked_ids = params[:announce].select { |id, action| action = '1' }.map { |id, action| id.to_i }
-			destroy_h = {}
-			recipe_h = {}
+			destroy_ids = []; cooked_ids = []
+			destroy_h = {}; recipe_h = {}
+			d_ingredients = {}; c_ingredients = {}
+			params[:announce].each { |id, action| (action == '1' ? cooked_ids : destroy_ids) << id.to_i }
 			
 			if destroy_ids.size > 0
 				destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
