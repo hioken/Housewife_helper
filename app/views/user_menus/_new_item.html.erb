@@ -1,5 +1,6 @@
 <%= link_to(recipe_path(recipe.id), class:"a_link__black", target: :_blank) do %>
-  <%= image_tag 'cake.jpg', size: '240x240', class:"b_photo__menu_new" %>
+  <h3 class="a_image__info">画像はランダムです</h3>
+  <%= image_tag "image_#{image_cnt}.jpeg", size: '240x240', class:"b_photo__menu_new" %>
   <h3><%= recipe.name %></h3>
   <p>料理時間: <%= recipe.cooking_time.to_s.rjust(3) %>分</p>
 <% end %>

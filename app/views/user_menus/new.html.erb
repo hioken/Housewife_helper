@@ -11,10 +11,12 @@
         <% end %>
       </div>
       <%= form_with model: UserMenu.new, class: "c_flex__recommend" do |f| %>
+        <% image_cnt = 0 %>
         <% @recipes.each_with_index do |recipe, i| %>
+          <% image_cnt = (image_cnt + 1) % 4 %>
           <div id="menu_<%= i %>" class="b_box__menu_new_item c_box__menu_new_item_inner" style="width: 50%; margin: 24px 0;">
             <div>
-              <%= render "new_item", recipe: recipe[0] %>
+              <%= render "new_item", recipe: recipe[0], image_cnt: image_cnt %>
               <% if recipe[1] > 0 %>
                 <p>冷蔵庫で<%= recipe[1] %>%賄えます</p>
               <% end %>

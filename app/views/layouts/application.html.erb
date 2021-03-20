@@ -13,7 +13,9 @@
   <body>
     <header>
       <div class="c_head a_flex">
-        <h1>Page</h1>
+        <%= link_to root_path do %>
+          <h1 style="color: black;">Page</h1>
+        <% end %>
         <%= link_to "マイページへ", end_users_path, class:"b_link__h" %>
         <%= link_to "献立を決定", new_user_menu_path , class:"b_link__h" %>
         <%= link_to "メニュー一覧", recipes_path, class:"b_link__h" %>
@@ -22,7 +24,7 @@
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
-        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
+        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h", style: "margin-left: auto;" %>
       </div>
     </header>
 
