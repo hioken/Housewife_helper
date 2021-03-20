@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   
   # resources :recipes, except: [:destroy]
   resources :recipes, except: [:destroy, :edit, :update, :new, :create]
-  get 'user_menus/new_week' => 'user_menus#new_week', as: :new_week_user_menu
+  patch 'user_menu/:id/cooked', to: 'user_menus#cooked', as: :cooked_user_menu
+  get 'user_menus/new_week', to: 'user_menus#new_week', as: :new_week_user_menu
   resources :user_menus, except: [:show, :edit]
   
   # resource :ingredients, only: [:new, :create]

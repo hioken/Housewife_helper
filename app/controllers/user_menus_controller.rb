@@ -6,8 +6,7 @@ class UserMenusController < ApplicationController
 	
 	def new
 		@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
-		@recipes = recommend(4, @sarve)
-		# レシピデータを取得
+		@recipes = recommend(4, @sarve) # レシピデータを取得
 	end
 	
 	def new_week
@@ -169,9 +168,10 @@ class UserMenusController < ApplicationController
     
     def recommend(quantity = 4, sarve = 1, limit: 50, type: :with_rate, duplicate: true, follow_fridge: true)
 			# レシピデータ、冷蔵庫、今週の献立を取得
-			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
+			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit).where('cooking_time <= ?', current_end_user.cooking_time_limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
 			week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + 6)).pluck(:recipe_id) # 今週のレシピを取得
+			ids = recipes.pluck(:id).uniq #冷蔵庫で賄えるレシピの数が、指定の数足りなかった時のランダム取得用のid
 			
 			# 各レシピの冷蔵庫の中身で賄える量を計算、{reicpe: 割合}でcover_howに格納、40%以下(duplicate falseの場合は60%以下)の割合は0とする
 			cover_how = {}
@@ -187,9 +187,9 @@ class UserMenusController < ApplicationController
     		how = (cover_cnt * 100 / ingredient_cnt)
     		
     		# メニュー候補追加処理
-    		if !(follow_fridge)
+    		if !(follow_fridge) # fllow_fridgeがfalseの時は、冷蔵庫の中身をカバーできる事を考慮しない
     			cover_how[recipe.id] = how
-    		elsif duplicate && how >= 40 
+    		elsif duplicate && how >= 40 # 40%以上冷蔵庫で賄えるレシピをハッシュに入れる
 					cover_how[recipe.id] = how
 				elsif how >= 60 # duplicateがfalseの時は、60%以上を賄えるメニューが見つかるたび、冷蔵庫の中身を減らす
 					cover_how[recipe.id] = how 
@@ -199,16 +199,22 @@ class UserMenusController < ApplicationController
 			
 			# 上の処理で残ったレシピが4つになるように調整
     	if !(follow_fridge)
-    		selects = (0...recipes.size).to_a.sample(quantity)
+    		selects = ids.sample(quantity)
 				cover_how.select!{ |id, how| selects.include?(id) }
     	else
 				cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
 				if cover_how.size < quantity
 					record_cnt = Recipe.count
 					stop_cnt = 0
-					while (cover_how.size < quantity)
-						id = rand(1..record_cnt)
+					while (cover_how.size < quantity && ids.size > 0)
+						id = ids.sample
+						ids.delete(id)
 						cover_how[id] = 0 if !(cover_how.key?(id)) || (stop_cnt += 1) > 20
+					end
+					while (cover_how.size < quantity)
+						ids = Recipe.limit(10).pluck(:id)
+						id = ids.sample
+						cover_how[]
 					end
 				end
 			end

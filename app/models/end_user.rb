@@ -6,9 +6,9 @@ class EndUser < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
          
-  has_many :fridge_items
-  has_many :user_menus
-  has_many :need_ingredients
+  has_many :fridge_items, dependent: :destroy
+  has_many :user_menus, dependent: :destroy
+  has_many :need_ingredients, dependent: :destroy
   
   # Methods
 end

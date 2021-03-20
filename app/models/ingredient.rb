@@ -1,8 +1,8 @@
 class Ingredient < ApplicationRecord
   # Setting
-  has_many :fridge_items
-  has_many :recipe_ingredients
-  has_many :need_ingredients
+  has_many :fridge_items, dependent: :destroy
+  has_many :recipe_ingredients, dependent: :destroy
+  has_many :need_ingredients, dependent: :destroy
   
   enum unit: [:合, :g, :切れ, :個, :本, :玉, :枚, :粒, :パック, :option]
   enum html_color: [:silver, :red, :orange, :green, :lime, :black]

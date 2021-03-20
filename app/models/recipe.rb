@@ -1,7 +1,7 @@
 class Recipe < ApplicationRecord
   # Setting
-  has_many :recipe_ingredients
-  has_many :user_menus
+  has_many :recipe_ingredients, dependent: :destroy
+  has_many :user_menus, dependent: :destroy
   
   # Methods
   def self.how_mach_already(recipe_ingredients, fridge_items, family_size)
