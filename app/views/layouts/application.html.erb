@@ -22,6 +22,7 @@
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
+        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
       </div>
     </header>
 

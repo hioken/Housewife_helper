@@ -1,0 +1,19 @@
+<script type="text/javascript">
+  let column_num = 4;
+  $(document).on("click", ".add", function() {
+    column_num += 1;
+    var add_num = String(column_num);
+    $(this).parent().clone(true).insertAfter($(this).parent().parent().find('div:last'));
+    var select = $(this).parent().parent().find('div:last').find('select')
+    $(select[0]).attr('name', `fridge_items[value_${add_num}[id_unit]]`);
+    $(select[1]).attr('name', `fridge_items[value_${add_num}[amount]]`);
+  });
+  $(document).on("click", ".delete", function() {
+    var target = $(this).parent().parent().find('div:last');
+    if (target.parent().children().length > 1) {
+        target.remove();
+    }
+  });
+</script>
+
+

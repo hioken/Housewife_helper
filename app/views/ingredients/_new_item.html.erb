@@ -1,6 +1,6 @@
 <div class="b_field__test_item">
   <div>
-    <%= f.select :dammy, ["鶏肉", "豚肉", "牛肉"], include_blank: "材料名" %>
+    <%= f.text_field :name, placeholder: "材料名" %>
     <%= f.select :dammy, ["赤", "青", "黄色"], include_blank: "色" %>
     <%= f.select :dammy, ["個", "本", "パック"], include_blank: "単位" %>
     <input type="button" value="＋" class="add a_input__add">
