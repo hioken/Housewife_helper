@@ -15,6 +15,7 @@ class UserMenusController < ApplicationController
 			sarve = params[:sarve].to_i
 			# 新しいレシピデータの取得
 			ids = flash[:recipes].map(&:to_i)
+			ids.clear if ids.size >= 32
 			new_recipes = Recipe.where('cooking_time <= ? AND id NOT IN (?)', current_end_user.cooking_time_limit, ids)
 			new_recipe = (new_recipes.size > 0 ? new_recipes[rand(0..(new_recipes.size - 1))] : Recipe.find(rand(0..10)))
 			@recipe =  [new_recipe, sarve]

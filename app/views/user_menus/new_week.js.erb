@@ -2,4 +2,5 @@ var html_id = <%= params[:html_id] %>;
 $("#menu_render_" + html_id).html("<%= j(render "new_item", recipe: @recipe[0], image_cnt: rand(0..3)) %>");
 $("#menu_" + html_id + " input[type='hidden']").val(<%= @recipe[0].id %>);
 $("#menu_change_" + html_id).attr('href', $("#menu_change_" + html_id).attr('href').replace(/old_sarve=\d/g, 'old_sarve=<%= @recipe[1] %>'));
+$("#menu_change_" + html_id).attr('href', $("#menu_change_" + html_id).attr('href').replace(/(?<!_)id=\d+/g, 'id=<%= @recipe[0].id %>'));
 $("#week_lacks").html("<%= j(render "new_week_lack", lacks: @lacks) %>");

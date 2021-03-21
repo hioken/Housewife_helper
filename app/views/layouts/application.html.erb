@@ -16,15 +16,15 @@
         <%= link_to root_path do %>
           <h1 style="color: black;">Page</h1>
         <% end %>
-        <%= link_to "マイページへ", end_users_path, class:"b_link__h" %>
-        <%= link_to "献立を決定", new_user_menu_path , class:"b_link__h" %>
-        <%= link_to "メニュー一覧", recipes_path, class:"b_link__h" %>
-        <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h" %>
-
+        <%= link_to "マイページ", end_users_path, class:"b_link__h" %>
+        <%= link_to "レシピ一覧", recipes_path, class:"b_link__h" %>
+        <%= link_to "献立確認", user_menus_path, class:"b_link__h" %>
+        <%= link_to "献立をおまかせ", new_user_menu_path , class:"b_link__h" %>
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
-        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h", style: "margin-left: auto;" %>
+        <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
+        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
       </div>
     </header>
 
