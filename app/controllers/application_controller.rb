@@ -1,5 +1,31 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_end_user!
+  before_action :time_set
+  before_action :check_untreated
+  
+  def after_sign_in_path_for(resource)
+    if (date = Outline.find_by(user: current_end_user.id))
+      date.destroy 
+    end
+    Outline.create(user: current_end_user.id, today: Date.today)
+    time_set
+    end_users_path
+  end
+  
+  def time_set
+    if end_user_signed_in?
+      date = Outline.find_by(user: current_end_user.id)
+      @set_today = (date ? date.today : Date.today)
+    end
+  end
+  
+  def check_untreated
+    if end_user_signed_in?
+      @unconfirmed = current_end_user.user_menus.eager_load(:recipe).where("is_cooked = ? AND cooking_date < ?", false, @set_today)
+    else
+      @unconfirmed = []
+    end
+  end
 end
 
 class Integer

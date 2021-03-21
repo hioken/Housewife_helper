@@ -87,6 +87,11 @@
   margin: 0 auto;
 }
 
+.a_image__info {
+  color: gray;
+  background-color: snow;
+}
+
 /* ヘッダー */
 header {
   border-bottom: 1px #c3c7c3 solid;
@@ -113,7 +118,7 @@ header {
 /* アナウンス */
 .c_box__announce_inner {
   width: 400px;
-  background-color: #fff;
+  background-color: #fad36e;
   border: 1px #6e6a65 solid;
   margin: 40px auto;
   padding: 24px;
@@ -1164,7 +1169,7 @@ input[name="b_item__radio"] {
   color: #dbb34e;
 }
 
-/* need_ingredients#index */
+/* end_users#shopping_list */
 .c_box__shopping_list_inner {
   margin: 80px 48px;
 }
@@ -1240,13 +1245,98 @@ input[name="b_item__radio"] {
 
 /* フッター */
 footer {
-  background-color: #6e6a65;
+  background-color: #7e7a75;
 }
 
 .c_foot {
+  height: 32px;
   text-align: center;
+  line-height: 32px;
+  justify-content: space-around;
 }
 
 .c_link__f {
   color: #fff;
+}
+
+.c_today {
+  color: white;
+}
+
+/* 概要 */
+.c_link_list {
+  width: 720px;
+  margin: 32px auto;
+}
+
+ul.cp_list {
+	position: relative;
+	padding: 0 0.5em;
+	margin-top: 2em;
+	list-style-type: none;
+	border: solid 2px #00796B;
+}
+ul.cp_list::after {
+	position: absolute;
+	content:attr(title);
+	padding: 1px 7px;
+	letter-spacing: 0.05em;
+	font-weight: bold;
+	font-size: .8em;
+	background: #00796B;
+	color: #fff;
+	bottom: 100%;
+	left: -2px;
+	border-radius: 4px 4px 0px 0px;
+}
+ul.cp_list li {
+	line-height: 1.5;
+	padding: 0.5em 0 0.5em 1.4em;
+	border-bottom: 1px dashed #4DB6AC;
+}
+ul.cp_list li::before {
+	position: absolute;
+	content: "
+ul.cp_list {
+position: relative;
+padding: 0 0.5em;
+margin-top: 2em;
+list-style-type: none;
+border: solid 2px #00796B;
+}
+ul.cp_list::after {
+position: absolute;
+content:attr(title);
+padding: 1px 7px;
+letter-spacing: 0.05em;
+font-weight: bold;
+font-size: .8em;
+background: #00796B;
+color: #fff;
+bottom: 100%;
+left: -2px;
+border-radius: 4px 4px 0px 0px;
+}
+ul.cp_list li {
+line-height: 1.5;
+padding: 0.5em 0 0.5em 1.4em;
+border-bottom: 1px dashed #4DB6AC;
+}
+ul.cp_list li::before {
+position: absolute;
+content: "\002713";
+color: #00796B;
+font-weight: bold;
+left : 0.5em;
+}
+ul.cp_list li:last-of-type {
+border-bottom: none;
+}
+2713";
+	color: #00796B;
+	font-weight: bold;
+	left : 0.5em;
+}
+ul.cp_list li:last-of-type {
+	border-bottom: none;
 }

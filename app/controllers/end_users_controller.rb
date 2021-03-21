@@ -22,6 +22,12 @@ class EndUsersController < ApplicationController
     end
   end
   
+  def shopping_list
+    @lack_ingredients = current_end_user.lack_list
+    @lack_ingredients.each { |data| data[1] += (4 - data[1] % 4) if data[1] % 4 != 0 } # 1/4個など、数量に端数が出ないよう調整
+    @fridge_item = FridgeItem.new
+  end
+  
   def update
     current_end_user.update(end_user_params)
   end

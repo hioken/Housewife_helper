@@ -11,53 +11,54 @@ class FridgeItemsController < ApplicationController
 
   def create
     ingredient_data = {}
-    if params[:from] == 'single'
+    if params[:from] == 'single' # 買い物リストからの処理
       ingredient_data = {params[:ingredient_id].to_i => params[:amount].to_i}
       @delete_html = params[:ingredient_id]
-    else
+    else # 冷蔵庫追加画面からの処理
       params[:fridge_items].each do |key, values|
         next if (values[:id_unit] == '' or values[:amount] == '')
         id_unit = values[:id_unit].split(',')
-        code = id_unit[0].to_i
+        ingre_id = id_unit[0].to_i
+        # amountをルール通り4倍する、理由は設計書のER図の説明欄
         amount = values[:amount].to_i * 4
         amount *= 100 if id_unit[1] == 'g'
-        if ingredient_data[code]
-          ingredient_data[code] += amount unless ingredient_data[code] == ApplicationRecord::BOOLEAN_AMOUNT
+        if ingredient_data[ingre_id]
+          ingredient_data[ingre_id] += amount unless ingredient_data[ingre_id] == ApplicationRecord::BOOLEAN_AMOUNT
         else
-          ingredient_data[code] = amount
+          ingredient_data[ingre_id] = amount
         end
       end
       redirect_to end_users_path
     end
-    FridgeItem.manage(ingredient_data, current_end_user.id, mode: :add)
+    current_end_user.manage(ingredient_data, mode: :add)
   end
 
   def update
     @fridge_item = FridgeItem.find(params[:id])
-    if params[:fridge_item][:amount] != "0" 
+    if params[:fridge_item][:amount] != "0" # 更新対象が0にならなければ(まだ冷蔵庫に対象が残っていれば)、そのまま更新
       @fridge_item.update(fridge_item_params)
-    else
-      code = @fridge_item.ingredient_id
+    else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
+      destroied_id = @fridge_item.ingredient_id
       columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']
       @fridge_item.destroy
-      if code > 4999 or code < 100
+      if destroied_id > 4999 or destroied_id < 100
         @foods = current_end_user.pick(:grain_seasoning, *columns)
         @food_box_id = 'seasonings'
         @food_genre = '調味料/穀物'
-      elsif code > 2999
+      elsif destroied_id > 2999
         @foods = current_end_user.pick(:other, *columns)
         @food_box_id = 'others'
         @food_genre = 'その他' 
-      elsif code > 999
+      elsif destroied_id > 999
         @foods = current_end_user.pick(:vegetable, *columns)
         @food_box_id = 'vegetables'
         @food_genre = '野菜'
-      elsif code > 99
+      elsif destroied_id > 99
         @foods = current_end_user.pick(:meat_fish, *columns)
         @food_box_id = 'meats_fishes'
         @food_genre = '肉/魚'
       else
-        raise "想定されていない食材コードです|| code: #{code}, controller: fridge_items_controller"
+        raise "想定されていない食材コードです|| destroied_id: #{destroied_id}, controller: fridge_items_controller"
       end
       render :destroy
     end

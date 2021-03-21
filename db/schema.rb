@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_02_164147) do
+ActiveRecord::Schema.define(version: 2021_03_19_094440) do
 
   create_table "end_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -44,13 +44,11 @@ ActiveRecord::Schema.define(version: 2021_03_02_164147) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "need_ingredients", force: :cascade do |t|
-    t.integer "end_user_id", null: false
-    t.integer "ingredient_id", null: false
-    t.integer "amount", null: false
+  create_table "outlines", force: :cascade do |t|
+    t.date "today", null: false
+    t.integer "user", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["end_user_id", "ingredient_id"], name: "index_need_ingredients_on_end_user_id_and_ingredient_id", unique: true
   end
 
   create_table "recipe_ingredients", force: :cascade do |t|
@@ -86,8 +84,6 @@ ActiveRecord::Schema.define(version: 2021_03_02_164147) do
 
   add_foreign_key "fridge_items", "end_users"
   add_foreign_key "fridge_items", "ingredients"
-  add_foreign_key "need_ingredients", "end_users"
-  add_foreign_key "need_ingredients", "ingredients"
   add_foreign_key "recipe_ingredients", "ingredients"
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "user_menus", "end_users"

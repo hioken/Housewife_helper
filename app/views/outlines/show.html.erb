@@ -1,0 +1,16 @@
+
+<div class="c_link_list">
+  <ul class="cp_list" title="Link list">
+  	<li>本アプリケーション説明はリンクリスト下にございます</li>
+  	<li><%= link_to "トップページ", root_path %></li>
+  	<li><%= link_to "マイページ(冷蔵庫機能)", end_users_path %></li>
+  	<li><%= link_to "冷蔵庫追加ページ", new_fridge_item_path %></li>
+  	<li><%= link_to "買いものリストページ", shopping_list_path %></li>
+  	<li><%= link_to "レシピ一覧ページ", recipes_path %></li>
+  	<li><%= link_to "レシピ詳細ページ", recipe_path(1) %></li>
+  	<li><%= link_to "献立一覧ページ", user_menus_path %></li>
+  	<li><%= link_to "献立生成ページ(本日分)", new_user_menu_path %></li>
+  	<li><%= link_to "献立生成ページ(1週間分)", new_week_user_menu_path %></li>
+  	<li><%= link_to "日付を進める", edit_outlines_path %></li>
+  </ul>
+</div>

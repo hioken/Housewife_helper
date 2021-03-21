@@ -8,7 +8,8 @@ EndUser.create(
     },
     {
       email: 'b@b',
-      password: 'password'
+      password: 'password',
+      cooking_time_limit: 120
     }
   ]
 )

@@ -1,10 +1,15 @@
 <div class="a_flex c_box__menu_index">
   <div class="c_box__left">
+    <% image_cnt = 0 %>
     <% @user_menus.each do |user_menu| %>
+      <% image_cnt = (image_cnt + 1) % 4 %>
       <div class="c_box__menu">
         <h2><%= user_menu.cooking_date %></h2>
         <div class="c_box__menu_inner">
-          <%= image_tag 'cake.jpg', size: '400x320', class:"c_photo__menu_index" %>
+          <%= link_to recipe_path(user_menu.recipe.id), target: :_blank do %>
+            <h3>画像はランダムです</h3>
+            <%= image_tag "image_#{image_cnt}.jpeg", size: '400x320', class:"c_photo__menu_index" %>
+          <% end %>
           <h2><%= user_menu.recipe.name %></h2>
           <div class="a_flex c_box__menu_button">
             <div class="  c_box__update_num">
@@ -37,13 +42,12 @@
             <p><%= lack[0] %></p>
           </div>
         <% end %>
-        <%= link_to need_ingredients_path do %>
+        <%= link_to shopping_list_path do %>
           <div class="a_box__link c_link__list_of_shopping" style="position: static; margin: auto;">
             <p class="a_link">買い物リストへ</p>
           </div>
         <% end %>
       </div>
     </div>
-    needs: <%= current_end_user.need_ingredients.count %>
   </div>
 </div>

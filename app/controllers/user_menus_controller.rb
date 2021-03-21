@@ -1,51 +1,46 @@
 class UserMenusController < ApplicationController
 	def index
 		@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients, ingredient_load: true)
+		@lacks = current_end_user.lack_list
 	end
 	
 	def new
 		@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
-		@recipes = recommend(4, @sarve)
-		# レシピデータを取得
+		@recipes = recommend(4, @sarve) # レシピデータを取得
 	end
 	
 	def new_week
 		if params[:menu_change]
 			# 変更前のレシピのsarveを取得
 			sarve = params[:sarve].to_i
-			
 			# 新しいレシピデータの取得
 			ids = flash[:recipes].map(&:to_i)
-			stop_cnt = 0
-			new_id = 
-				loop do
-					ret = rand(1..Recipe.count)
-					break ret if !(ids.include?(ret)) || (stop_cnt += 1) > 20
-				end
-			@recipe =  [Recipe.find(new_id), sarve]
+			ids.clear if ids.size >= 32
+			new_recipes = Recipe.where('cooking_time <= ? AND id NOT IN (?)', current_end_user.cooking_time_limit, ids)
+			new_recipe = (new_recipes.size > 0 ? new_recipes[rand(0..(new_recipes.size - 1))] : Recipe.find(rand(0..10)))
+			@recipe =  [new_recipe, sarve]
 			
 			# lacksの編集
 			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
 			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingre| lacks_tmp[ingre.ingredient.id] -= ingre.amount * params[:old_sarve].to_i }
 			@recipe[0].recipe_ingredients.each { |ingre| lacks_tmp[ingre.ingredient.id] = lacks_tmp[ingre.ingredient.id].to_i + ingre.amount * sarve }
-			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			@lacks = current_end_user.lack_list(lacks_tmp)
 			
 			#次のflashのセット
 			flash[:lacks] = lacks_tmp
-			flash[:recipes] = ids << new_id
+			flash[:recipes] = ids << new_recipe.id
 		else
 			days = params[:days] ? params[:days].to_i : 7
 			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
-			if (week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + days - 1))).size > 0
+			if (week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + days - 1))).size > 0
 				week_menu.each do |menu|
-					@recipes.insert((menu.cooking_date - Date.today).to_i, [menu.recipe, menu.sarve])
+					@recipes.insert((menu.cooking_date - @set_today).to_i, [menu.recipe, menu.sarve])
 				end
 				@recipes.slice!(-(week_menu.size)..-1)
 			end
 			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
 			lacks_tmp = multiple_recipe_ingredients(recipes_h)
-			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			@lacks = current_end_user.lack_list(lacks_tmp)
 			flash[:lacks] = lacks_tmp
 			flash[:recipes] = recipes_h.keys
 		end
@@ -58,79 +53,80 @@ class UserMenusController < ApplicationController
 			recipes_h = {}
 			params[:user_menus].each { |key, values| recipes_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
-			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
-			today = Date.today
+			# 新しいuser_menuのインスタンスを作成
+			today = @set_today
 			user_menus = []
 			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
-			need_ingredients = multiple_recipe_ingredients(recipes_h)
+			
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを削除
+			current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1)).delete_all
+			
+			user_menus.each { |user_menu| user_menu.save }
+			redirect_to user_menus_path
+		else
+			# 新しいuser_menuのインスタンスを作成
+			user_menu = current_end_user.user_menus.new(user_menu_params)
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
-			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1))
-			duplicates_h = {}
-			duplicates.each { |duplicate| duplicates_h[duplicate.recipe.id] = duplicate.sarve } if duplicates
-			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
-		else
-			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
-			user_menu = current_end_user.user_menus.new(user_menu_params)
-			user_menus = [user_menu]
-			need_ingredients = user_menu.menu_ingredients(user_menu.sarve)
-			
-			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-			destroy_ingredients = duplicate.menu_ingredients(duplicate.sarve) if duplicate
-		end
 			
-		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-		if duplicates
-			duplicates.delete_all
-			raise 'user_menus delete_all error' if duplicates.size > 0
-		elsif duplicate
-			duplicate.destroy!
+			# 被るuser_menuを削除、新しいuser_menuを保存
+			if user_menu.cooking_date >= @set_today # 昨日以前の日付の場合はエラーを返す
+				duplicate.destroy! if duplicate
+				user_menu.save
+				redirect_to user_menus_path
+			else
+    		@recipe = Recipe.find(params[:user_menu][:recipe_id])
+    		@recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
+    		@size = params[:size] ? params[:size].to_i : current_end_user.family_size
+    		@lack_ingredients = current_end_user.lack_list(@recipe_ingredients.map {|ingre| [ingre.ingredient_id, ingre.amount * @size] }.to_h)
+				@todays_menu = current_end_user.user_menus.find_by(cooking_date: @set_today, is_cooked: false)
+				@yesterday = true
+				render 'recipes/show'
+			end
 		end
-		user_menus.each { |user_menu| user_menu.save }
-		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
-		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
-		redirect_to user_menus_path
 	end
 	
 	def update
-		user_menu = UserMenu.find(params[:id])
-		if user_menu.sarve != params[:user_menu][:sarve].to_i
-			# アップデートする前に古い人数を取得
-			old_sarve = user_menu.sarve
-			# アップデート
-			user_menu.update!(user_menu_params)
-			
-			# メニューの新旧の人数を比較
-			## 増: needを追加 / 減: needを減らす
-			mode = (old_sarve > user_menu.sarve ? :cut : :add)
-			remainder = (old_sarve - user_menu.sarve).abs
-			ingredients = user_menu.menu_ingredients(remainder)
-			NeedIngredient.manage(ingredients, current_end_user.id, mode: mode)
-		end
-			redirect_to user_menus_path
+		UserMenu.find(params[:id]).update!(user_menu_params)
+		redirect_to user_menus_path
 	end
 	
 	def destroy
-		user_menu = UserMenu.find(params[:id])
-		ingredients = user_menu.menu_ingredients(user_menu.sarve)
-		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
-		user_menu.destroy
+		UserMenu.find(params[:id]).destroy!
 		redirect_to user_menus_path
 	end
 
 	def cooked
-		if false # アナウンス
-		ingredients = {}
-		else
+		if params[:announce] #アナウンス機能の処理
+			# 取り消しするidと調理済みにするidを分割
+			destroy_ids = []; cooked_ids = []
+			recipe_h = {}; c_ingredients = {}
+			params[:announce].each { |id, action| (action == '1' ? cooked_ids : destroy_ids) << id.to_i }
+			
+			# 取り消しするidの献立を削除
+			if destroy_ids.size > 0; current_end_user.user_menus.where(id: destroy_ids).delete_all; end
+			
+			# 調理済みにするidの献立の処理
+			if cooked_ids.size > 0
+				cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
+				cooked_u_ms.each do |user_menu| 
+					recipe_h[user_menu.recipe.id] = user_menu.sarve
+					user_menu.update(is_cooked: true) 
+				end
+				c_ingredients = multiple_recipe_ingredients(recipe_h)
+				current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
+			end
+		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
-			ingredients = user_menu.menu_ingredients(user_menu.sarve)
-			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-			NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
-			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
+			ingredients = user_menu.menu_ingredients
+			
 			# 献立を調理済みに更新
 			user_menu.update(is_cooked: true)
+			
+			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
+			current_end_user.manage(ingredients, mode: :cut)
 		end
 		redirect_back fallback_location: end_users_path
 	end
@@ -142,9 +138,10 @@ class UserMenusController < ApplicationController
     
     def recommend(quantity = 4, sarve = 1, limit: 50, type: :with_rate, duplicate: true, follow_fridge: true)
 			# レシピデータ、冷蔵庫、今週の献立を取得
-			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit)
+			recipes = Recipe.eager_load(:recipe_ingredients).limit(limit).where('cooking_time <= ?', current_end_user.cooking_time_limit)
 			fridge = current_end_user.fridge_items.where(ingredient_id: FridgeItem::GENRE_SCOPE[:not_seasoning]).pluck(:ingredient_id, :amount).to_h
-			week_menu = current_end_user.user_menus.where(cooking_date: (Date.today)..(Date.today + 6)).pluck(:recipe_id) # 今週のレシピを取得
+			week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + 6)).pluck(:recipe_id) # 今週のレシピを取得
+			ids = recipes.pluck(:id).uniq #冷蔵庫で賄えるレシピの数が、指定の数足りなかった時のランダム取得用のid
 			
 			# 各レシピの冷蔵庫の中身で賄える量を計算、{reicpe: 割合}でcover_howに格納、40%以下(duplicate falseの場合は60%以下)の割合は0とする
 			cover_how = {}
@@ -160,9 +157,9 @@ class UserMenusController < ApplicationController
     		how = (cover_cnt * 100 / ingredient_cnt)
     		
     		# メニュー候補追加処理
-    		if !(follow_fridge)
+    		if !(follow_fridge) # fllow_fridgeがfalseの時は、冷蔵庫の中身をカバーできる事を考慮しない
     			cover_how[recipe.id] = how
-    		elsif duplicate && how >= 40 
+    		elsif duplicate && how >= 40 # 40%以上冷蔵庫で賄えるレシピをハッシュに入れる
 					cover_how[recipe.id] = how
 				elsif how >= 60 # duplicateがfalseの時は、60%以上を賄えるメニューが見つかるたび、冷蔵庫の中身を減らす
 					cover_how[recipe.id] = how 
@@ -172,16 +169,22 @@ class UserMenusController < ApplicationController
 			
 			# 上の処理で残ったレシピが4つになるように調整
     	if !(follow_fridge)
-    		selects = (0...recipes.size).to_a.sample(quantity)
+    		selects = ids.sample(quantity)
 				cover_how.select!{ |id, how| selects.include?(id) }
     	else
 				cover_how = (cover_how.sort_by { |k, v| v }.reverse)[0..(quantity - 1)].to_h
 				if cover_how.size < quantity
 					record_cnt = Recipe.count
 					stop_cnt = 0
-					while (cover_how.size < quantity)
-						id = rand(1..record_cnt)
+					while (cover_how.size < quantity && ids.size > 0)
+						id = ids.sample
+						ids.delete(id)
 						cover_how[id] = 0 if !(cover_how.key?(id)) || (stop_cnt += 1) > 20
+					end
+					while (cover_how.size < quantity)
+						ids = Recipe.limit(10).pluck(:id)
+						id = ids.sample
+						cover_how[]
 					end
 				end
 			end

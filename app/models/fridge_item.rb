@@ -1,5 +1,3 @@
-require 'modules/user_ingredient_manager.rb'
-
 class AmountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if record.ingredient.unit == 'g'
@@ -12,16 +10,11 @@ end
 
 class FridgeItem < ApplicationRecord
   # setting
-  extend UserIngredientManager
-  
   belongs_to :end_user
   belongs_to :ingredient
   
   validates :amount, amount: true
   # Methods
-  def self.fridge_hash(user_id)
-    FridgeItem.where(end_user_id: user_id).pluck(:ingredient_id, :amount).to_h
-  end
   
   def self.lack_ingredients(user, ingredients, size: 1, ingredient_load: false)
     # 引数 => user: current_end_user, ingredients: 冷蔵庫と比較したい食材のリレーション, size: ingredientsのamountの量の倍率(人数), ingredient_load: falseならingredientをロードしない 

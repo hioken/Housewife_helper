@@ -1,7 +1,7 @@
 class Recipe < ApplicationRecord
   # Setting
-  has_many :recipe_ingredients
-  has_many :user_menus
+  has_many :recipe_ingredients, dependent: :destroy
+  has_many :user_menus, dependent: :destroy
   
   # Methods
   def self.how_mach_already(recipe_ingredients, fridge_items, family_size)
@@ -12,5 +12,9 @@ class Recipe < ApplicationRecord
     end
     ret = (cover_cnt * 100 / recipe_size)
     ret > 40 ? ret : nil
+  end
+  
+  def recipe_ingredients_hash(sarve = 1)
+    self.recipe_ingredients.pluck(:ingredient_id, :amount).map { |id, a| [id, a * sarve] }.to_h
   end
 end
