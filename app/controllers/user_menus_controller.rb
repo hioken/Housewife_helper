@@ -53,7 +53,7 @@ class UserMenusController < ApplicationController
 			recipes_h = {}
 			params[:user_menus].each { |key, values| recipes_h[values[:recipe_id].to_i] = values[:sarve].to_i }
 			
-			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
+			# 新しいuser_menuのインスタンスを作成
 			today = @set_today
 			user_menus = []
 			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
@@ -64,14 +64,14 @@ class UserMenusController < ApplicationController
 			user_menus.each { |user_menu| user_menu.save }
 			redirect_to user_menus_path
 		else
-			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
+			# 新しいuser_menuのインスタンスを作成
 			user_menu = current_end_user.user_menus.new(user_menu_params)
 			
-			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
 			
-			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-			if user_menu.cooking_date >= @set_today
+			# 被るuser_menuを削除、新しいuser_menuを保存
+			if user_menu.cooking_date >= @set_today # 昨日以前の日付の場合はエラーを返す
 				duplicate.destroy! if duplicate
 				user_menu.save
 				redirect_to user_menus_path
@@ -99,13 +99,15 @@ class UserMenusController < ApplicationController
 
 	def cooked
 		if params[:announce] #アナウンス機能の処理
-			# 削除するidと
+			# 取り消しするidと調理済みにするidを分割
 			destroy_ids = []; cooked_ids = []
 			recipe_h = {}; c_ingredients = {}
 			params[:announce].each { |id, action| (action == '1' ? cooked_ids : destroy_ids) << id.to_i }
 			
+			# 取り消しするidの献立を削除
 			if destroy_ids.size > 0; current_end_user.user_menus.where(id: destroy_ids).delete_all; end
 			
+			# 調理済みにするidの献立の処理
 			if cooked_ids.size > 0
 				cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
 				cooked_u_ms.each do |user_menu| 
@@ -113,9 +115,8 @@ class UserMenusController < ApplicationController
 					user_menu.update(is_cooked: true) 
 				end
 				c_ingredients = multiple_recipe_ingredients(recipe_h)
+				current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
 			end
-			
-			current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
 		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
