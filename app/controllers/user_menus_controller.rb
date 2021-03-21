@@ -13,16 +13,11 @@ class UserMenusController < ApplicationController
 		if params[:menu_change]
 			# 変更前のレシピのsarveを取得
 			sarve = params[:sarve].to_i
-			
 			# 新しいレシピデータの取得
 			ids = flash[:recipes].map(&:to_i)
-			stop_cnt = 0
-			new_id = 
-				loop do
-					ret = rand(1..Recipe.count)
-					break ret if !(ids.include?(ret)) || (stop_cnt += 1) > 20
-				end
-			@recipe =  [Recipe.find(new_id), sarve]
+			new_recipes = Recipe.where('cooking_time <= ? AND id NOT IN (?)', current_end_user.cooking_time_limit, ids)
+			new_recipe = (new_recipes.size > 0 ? new_recipes[rand(0..(new_recipes.size - 1))] : Recipe.find(rand(0..10)))
+			@recipe =  [new_recipe, sarve]
 			
 			# lacksの編集
 			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
@@ -32,7 +27,7 @@ class UserMenusController < ApplicationController
 			
 			#次のflashのセット
 			flash[:lacks] = lacks_tmp
-			flash[:recipes] = ids << new_id
+			flash[:recipes] = ids << new_recipe.id
 		else
 			days = params[:days] ? params[:days].to_i : 7
 			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
