@@ -119,7 +119,7 @@ class UserMenusController < ApplicationController
 				c_ingredients = multiple_recipe_ingredients(recipe_h)
 			end
 			
-			FridgeItem.manage(c_ingredients, current_end_user.id, mode: :cut) if c_ingredients.size > 0
+			current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
 		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
@@ -129,7 +129,7 @@ class UserMenusController < ApplicationController
 			user_menu.update(is_cooked: true)
 			
 			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
+			current_end_user.manage(ingredients, mode: :cut)
 		end
 		redirect_back fallback_location: end_users_path
 	end

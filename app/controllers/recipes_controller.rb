@@ -21,7 +21,7 @@ class RecipesController < ApplicationController
 		
 		if params[:cooked]
 		  ingredients = @recipe_ingredients.pluck(:ingredient_id, :amount).map{ |id, amount| [id, amount * @size] }.to_h
-		  FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
+		  current_end_user.manage(ingredients, mode: :cut)
 		end
   end
 

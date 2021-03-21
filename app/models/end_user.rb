@@ -13,6 +13,11 @@ class EndUser < ApplicationRecord
 		self.fridge_items.joins(:ingredient).where(constraint).pluck(*columns)
 	end
 	
+	def fridge_hash(arg_ingredients = false)
+		ret = self.fridge_items.pluck(:ingredient_id, :amount).to_h
+		ret.select{ |id, a| arg_ingredients.include?(id) } if arg_ingredients
+  end
+	
 	def need_ingredients(key: false)
 	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
 	  ingredient_ids = []
@@ -35,7 +40,7 @@ class EndUser < ApplicationRecord
 	  
 	  return_list
 	end
-	
+  
 	def lack_list(arg_ingredients = false, with_id: true)
 		raise 'lack_list(models/end_user.rb)の引数がHash型ではありません' if arg_ingredients && arg_ingredients.class != Hash
 	  needs = (arg_ingredients ? arg_ingredients.select { |id, amount| ApplicationRecord::GENRE_SCOPE[:semi_all].include?(id) } : self.need_ingredients)
@@ -49,8 +54,31 @@ class EndUser < ApplicationRecord
 	  end
 	end
 	  
-	def fridge_hash(arg_ingredients = false)
-		ret = self.fridge_items.pluck(:ingredient_id, :amount).to_h
-		ret.select{ |id, a| arg_ingredients.include?(id) } if arg_ingredients
+  def manage(ingredients, mode: :add)
+    raise unless ingredients.class == Hash
+    if mode == :add
+      existings = self.fridge_items.where(ingredient_id: ingredients.keys)
+      existings.each do |existing|
+        existing.update(amount: (existing.amount + ingredients[existing.ingredient_id]))
+        ingredients.delete(existing.ingredient_id)
+      end
+      
+      ingredients.each do |id, amount|
+        next unless FridgeItem::GENRE_SCOPE[:semi_all].include?(id)
+        self.fridge_items.new(ingredient_id: id, amount: amount).save
+      end
+    end
+    
+    if mode == :cut
+      ingredients.delete_if{ |key, value| FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
+      existings = self.fridge_items.where(ingredient_id: ingredients.keys)
+      delete_ids = []
+      existings.each do |existing|
+        existing.amount -= ingredients[existing.ingredient_id]
+        existing.amount <= 0 ? delete_ids << existing.id : existing.save
+      end
+      
+      self.fridge_items.where(id: delete_ids).delete_all
+    end
   end
 end

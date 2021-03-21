@@ -29,7 +29,7 @@ class FridgeItemsController < ApplicationController
       end
       redirect_to end_users_path
     end
-    FridgeItem.manage(ingredient_data, current_end_user.id, mode: :add)
+    current_end_user.manage(ingredient_data, mode: :add)
   end
 
   def update
