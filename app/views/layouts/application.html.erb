@@ -35,18 +35,20 @@
           <p>調理済みを選択した場合、冷蔵庫からレシピの材料が取り出されます</p>
         </div>
         <div class="c_box__announce_inner c_fadein">
+          <% image_cnt = 0 %>
           <%= form_with url: cooked_user_menu_path('multiple'), method: :patch do |f| %>
             <% @unconfirmed.each do |user_menu| %>
+            <% image_cnt = (image_cnt + 1) % 4 %>
               <table class="table c_table__announce">
                 <tbody>
                   <tr>
-                    <th>
+                    <th style="width: 80%;">
                       <div>
-                        <%= image_tag 'cake.jpg', size: '100x100',class:"c_photo__rank" %>
+                        <%= image_tag "image_#{image_cnt}", size: '100x100',class:"c_photo__rank" %>
                         <p><%= user_menu.recipe.name %></p>
                       </div>
                     </th>
-                    <td>
+                    <td style="width: 20%;">
                       <div class="c_field__announce">
                         <%= f.select "announce[#{user_menu.id.to_s}]", [["調理済", 1],["取消", 0]] %>
                       </div>

@@ -88,9 +88,9 @@ class UserMenusController < ApplicationController
 			destroy_ingredients = duplicate.menu_ingredients if duplicate
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-			user_menu.user_id = current_end_user.id
-			if user_menu.save
+			if user_menu.cooking_date >= @set_today
 				duplicate.destroy! if duplicate
+				user_menu.save
 				NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
 				NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
 				redirect_to user_menus_path

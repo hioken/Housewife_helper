@@ -18,6 +18,6 @@ class UserMenu < ApplicationRecord
   
   private
     def cooking_date_check
-      errors.add(:cooking_date, '昨日以降の日付は登録出来ません') if cooking_date < Outline.find_by(user: user_id).today
+      errors.add(:cooking_date, '昨日以降の日付は登録出来ません') if cooking_date < Date.today
     end
 end
