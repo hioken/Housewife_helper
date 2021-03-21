@@ -117,7 +117,7 @@
         <div class="c_form__date_inner">
           <%= form_with model: UserMenu.new do |f| %>
             <div class="c_field__date">
-              <%= f.date_field :cooking_date, value: @set_today + 1 %>
+              <%= f.date_field :cooking_date, value: @set_today + 1, id: "date_field" %>
               <%= f.hidden_field :sarve, value: @size %>
               <%= f.hidden_field :recipe_id, value: @recipe.id %>
             </div>
@@ -137,3 +137,9 @@
     </div>
   </div>
 </div>
+
+<% if @yesterday %>
+  <script>
+   alert('今日以降の日付を選択してください');
+  </script>
+<% end %>

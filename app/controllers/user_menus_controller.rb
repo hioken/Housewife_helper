@@ -68,28 +68,42 @@ class UserMenusController < ApplicationController
 			duplicates_h = {}
 			duplicates.each { |duplicate| duplicates_h[duplicate.recipe.id] = duplicate.sarve } if duplicates
 			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
+			
+			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
+			if duplicates
+				duplicates.delete_all
+				raise 'user_menus delete_all error' if duplicates.size > 0
+			end
+			user_menus.each { |user_menu| user_menu.save }
+			NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
+			NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
+			redirect_to user_menus_path
 		else
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			user_menu = current_end_user.user_menus.new(user_menu_params)
-			user_menus = [user_menu]
 			need_ingredients = user_menu.menu_ingredients
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
 			destroy_ingredients = duplicate.menu_ingredients if duplicate
-		end
 			
-		# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-		if duplicates
-			duplicates.delete_all
-			raise 'user_menus delete_all error' if duplicates.size > 0
-		elsif duplicate
-			duplicate.destroy!
+			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
+			user_menu.user_id = current_end_user.id
+			if user_menu.save
+				duplicate.destroy! if duplicate
+				NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
+				NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
+				redirect_to user_menus_path
+			else
+    		@recipe = Recipe.find(params[:user_menu][:recipe_id])
+    		@recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
+    		@size = params[:size] ? params[:size].to_i : current_end_user.family_size
+    		@lack_ingredients = FridgeItem.lack_ingredients(current_end_user, @recipe_ingredients, size: @size, ingredient_load: false)
+				@todays_menu = current_end_user.user_menus.find_by(cooking_date: @set_today, is_cooked: false)
+				@yesterday = true
+				render 'recipes/show'
+			end
 		end
-		user_menus.each { |user_menu| user_menu.save }
-		NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
-		NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
-		redirect_to user_menus_path
 	end
 	
 	def update

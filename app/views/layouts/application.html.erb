@@ -68,8 +68,11 @@
     </body>
 
     <footer>
-      <div class="c_foot">
-       <%= link_to "概要", url: outlines_path ,class:"c_link__f" %>
+      <div class="c_foot a_flex">
+        <div><%= link_to "本ポートフォリオの概要と各ページのリンクはこちら！", outlines_path, class:"c_link__f" %></div>
+        <% if end_user_signed_in? %>
+          <div><p class="c_today">現在の日付: <%= @set_today %></p></div>
+        <% end %>
       </div>
     </footer>
   </body>
