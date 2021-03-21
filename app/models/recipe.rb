@@ -13,4 +13,8 @@ class Recipe < ApplicationRecord
     ret = (cover_cnt * 100 / recipe_size)
     ret > 40 ? ret : nil
   end
+  
+  def recipe_ingredients_hash(sarve = 1)
+    self.recipe_ingredients.pluck(:ingredient_id, :amount).map { |id, a| [id, a * sarve] }.to_h
+  end
 end

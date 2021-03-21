@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   root 'recipes#top'
   resource :outlines, only: [:show, :edit, :update]
   
+  get 'shopping_list', to: 'end_users#shopping_list', as: :shopping_list
   resource :end_users, only: [:show, :update]
-  resource :need_ingredients, only: [:show]
   resources :fridge_items, only: [:new, :create, :update]
   
   # resources :recipes, except: [:destroy]

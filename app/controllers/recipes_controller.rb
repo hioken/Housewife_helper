@@ -16,7 +16,7 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     @recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
     @size = params[:size] ? params[:size].to_i : current_end_user.family_size
-    @lack_ingredients = FridgeItem.lack_ingredients(current_end_user, @recipe_ingredients, size: @size, ingredient_load: false)
+    @lack_ingredients = current_end_user.lack_list(@recipe_ingredients.map{ |ingre| [ingre.ingredient_id, ingre.amount * @size]}.to_h)
 		@todays_menu = current_end_user.user_menus.find_by(cooking_date: @set_today, is_cooked: false)
 		
 		if params[:cooked]

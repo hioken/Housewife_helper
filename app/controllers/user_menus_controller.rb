@@ -1,7 +1,7 @@
 class UserMenusController < ApplicationController
 	def index
 		@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-		@lacks = FridgeItem.lack_ingredients(current_end_user, current_end_user.need_ingredients, ingredient_load: true)
+		@lacks = current_end_user.lack_list
 	end
 	
 	def new
@@ -28,7 +28,7 @@ class UserMenusController < ApplicationController
 			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
 			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingre| lacks_tmp[ingre.ingredient.id] -= ingre.amount * params[:old_sarve].to_i }
 			@recipe[0].recipe_ingredients.each { |ingre| lacks_tmp[ingre.ingredient.id] = lacks_tmp[ingre.ingredient.id].to_i + ingre.amount * sarve }
-			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			@lacks = current_end_user.lack_list(lacks_tmp)
 			
 			#次のflashのセット
 			flash[:lacks] = lacks_tmp
@@ -44,7 +44,7 @@ class UserMenusController < ApplicationController
 			end
 			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
 			lacks_tmp = multiple_recipe_ingredients(recipes_h)
-			@lacks = FridgeItem.lack_ingredients(current_end_user, lacks_tmp)
+			@lacks = current_end_user.lack_list(lacks_tmp)
 			flash[:lacks] = lacks_tmp
 			flash[:recipes] = recipes_h.keys
 		end
@@ -61,44 +61,29 @@ class UserMenusController < ApplicationController
 			today = @set_today
 			user_menus = []
 			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
-			need_ingredients = multiple_recipe_ingredients(recipes_h)
 			
-			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
-			duplicates = current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1))
-			duplicates_h = {}
-			duplicates.each { |duplicate| duplicates_h[duplicate.recipe.id] = duplicate.sarve } if duplicates
-			destroy_ingredients = multiple_recipe_ingredients(duplicates_h)
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを削除
+			current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1)).delete_all
 			
-			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
-			if duplicates
-				duplicates.delete_all
-				raise 'user_menus delete_all error' if duplicates.size > 0
-			end
 			user_menus.each { |user_menu| user_menu.save }
-			NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
-			NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
 			redirect_to user_menus_path
 		else
 			# 新しいuser_menuのインスタンスを作成 && その必要材料をまとめる
 			user_menu = current_end_user.user_menus.new(user_menu_params)
-			need_ingredients = user_menu.menu_ingredients
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得 && その必要材料をまとめる
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-			destroy_ingredients = duplicate.menu_ingredients if duplicate
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存、削除更新した分の材料をNeedIngredientに反映
 			if user_menu.cooking_date >= @set_today
 				duplicate.destroy! if duplicate
 				user_menu.save
-				NeedIngredient.manage(destroy_ingredients, current_end_user.id, mode: :cut) if destroy_ingredients
-				NeedIngredient.manage(need_ingredients, current_end_user.id, mode: :add) if need_ingredients
 				redirect_to user_menus_path
 			else
     		@recipe = Recipe.find(params[:user_menu][:recipe_id])
     		@recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
     		@size = params[:size] ? params[:size].to_i : current_end_user.family_size
-    		@lack_ingredients = FridgeItem.lack_ingredients(current_end_user, @recipe_ingredients, size: @size, ingredient_load: false)
+    		@lack_ingredients = current_end_user.lack_list(@recipe_ingredients.map {|ingre| [ingre.ingredient_id, ingre.amount * @size] }.to_h)
 				@todays_menu = current_end_user.user_menus.find_by(cooking_date: @set_today, is_cooked: false)
 				@yesterday = true
 				render 'recipes/show'
@@ -107,28 +92,12 @@ class UserMenusController < ApplicationController
 	end
 	
 	def update
-		user_menu = UserMenu.find(params[:id])
-		if user_menu.sarve != params[:user_menu][:sarve].to_i
-			# アップデートする前に古い人数を取得
-			old_sarve = user_menu.sarve
-			# アップデート
-			user_menu.update!(user_menu_params)
-			
-			# メニューの新旧の人数を比較
-			## 増: needを追加 / 減: needを減らす
-			mode = (old_sarve > user_menu.sarve ? :cut : :add)
-			remainder = (old_sarve - user_menu.sarve).abs
-			ingredients = user_menu.menu_ingredients(remainder)
-			NeedIngredient.manage(ingredients, current_end_user.id, mode: mode)
-		end
-			redirect_to user_menus_path
+		UserMenu.find(params[:id]).update!(user_menu_params)
+		redirect_to user_menus_path
 	end
 	
 	def destroy
-		user_menu = UserMenu.find(params[:id])
-		ingredients = user_menu.menu_ingredients
-		NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
-		user_menu.destroy
+		UserMenu.find(params[:id]).destroy!
 		redirect_to user_menus_path
 	end
 
@@ -136,16 +105,10 @@ class UserMenusController < ApplicationController
 		if params[:announce] #アナウンス機能の処理
 			# 削除するidと
 			destroy_ids = []; cooked_ids = []
-			destroy_h = {}; recipe_h = {}
-			d_ingredients = {}; c_ingredients = {}
+			recipe_h = {}; c_ingredients = {}
 			params[:announce].each { |id, action| (action == '1' ? cooked_ids : destroy_ids) << id.to_i }
 			
-			if destroy_ids.size > 0
-				destroy_u_ms = current_end_user.user_menus.where(id: destroy_ids)
-				destroy_u_ms.each { |user_menu| destroy_h[user_menu.recipe.id] = user_menu.sarve }
-				destroy_u_ms.delete_all
-				d_ingredients = multiple_recipe_ingredients(destroy_h)
-			end
+			if destroy_ids.size > 0; current_end_user.user_menus.where(id: destroy_ids).delete_all; end
 			
 			if cooked_ids.size > 0
 				cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
@@ -156,10 +119,7 @@ class UserMenusController < ApplicationController
 				c_ingredients = multiple_recipe_ingredients(recipe_h)
 			end
 			
-			d_ingredients.merge!(c_ingredients) { |id, a_1, a_2| a_1 + a_2 }
-			NeedIngredient.manage(d_ingredients, current_end_user.id, mode: :cut) if d_ingredients.size > 0
 			FridgeItem.manage(c_ingredients, current_end_user.id, mode: :cut) if c_ingredients.size > 0
-			
 		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
 			user_menu = UserMenu.find(params[:id])
@@ -169,7 +129,6 @@ class UserMenusController < ApplicationController
 			user_menu.update(is_cooked: true)
 			
 			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-			NeedIngredient.manage(ingredients, current_end_user.id, mode: :cut)
 			FridgeItem.manage(ingredients, current_end_user.id, mode: :cut)
 		end
 		redirect_back fallback_location: end_users_path

@@ -5,7 +5,6 @@ class EndUser < ApplicationRecord
          
   has_many :fridge_items, dependent: :destroy
   has_many :user_menus, dependent: :destroy
-  has_many :need_ingredients, dependent: :destroy
   
   # Methods
 	def pick(genre_scope, *columns)
@@ -14,8 +13,8 @@ class EndUser < ApplicationRecord
 		self.fridge_items.joins(:ingredient).where(constraint).pluck(*columns)
 	end
 	
-	def find_need_ingredients(key: false)
-	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(is_cooked: false).pluck(:ingredient_id, :amount, :sarve)
+	def need_ingredients(key: false)
+	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
 	  ingredient_ids = []
 	  needs.map! do |id, amount, sarve|
 	    ingredient_ids << id
@@ -37,11 +36,21 @@ class EndUser < ApplicationRecord
 	  return_list
 	end
 	
-	def lack_list
-	  needs = self.find_need_ingredients
-	  fridge = self.fridge_items.pluck(:ingredient_id, :amount).to_h
-	  needs.delete_if { |id, a| a <= fridge[id].to_i }
+	def lack_list(arg_ingredients = false, with_id: true)
+		raise 'lack_list(models/end_user.rb)の引数がHash型ではありません' if arg_ingredients && arg_ingredients.class != Hash
+	  needs = (arg_ingredients ? arg_ingredients.select { |id, amount| ApplicationRecord::GENRE_SCOPE[:semi_all].include?(id) } : self.need_ingredients)
+	  fridge = self.fridge_hash(needs)
 	  needs.merge!(fridge) { |id, a_1, a_2| a_1 - a_2 }
-	  Ingredient.where(id: needs.keys).map { |ingre| [ingre.name, needs[ingre.id], unit] }
+	  needs.delete_if { |id, a| a <= 0 }
+	  if with_id
+	    Ingredient.where(id: needs.keys).map { |ingre| [ingre.name, needs[ingre.id], ingre.unit, ingre.id] }
+	  else
+	    Ingredient.where(id: needs.keys).map { |ingre| [ingre.name, needs[ingre.id], ingre.unit] }
+	  end
 	end
+	  
+	def fridge_hash(arg_ingredients = false)
+		ret = self.fridge_items.pluck(:ingredient_id, :amount).to_h
+		ret.select{ |id, a| arg_ingredients.include?(id) } if arg_ingredients
+  end
 end
