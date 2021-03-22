@@ -1,6 +1,7 @@
-
-<div class="c_link_list">
-  <ul class="cp_list" title="Link list">
+<div class="c_container_info">
+  <div><p style="font-family: 'Yu Mincho';">お忙しい中、お目通しいただきありがとうございます！<br>興味を持っていただいた項目だけでもご一読いただけると幸いです。</p></div>
+  
+  <ul class="cp_list" title="Link list" style="column-count: 2;">
   	<li>本アプリケーション説明はリンクリスト下にございます</li>
   	<li> - <%= link_to "トップページ", root_path %></li>
   	<li> - <%= link_to "マイページ(冷蔵庫機能)", end_users_path %></li>
@@ -13,4 +14,72 @@
   	<li> - <%= link_to "献立生成ページ(1週間分)", new_week_user_menu_path %></li>
   	<li> - <%= link_to "日付を進める", edit_outlines_path %></li>
   </ul>
+  
+  <ul class="cp_list" title="Documents list" style="column-count: 2;">
+    <li> - <a href="https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing">設計書</a></li>
+    <li> - <a href="https://docs.google.com/document/d/15QbBmD9cz0fZxOTJzNqsOCVsaaV9IhqFrHodw8bfh5Y/edit?usp=sharing">要件定義(初期段階)</a></li>
+    <li> - <a href="https://cacoo.com/diagrams/52W9xRDKiHJahDG5#91212">ワイヤーフレーム</a></li>
+    <li> - <a href="https://cacoo.com/diagrams/edb5Dqr5aYgNoUyf#89F93">ER図</a></li>
+  </ul>
+</div>
+
+<hr class="c_line">
+
+<div class="c_container_info">
+  <ul class="cp_list" title="Info index">
+  	<li><a href="/outlines#info_1">アプリケーション概要</a></li>
+  	<li><a href="/outlines#info_2">各機能</a></li>
+  	<li><a href="/outlines#info_3">なぜ作ろうと思ったか</a></li>
+  	<li><a href="/outlines#info_4">作成に当たって意識したこと</a></li>
+  </ul>
+  
+  <div class="c_box__info">
+    <div class="c_box__info_title">
+      <h2 id="info_1", class="c_title__info">アプリケーション概要</h2>
+    </div>
+    <hr class="c_line_in_box">
+    <div>
+      <span class="c_text_info">
+      　レシピ掲載 × 献立保存 × 冷蔵庫管理システムのウェブアプリケーションのサンプルです。<br>
+      　Dely様に応募するにあたって、自分の作りたいアプリケーションのイメージをアピールするために作成しました。<br>
+      </span>
+    </div>
+  </div>
+  
+  <div class="c_box__info">
+    <div class="c_box__info_title">
+      <h2 id="info_2", class="c_title__info">各機能</h2>
+    </div>
+    <div>
+      <h3>献立提案機能</h3>
+      <span class="c_text_info">
+      - ユーザーの冷蔵庫の中身を考慮して、なるべく冷蔵庫の中身でレシピの内容を賄えるレシピを選別、提案する<br>
+      - 今日の献立の案を複数提案、または自動で2 ~ 7日間のレシピを提供する<br>
+      - 複数日のレシピ提案時に、事前に登録したレシピがある場合は、そちらを提案画面に乗せる<br>
+      </span>
+      <br>
+      <h3>献立管理機能</h3>
+      <span class="c_text_info">
+      - 献立を登録する<br>
+      - 献立の調理済みフラグをオンにして、冷蔵庫の中から、料理に使った材料を引く<br>
+      - 登録した献立の一覧を表示して、取り消し、または調理済み処理ができる<br>
+      </span>
+    </div>
+  </div>
+  
+  <div class="c_box__info">
+    <div class="c_box__info_title">
+      <h2 id="info_3", class="c_title__info">なぜ作ろうと思ったのか</h2>
+    </div>
+    <div>
+      <span class="c_text_info">
+      　以前からレシピ掲載サイト × 献立保存 × 冷蔵庫管理システムを実現できるアプリがあれば便利だと思っていました。<br>
+      そして、このアイデアとクラシルのサービスが、以下の理由で相性が良いと思い、ポートフォリオと、自分がどういうサービスを作りたいかというアピールをかねて、作成しました。<br>
+      〇理由<br>
+        - レシピによって単位がまちまちだと、冷蔵庫管理システムと連携した時に、量の管理に問題が生じてしまうと思いました。<br>
+        - そして、その問題を解決しようと投稿のスタイルを制限すると、投稿側に不便をかけてしまうと考えました。<br>
+        - その点、クラシルはレシピ投稿者がサービス提供側であるため、多少投稿側のUIの低下は許容でき、また投稿形式の管理も他のサービスに比べて容易だと考えました。<br>
+      </span>
+    </div>
+  </div>
 </div>

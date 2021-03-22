@@ -1264,9 +1264,31 @@ footer {
 }
 
 /* 概要 */
-.c_link_list {
+.c_container_info {
   width: 744px;
   margin: 32px auto;
+}
+
+.c_line {
+  border-top: 4px;
+  width: 88%;
+  margin: 16px auto;
+}
+
+.c_line_in_box {
+  border-top: 2px dashed #00796B;
+  margin: 4px 0;
+}
+
+.c_box__info {
+  border: 3px solid #00796B;
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 12px;
+}
+
+.c_box__info_title {
+  color: #00594B;
 }
 
 ul.cp_list {
@@ -1274,9 +1296,9 @@ ul.cp_list {
 	padding: 0 0.5em;
 	margin-top: 2em;
 	list-style-type: none;
-	border: solid 2px #00796B;
-	column-count: 2;
+	border: solid 4px #00796B;
 }
+
 ul.cp_list::after {
 	position: absolute;
 	content:attr(title);
