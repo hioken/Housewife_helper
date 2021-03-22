@@ -1265,7 +1265,7 @@ footer {
 
 /* 概要 */
 .c_link_list {
-  width: 720px;
+  width: 744px;
   margin: 32px auto;
 }
 
@@ -1275,6 +1275,7 @@ ul.cp_list {
 	margin-top: 2em;
 	list-style-type: none;
 	border: solid 2px #00796B;
+	column-count: 2;
 }
 ul.cp_list::after {
 	position: absolute;

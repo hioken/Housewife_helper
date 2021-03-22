@@ -23,6 +23,7 @@
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
+        <%= link_to "本ポートフォリオ概要", outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
         <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
         <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
       </div>
