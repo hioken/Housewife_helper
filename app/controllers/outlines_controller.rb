@@ -1,4 +1,8 @@
 class OutlinesController < ApplicationController
+  skip_before_action :authenticate_end_user!
+  skip_before_action :check_untreated
+  before_action :set_unconfirmed
+  
   def show
   end
 
@@ -14,5 +18,9 @@ class OutlinesController < ApplicationController
   private
     def outline_params
       params.require(:outline).permit(:today)
+    end
+    
+    def set_unconfirmed
+      @unconfirmed = []
     end
 end
