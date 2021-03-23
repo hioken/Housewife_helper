@@ -1291,6 +1291,21 @@ footer {
   color: #00594B;
 }
 
+.c_list__info {
+  background-color: #fcfcfc;
+}
+
+.c_list__info > li:first-child {
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.c_list__info > li:nth-child(n + 2) {
+  margin-left: 32px;
+  list-style-type: circle;
+}
+
+
 ul.cp_list {
 	position: relative;
 	padding: 0 0.5em;
