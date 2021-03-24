@@ -3,7 +3,6 @@ class UserMenu < ApplicationRecord
   belongs_to :end_user
   belongs_to :recipe
   
-  validate :cooking_date_check
   attr_accessor :user_id
   
   #Methods
@@ -13,8 +12,4 @@ class UserMenu < ApplicationRecord
 		ingredients
   end
   
-  private
-    def cooking_date_check
-      errors.add(:cooking_date, '昨日以降の日付は登録出来ません') if cooking_date < Date.today
-    end
 end

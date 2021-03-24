@@ -71,11 +71,11 @@ class UserMenusController < ApplicationController
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存
-			if user_menu.cooking_date >= @set_today # 昨日以前の日付の場合はエラーを返す
+			if user_menu.cooking_date >= @set_today
 				duplicate.destroy! if duplicate
 				user_menu.save
 				redirect_to user_menus_path
-			else
+			else # 昨日以前の日付の場合はエラーを返す
     		@recipe = Recipe.find(params[:user_menu][:recipe_id])
     		@recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
     		@size = params[:size] ? params[:size].to_i : current_end_user.family_size
