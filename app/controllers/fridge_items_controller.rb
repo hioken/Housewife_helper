@@ -42,15 +42,25 @@ class FridgeItemsController < ApplicationController
       rescue ActiveRecord::RecordNotFound => e
         e.exception_log
       rescue ActiveRecord::RecordInvalid => e
-        retry_cnt += 1
-        retry if retry_cnt <= 3
         e.exception_log
-        set_rescue_variable('データの更新に誤作動が生じたため、')
+        set_rescue_variable(ERROR_MESSAGE[:fridge_item_update])
+      rescue => e
+        retry if retry_cnt < RETRY_COUNT
+        retry_cnt += 1
+        e.exception_log
+        redirect_to exceptions_path
       end
     else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
       destroied_id = @fridge_item.ingredient_id
       columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']
-      @fridge_item.destroy
+      begin
+        @fridge_item.destroy!
+      rescue => e
+        retry if retry_cnt < RETRY_COUNT
+        retry_cnt += 1
+        e.exception_log
+        redirect_to exceptions_path
+      end
       if destroied_id > 4999 or destroied_id < 100
         @foods = current_end_user.pick(:grain_seasoning, *columns)
         @food_box_id = 'seasonings'

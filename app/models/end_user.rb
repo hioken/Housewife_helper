@@ -61,7 +61,7 @@ class EndUser < ApplicationRecord
 	end
 	  
   def manage(ingredients, mode: :add)
-    raise ArgumentError 'first argument isn`t Hash' unless ingredients.class == Hash
+    raise ArgumentError 'first argument isn`t Hash' if ingredients.class != Hash
     if mode == :add
     	FridgeItem.transaction do
     	  existings = self.fridge_items.where(ingredient_id: ingredients.keys)

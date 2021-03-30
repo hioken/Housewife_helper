@@ -6,8 +6,9 @@ class ApplicationController < ActionController::Base
   # 定数
   RETRY_COUNT = 3
   ERROR_MESSAGE = {
-    unexpected: "予期せぬエラーが発生しました。早急に原因を調査して修正致します。ご迷惑をおかけして申し訳ございません。",
-    end_user_update: "ユーザー情報の更新に失敗しました。アプリケーションの不具合により、現在そちらの選択肢は利用できません、ご迷惑おかけいたします。"
+    unexpected: '予期せぬエラーが発生しました。早急に原因を調査して修正致します。ご迷惑をおかけして申し訳ございません。',
+    end_user_update: 'ユーザー情報の更新に失敗しました。アプリケーションの不具合により、現在そちらの選択肢は利用できません、ご迷惑おかけいたします。',
+    fridge_item_update: 'データの更新に誤作動が生じたため、更新を取り消しました。'
   }
   
   # methods

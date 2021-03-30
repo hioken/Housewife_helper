@@ -41,8 +41,8 @@ class EndUsersController < ApplicationController
       set_rescue_variable(ERROR_MESSAGE[:end_user_update])
       render 'layouts/exception.js.erb'
     rescue => e
+      retry if retry_cnt < RETRY_COUNT
       retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
       e.exception_log
       redirect_to exceptions_path
     end
