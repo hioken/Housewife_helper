@@ -36,7 +36,7 @@ class EndUsersController < ApplicationController
       retry_cnt += 1
       retry if retry_cnt <= RETRY_COUNT
       e.exception_log
-      render template 'layouts/exception.js.erb'
+      render 'layouts/exception.js.erb'
     end
   end
   

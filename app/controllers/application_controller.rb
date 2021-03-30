@@ -51,7 +51,8 @@ module LogSecretary
         break
       end
     end
-    text << "\ttrace_count: #{cnt.to_s}"
+    text << "\t\t......\n"
+    text << "\ttrace_count: #{cnt.to_s}\n"
     Rails.application.config.exception_logger.info(text)
   end
 end
