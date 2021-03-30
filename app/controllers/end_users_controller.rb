@@ -17,11 +17,7 @@ class EndUsersController < ApplicationController
       elsif food[0] > 99
         @meats_fishes << food
       else
-        begin
-          raise "想定されていない食材コードです: #{code}"
-        rescue RuntimeError => e
-          e.exception_log(tracing: false)
-        end
+        Ingredient.exception_ingredient(FridgeItem, food[0])
       end
     end
   end

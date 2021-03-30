@@ -78,7 +78,7 @@ class FridgeItemsController < ApplicationController
         @food_box_id = 'meats_fishes'
         @food_genre = '肉/魚'
       else
-        raise "想定されていない食材コードです|| destroied_id: #{destroied_id}, controller: fridge_items_controller"
+        Ingredient.exception_ingredient(FridgeItem, destroied_id)
       end
       render :destroy
     end
