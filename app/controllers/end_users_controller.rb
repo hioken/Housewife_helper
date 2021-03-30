@@ -29,11 +29,15 @@ class EndUsersController < ApplicationController
   end
   
   def update
-    # begin
-    #   current_end_user.update!(end_user_params)
-    # rescue => er
-      
-    # end
+    retry_cnt = 0
+    begin
+      current_end_user.update!(end_user_params)
+    rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+      e.exception_log
+      render template 'layouts/exception.js.erb'
+    end
   end
   
   private

@@ -5,6 +5,8 @@ class EndUser < ApplicationRecord
          
   has_many :fridge_items, dependent: :destroy
   has_many :user_menus, dependent: :destroy
+
+	validates :cooking_time_limit, numericality: {less_than: 110}
   
   # Methods
 	def pick(genre_scope, *columns)

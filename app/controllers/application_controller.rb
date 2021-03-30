@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   before_action :time_set
   before_action :check_untreated
   
+  RETRY_COUNT = 3
+  
   def after_sign_in_path_for(resource)
     if (date = Outline.find_by(user: current_end_user.id))
       date.destroy 
@@ -50,7 +52,7 @@ module LogSecretary
       end
     end
     text << "\ttrace_count: #{cnt.to_s}"
-    Rails.application.config.another_loger.info(text)
+    Rails.application.config.exception_logger.info(text)
   end
 end
 
@@ -58,7 +60,7 @@ module ActiveRecord
   include LogSecretary
 end
 
-class Exeption
+class Exception
   include LogSecretary
 end
 
