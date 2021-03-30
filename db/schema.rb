@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_094440) do
     t.datetime "remember_created_at"
     t.string "user_name", default: "kenta", null: false
     t.integer "family_size", default: 2, null: false
-    t.integer "cooking_time_limit"
+    t.integer "cooking_time_limit", default: 9999, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_end_users_on_email", unique: true
