@@ -36,7 +36,10 @@ class FridgeItemsController < ApplicationController
   def update
     @fridge_item = FridgeItem.find(params[:id])
     if params[:fridge_item][:amount] != "0" # 更新対象が0にならなければ(まだ冷蔵庫に対象が残っていれば)、そのまま更新
-      @fridge_item.update(fridge_item_params)
+      begin
+        @fridge_item.update!(fridge_item_params)
+      rescue => e
+      end
     else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
       destroied_id = @fridge_item.ingredient_id
       columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']

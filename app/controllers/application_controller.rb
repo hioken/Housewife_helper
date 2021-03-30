@@ -3,8 +3,10 @@ class ApplicationController < ActionController::Base
   before_action :time_set
   before_action :check_untreated
   
+  # 定数
   RETRY_COUNT = 3
   
+  # methods
   def after_sign_in_path_for(resource)
     if (date = Outline.find_by(user: current_end_user.id))
       date.destroy 
@@ -29,10 +31,10 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # def set_rescue_variable(message)
-  #   @message = message
-  #   @url = request.referrer
-  # end
+  def set_rescue_variable(message)
+    @message = message
+    @url = request.referrer
+  end
 end
 
 # 例外処理用メソッド

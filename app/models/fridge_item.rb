@@ -13,7 +13,7 @@ class FridgeItem < ApplicationRecord
   belongs_to :end_user
   belongs_to :ingredient
   
-  validates :amount, amount: true
+  validates :amount, numericality: {greater_than: 0}
   # Methods
   
   def self.lack_ingredients(user, ingredients, size: 1, ingredient_load: false)
