@@ -29,7 +29,11 @@ class EndUsersController < ApplicationController
   end
   
   def update
-    current_end_user.update(end_user_params)
+    # begin
+    #   current_end_user.update!(end_user_params)
+    # rescue => er
+      
+    # end
   end
   
   private
