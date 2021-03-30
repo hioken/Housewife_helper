@@ -79,6 +79,8 @@ class FridgeItemsController < ApplicationController
         @food_genre = '肉/魚'
       else
         Ingredient.exception_ingredient(FridgeItem, destroied_id)
+        @food_box_id = 'meats_fishes'
+        @food_genre = '肉/魚'
       end
       render :destroy
     end

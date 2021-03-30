@@ -2,19 +2,21 @@ class EndUsersController < ApplicationController
   def show
     # ユーザーの冷蔵庫の情報を配列で取得、SQLを減らすために一括受取
     foods = current_end_user.pick(false, :ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')  # fridge_items.joins(:ingredient).pluck(:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id')
+    p foods
     # ジャンル別に分割
     @meats_fishes = []
     @vegetables = []
     @others = []
     @seasonings = [] 
+    scope = ApplicationRecord::GENRE_SCOPE
     foods.each do |food|
-      if food[0] > 4999 or food[0] < 100
+      if scope[:grain_seasoning].include?(food[0]) #food[0] > 4999 or food[0] < 100
         @seasonings << food
-      elsif food[0] > 2999
+      elsif scope[:other].include?(food[0]) # food[0] > 2999
         @others << food
-      elsif food[0] > 999
+      elsif scope[:vegetable].include?(food[0]) # food[0] > 999
         @vegetables << food
-      elsif food[0] > 99
+      elsif scope[:meat_fish].include?(food[0]) # food[0] > 99
         @meats_fishes << food
       else
         Ingredient.exception_ingredient(FridgeItem, food[0])

@@ -50,12 +50,13 @@ module LogSecretary
     text << "\tMassage:  #{self.message}\n"
     if tracing
       text << "\tBacktrace:\n"
+      limit = (self.class == ActiveRecord::RecordInvalid || self.class == ArgumentError ? 4 : 20) # backtraceの出力行数
       cnt = 0
       self.backtrace.each do |trace|
         text << "\t\t" + trace + "\n"
         cnt += 1
-        if cnt > 20
-          cnt = 'over 20'
+        if cnt > limit
+          cnt = "over #{limit}"
           text << "\t\t......\n"
           break
         end
