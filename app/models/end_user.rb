@@ -6,6 +6,12 @@ class EndUser < ApplicationRecord
   has_many :fridge_items, dependent: :destroy
   has_many :user_menus, dependent: :destroy
   
+  with_options presence: true do
+  	validates :user_name
+  	validates :cooking_time_limit, numericality: {greater_than: 0}
+  	validates :family_size, numericality: {greater_than: 0, less_than: 13}
+  end
+  
   # Methods
 	def pick(genre_scope, *columns)
 		constraint = {end_user_id: self.id}

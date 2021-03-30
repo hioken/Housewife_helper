@@ -17,7 +17,11 @@ class EndUsersController < ApplicationController
       elsif food[0] > 99
         @meats_fishes << food
       else
-        raise "想定されていない食材コードです#{code}"
+        begin
+          raise "想定されていない食材コードです: #{code}"
+        rescue RuntimeError => e
+          e.exception_log(tracing: false)
+        end
       end
     end
   end
@@ -32,14 +36,13 @@ class EndUsersController < ApplicationController
     retry_cnt = 0
     begin
       current_end_user.update!(end_user_params)
-      raise
     rescue ActiveRecord::RecordInvalid => e
-      set_rescue_variable('ユーザー情報の更新に失敗しました。')
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
       e.exception_log
+      set_rescue_variable(ERROR_MESSAGE[:end_user_update])
       render 'layouts/exception.js.erb'
     rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
       e.exception_log
       redirect_to exceptions_path
     end

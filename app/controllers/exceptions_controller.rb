@@ -1,5 +1,8 @@
 class ExceptionsController < ApplicationController
   def show
-    set_rescue_variable("予期せぬエラーが発生しました。\n早急に原因を調査して修正致します。\nご迷惑をおかけして申し訳ございません。")
+    set_rescue_variable(ERROR_MESSAGE[:unexpected])
+    # 正規表現で訂正
+    
+    @url = '/end_users' if @url == nil || @url == '/exceptions'
   end
 end

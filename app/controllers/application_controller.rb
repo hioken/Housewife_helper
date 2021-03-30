@@ -5,11 +5,15 @@ class ApplicationController < ActionController::Base
   
   # 定数
   RETRY_COUNT = 3
+  ERROR_MESSAGE = {
+    unexpected: "予期せぬエラーが発生しました。早急に原因を調査して修正致します。ご迷惑をおかけして申し訳ございません。",
+    end_user_update: "ユーザー情報の更新に失敗しました。アプリケーションの不具合により、現在そちらの選択肢は利用できません、ご迷惑おかけいたします。"
+  }
   
   # methods
   def after_sign_in_path_for(resource)
     if (date = Outline.find_by(user: current_end_user.id))
-      date.destroy 
+      date.destroy!
     end
     Outline.create(user: current_end_user.id, today: Date.today)
     time_set
@@ -39,22 +43,24 @@ end
 
 # 例外処理用メソッド
 module LogSecretary
-  def exception_log
+  def exception_log(tracing: true)
     text = "\n"
     text << "\tError:    #{self.class}\n"
     text << "\tMassage:  #{self.message}\n"
-    text << "\tBacktrace:\n"
-    cnt = 0
-    self.backtrace.each do |trace|
-      text << "\t\t" + trace + "\n"
-      cnt += 1
-      if cnt > 20
-        cnt = 'over 20'
-        break
+    if tracing
+      text << "\tBacktrace:\n"
+      cnt = 0
+      self.backtrace.each do |trace|
+        text << "\t\t" + trace + "\n"
+        cnt += 1
+        if cnt > 20
+          cnt = 'over 20'
+          text << "\t\t......\n"
+          break
+        end
       end
+      text << "\ttrace_count: #{cnt.to_s}\n"
     end
-    text << "\t\t......\n"
-    text << "\ttrace_count: #{cnt.to_s}\n"
     Rails.application.config.exception_logger.info(text)
   end
 end
