@@ -33,12 +33,15 @@ class EndUsersController < ApplicationController
     begin
       current_end_user.update!(end_user_params)
       raise
-    rescue => e
+    rescue ActiveRecord::RecordInvalid => e
       set_rescue_variable('ユーザー情報の更新に失敗しました。')
       retry_cnt += 1
       retry if retry_cnt <= RETRY_COUNT
       e.exception_log
       render 'layouts/exception.js.erb'
+    rescue => e
+      e.exception_log
+      redirect_to exceptions_path
     end
   end
   

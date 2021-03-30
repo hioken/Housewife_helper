@@ -30,15 +30,22 @@ class FridgeItemsController < ApplicationController
       end
       redirect_to end_users_path
     end
-    current_end_user.manage(ingredient_data, mode: :add)
+    current_end_user.manage(ingredient_data, mode: :add) # データを追加
   end
 
   def update
+    retry_cnt = 0
     @fridge_item = FridgeItem.find(params[:id])
     if params[:fridge_item][:amount] != "0" # 更新対象が0にならなければ(まだ冷蔵庫に対象が残っていれば)、そのまま更新
       begin
         @fridge_item.update!(fridge_item_params)
-      rescue => e
+      rescue ActiveRecord::RecordNotFound => e
+        e.exception_log
+      rescue ActiveRecord::RecordInvalid => e
+        retry_cnt += 1
+        retry if retry_cnt <= 3
+        e.exception_log
+        set_rescue_variable('データの更新に誤作動が生じたため、')
       end
     else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
       destroied_id = @fridge_item.ingredient_id

@@ -13,9 +13,9 @@ class FridgeItem < ApplicationRecord
   belongs_to :end_user
   belongs_to :ingredient
   
-  validates :amount, numericality: {greater_than: 0}
-  # Methods
+  validates :amount, amount: true # AmountValicatorを検証
   
+  # Methods
   def self.lack_ingredients(user, ingredients, size: 1, ingredient_load: false)
     # 引数 => user: current_end_user, ingredients: 冷蔵庫と比較したい食材のリレーション, size: ingredientsのamountの量の倍率(人数), ingredient_load: falseならingredientをロードしない 
     # ロードする場合のSQLの発行を抑えるため1行で書いている

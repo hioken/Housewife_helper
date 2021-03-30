@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'outlines#show'
   resource :outlines, only: [:show, :edit, :update]
+  resource :exceptions, only: :show
   
   get 'shopping_list', to: 'end_users#shopping_list', as: :shopping_list
   resource :end_users, only: [:show, :update]

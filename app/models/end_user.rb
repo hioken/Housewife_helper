@@ -55,30 +55,34 @@ class EndUser < ApplicationRecord
 	end
 	  
   def manage(ingredients, mode: :add)
-    raise unless ingredients.class == Hash
+    raise ArgumentError 'first argument isn`t Hash' unless ingredients.class == Hash
     if mode == :add
-      existings = self.fridge_items.where(ingredient_id: ingredients.keys)
-      existings.each do |existing|
-        existing.update(amount: (existing.amount + ingredients[existing.ingredient_id]))
-        ingredients.delete(existing.ingredient_id)
-      end
-      
-      ingredients.each do |id, amount|
-        next unless FridgeItem::GENRE_SCOPE[:semi_all].include?(id)
-        self.fridge_items.new(ingredient_id: id, amount: amount).save
-      end
+    	FridgeItem.transaction do
+    	  existings = self.fridge_items.where(ingredient_id: ingredients.keys)
+    	  existings.each do |existing|
+    	    existing.update!(amount: (existing.amount + ingredients[existing.ingredient_id]))
+    	    ingredients.delete(existing.ingredient_id)
+    	  end
+    	  
+    	  ingredients.each do |id, amount|
+    	    next unless FridgeItem::GENRE_SCOPE[:semi_all].include?(id)
+    	    self.fridge_items.new(ingredient_id: id, amount: amount).save!
+    	  end
+    	end
     end
     
     if mode == :cut
-      ingredients.delete_if{ |key, value| FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
-      existings = self.fridge_items.where(ingredient_id: ingredients.keys)
-      delete_ids = []
-      existings.each do |existing|
-        existing.amount -= ingredients[existing.ingredient_id]
-        existing.amount <= 0 ? delete_ids << existing.id : existing.save
+    	FridgeItem.transaction do
+      	ingredients.delete_if{ |key, value| FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
+      	existings = self.fridge_items.where(ingredient_id: ingredients.keys)
+      	delete_ids = []
+      	existings.each do |existing|
+      	  existing.amount -= ingredients[existing.ingredient_id]
+      	  existing.amount <= 0 ? delete_ids << existing.id : existing.save!
+      	end
+      	
+      	self.fridge_items.where(id: delete_ids).delete_all
       end
-      
-      self.fridge_items.where(id: delete_ids).delete_all
     end
   end
 end
