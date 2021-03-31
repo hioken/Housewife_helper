@@ -47,7 +47,7 @@ module LogSecretary
   def exception_log(tracing: true)
     text = "\n"
     text << "\tError:    #{self.class}\n"
-    text << "\tModel:    #{self.record.class}\n" if self.class.name.deconstantize.constantize == ActiveRecord && self.respond_to?(:record)
+    text << "\tModel:    #{self.record.class}\n" if self.class.name.deconstantize == "ActiveRecord" && self.respond_to?(:record)
     text << "\tMassage:  #{self.message}\n"
       
     if tracing

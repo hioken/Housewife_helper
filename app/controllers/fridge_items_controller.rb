@@ -30,7 +30,11 @@ class FridgeItemsController < ApplicationController
       end
       redirect_to end_users_path
     end
-    current_end_user.manage(ingredient_data, mode: :add) # データを追加
+    begin
+      current_end_user.manage(ingredient_data, mode: :add) # データを追加
+    rescue => e
+      e.exception_log
+    end
   end
 
   def update
@@ -45,8 +49,8 @@ class FridgeItemsController < ApplicationController
         e.exception_log
         set_rescue_variable(ERROR_MESSAGE[:fridge_item_update])
       rescue => e
-        retry if retry_cnt < RETRY_COUNT
         retry_cnt += 1
+        retry if retry_cnt <= RETRY_COUNT
         e.exception_log
         redirect_to exceptions_path
       end
@@ -56,8 +60,8 @@ class FridgeItemsController < ApplicationController
       begin
         @fridge_item.destroy!
       rescue => e
-        retry if retry_cnt < RETRY_COUNT
         retry_cnt += 1
+        retry if retry_cnt <= RETRY_COUNT
         e.exception_log
         redirect_to exceptions_path
       end
