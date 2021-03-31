@@ -33,7 +33,7 @@ class EndUsersController < ApplicationController
   def update
     retry_cnt = 0
     begin
-      current_end_user.update!(end_user_params)
+      current_end_user.update!(cooking_time_limit: nil)
     rescue ActiveRecord::RecordInvalid => e
       e.exception_log
       set_rescue_variable(ERROR_MESSAGE[:end_user_update])
@@ -51,3 +51,5 @@ class EndUsersController < ApplicationController
       params.require(:end_user).permit(:family_size, :cooking_time_limit)
     end
 end
+  
+  

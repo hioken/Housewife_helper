@@ -47,10 +47,12 @@ module LogSecretary
   def exception_log(tracing: true)
     text = "\n"
     text << "\tError:    #{self.class}\n"
+    text << "\tModel:    #{self.record.class}\n" if self.class.name.deconstantize.constantize == ActiveRecord && self.respond_to?(:record)
     text << "\tMassage:  #{self.message}\n"
+      
     if tracing
       text << "\tBacktrace:\n"
-      limit = (self.class == ActiveRecord::RecordInvalid || self.class == ArgumentError ? 4 : 20) # backtraceの出力行数
+      limit = (self.class == ActiveRecord::RecordInvalid || self.class == ArgumentError ? 16 : 30) # backtraceの出力行数
       cnt = 0
       self.backtrace.each do |trace|
         text << "\t\t" + trace + "\n"
