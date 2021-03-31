@@ -78,5 +78,11 @@
         <% end %>
       </div>
     </footer>
+    
+    <% if flash[:exception_message] %>
+      <script>
+        alert("<%= flash[:exception_message] %>");
+      </script>
+    <% end %>
   </body>
 </html>

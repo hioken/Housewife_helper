@@ -1,9 +1,9 @@
 class AmountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if record.ingredient.unit == 'g'
-      record.errors.add(attribute, 'が想定されていない数値です。') if value < 100
+      record.errors.add(attribute, "is #{record.amount}, expected (amount > 100)") if value < 100
     else
-      record.errors.add(attribute, 'が想定されていない数値です。') if value < 1
+      record.errors.add(attribute, "is #{record.amount}, expected (amount > 1)") if value < 1
     end
   end
 end

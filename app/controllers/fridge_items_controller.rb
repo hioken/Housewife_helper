@@ -14,6 +14,14 @@ class FridgeItemsController < ApplicationController
     if params[:from] == 'single' # 買い物リストからの処理
       ingredient_data = {params[:ingredient_id].to_i => params[:amount].to_i}
       @delete_html = params[:ingredient_id]
+      begin
+        FridgeItem.transaction do
+          current_end_user.manage(ingredient_data, mode: :add) # データを追加
+        end
+      rescue => e
+        e.exception_log
+        redirect_to exceptions_path # viewを読み込み直して治る例外は起こりづらいアクションのため、例外画面へ
+      end
     else # 冷蔵庫追加画面からの処理
       params[:fridge_items].each do |key, values|
         next if (values[:id_unit] == '' or values[:amount] == '')
@@ -28,12 +36,16 @@ class FridgeItemsController < ApplicationController
           ingredient_data[ingre_id] = amount
         end
       end
-      redirect_to end_users_path
-    end
-    begin
-      current_end_user.manage(ingredient_data, mode: :add) # データを追加
-    rescue => e
-      e.exception_log
+      begin
+        FridgeItem.transaction do
+          current_end_user.manage(ingredient_data, mode: :add) # データを追加
+        end
+      rescue => e
+        e.exception_log
+        redirect_to new_fridge_item_path, flash: { exception_message: ERROR_MESSAGE[:fridge_item_create] }
+      else
+        redirect_to end_users_path
+      end
     end
   end
 
@@ -43,14 +55,13 @@ class FridgeItemsController < ApplicationController
     if params[:fridge_item][:amount] != "0" # 更新対象が0にならなければ(まだ冷蔵庫に対象が残っていれば)、そのまま更新
       begin
         @fridge_item.update!(fridge_item_params)
-      rescue ActiveRecord::RecordNotFound => e
-        e.exception_log
       rescue ActiveRecord::RecordInvalid => e
         e.exception_log
         set_rescue_variable(ERROR_MESSAGE[:fridge_item_update])
+        render 'layouts/exception.js.erb'
       rescue => e
         retry_cnt += 1
-        retry if retry_cnt <= RETRY_COUNT
+        retry if retry_cnt <= RETRY_COUNT && e.class != ArgumentError
         e.exception_log
         redirect_to exceptions_path
       end

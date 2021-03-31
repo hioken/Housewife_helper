@@ -61,7 +61,7 @@ class EndUser < ApplicationRecord
 	end
 	  
   def manage(ingredients, mode: :add)
-    raise ArgumentError 'first argument isn`t Hash' if ingredients.class != Hash
+    raise ArgumentError, "expected Hash, give #{ingredients.class}" if ingredients.class != Hash
     if mode == :add
       existings = self.fridge_items.where(ingredient_id: ingredients.keys)
       existings.each do |existing|
