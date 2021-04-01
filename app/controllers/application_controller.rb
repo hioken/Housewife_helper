@@ -9,7 +9,8 @@ class ApplicationController < ActionController::Base
     unexpected: '予期せぬエラーが発生しました。早急に原因を調査して修正致しますので、時間をおいて再度ご利用ください。ご迷惑をおかけして申し訳ございません。',
     end_user_update: 'ユーザー情報の更新に失敗しました。アプリケーションの不具合により、現在そちらの選択肢は利用できません、ご迷惑おかけいたします。',
     fridge_item_update: '食材の数量の更新に誤作動が生じたため、更新を取り消しました。',
-    fridge_item_create: '食材の追加に失敗しました。'
+    fridge_item_create: '食材の追加に失敗しました。',
+    user_menu_update: '献立の追加/更新に失敗しました。'
   }
   
   # methods

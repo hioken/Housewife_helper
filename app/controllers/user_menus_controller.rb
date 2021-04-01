@@ -103,7 +103,7 @@ class UserMenusController < ApplicationController
 					failure_cnt	+= 1
 				end
 			end
-			flash[:exception_message] = "#{failure_cnt}件の献立の追加/更新に失敗しました。" if failure_cnt > 0
+			flash[:exception_message] = "#{failure_cnt}件の" + ERROR_MESSAGE[:user_menu_update] if failure_cnt > 0
 			redirect_to user_menus_path
 		else
 			# 新しいuser_menuのインスタンスを作成
@@ -114,9 +114,18 @@ class UserMenusController < ApplicationController
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存
 			if user_menu.cooking_date >= @set_today
-				duplicate.destroy! if duplicate
-				user_menu.save
-				redirect_to user_menus_path
+				begin
+					UserMenu.transaction do
+						duplicate.destroy! if duplicate
+						user_menu.save!
+					end
+				rescue => e
+					e.exception_log
+					flash[:exception_message] = ERROR_MESSAGE[:user_menu_update]
+					redirect_back(fallback_location: user_menus_path)
+				else
+					redirect_to user_menus_path
+				end
 			else # 昨日以前の日付の場合はエラーを返す
     		@recipe = Recipe.find(params[:user_menu][:recipe_id])
     		@recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
@@ -130,12 +139,22 @@ class UserMenusController < ApplicationController
 	end
 	
 	def update
-		UserMenu.find(params[:id]).update!(user_menu_params)
+		begin
+			UserMenu.find(params[:id]).update!(user_menu_params)
+		rescue => e
+			e.exception_log
+			flash[:exception_message] = ERROR_MESSAGE[:user_menu_update]
+		end
 		redirect_to user_menus_path
 	end
 	
 	def destroy
-		UserMenu.find(params[:id]).destroy!
+		begin
+			UserMenu.find(params[:id]).destroy!
+		rescue => e
+			e.exception_log
+			flash[:exception_message] = ERROR_MESSAGE[:user_menu_update]
+		end
 		redirect_to user_menus_path
 	end
 
