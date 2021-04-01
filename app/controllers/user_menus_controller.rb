@@ -170,13 +170,20 @@ class UserMenusController < ApplicationController
 			
 			# 調理済みにするidの献立の処理
 			if cooked_ids.size > 0
-				cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
-				cooked_u_ms.each do |user_menu| 
-					recipe_h[user_menu.recipe.id] = user_menu.sarve
-					user_menu.update(is_cooked: true) 
+				begin
+					ActiveRecord::Base.transaction do
+						cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
+						cooked_u_ms.each do |user_menu| 
+							recipe_h[user_menu.recipe.id] = user_menu.sarve
+							user_menu.update!(is_cooked: true) 
+						end
+						c_ingredients = multiple_recipe_ingredients(recipe_h)
+						current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
+					end
+				rescue => e
+					e.exception_log
+					flash[:exception_message] = ERROR_MESSAGE[:user_menu_cooked]
 				end
-				c_ingredients = multiple_recipe_ingredients(recipe_h)
-				current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
 			end
 		else #user_menusからの処理
 			# 献立の取得と、manageの引数を作成
@@ -184,10 +191,15 @@ class UserMenusController < ApplicationController
 			ingredients = user_menu.menu_ingredients
 			
 			# 献立を調理済みに更新
-			user_menu.update(is_cooked: true)
-			
-			# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
-			current_end_user.manage(ingredients, mode: :cut)
+			begin
+				user_menu.update!(is_cooked: true)
+				
+				# 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
+				current_end_user.manage(ingredients, mode: :cut)
+			rescue Exception => e
+				e.exception_log
+				flash[:exception_message] = ERROR_MESSAGE[:user_menu_cooked]
+			end
 		end
 		redirect_back fallback_location: end_users_path
 	end
