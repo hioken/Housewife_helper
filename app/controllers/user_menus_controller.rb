@@ -1,52 +1,82 @@
 class UserMenusController < ApplicationController
 	def index
-		@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-		@lacks = current_end_user.lack_list
+    retry_cnt = 0
+    begin
+			@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
+			@lacks = current_end_user.lack_list
+    rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+      e.exception_log
+      redirect_to exceptions_path
+    end
 	end
 	
 	def new
-		@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
-		@recipes = recommend(4, @sarve) # レシピデータを取得
+    retry_cnt = 0
+    begin
+    	raise
+			@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
+			@recipes = recommend(4, @sarve) # レシピデータを取得
+    rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+      e.exception_log
+      redirect_to exceptions_path
+    end
 	end
 	
 	def new_week
-		if params[:menu_change]
-			# 変更前のレシピのsarveを取得
-			sarve = params[:sarve].to_i
-			# 新しいレシピデータの取得
-			ids = flash[:recipes].map(&:to_i)
-			ids.clear if ids.size >= 32
-			new_recipes = Recipe.where('cooking_time <= ? AND id NOT IN (?)', current_end_user.cooking_time_limit, ids)
-			new_recipe = (new_recipes.size > 0 ? new_recipes[rand(0..(new_recipes.size - 1))] : Recipe.find(rand(0..10)))
-			@recipe =  [new_recipe, sarve]
-			
-			# lacksの編集
-			lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
-			RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingre| lacks_tmp[ingre.ingredient.id] -= ingre.amount * params[:old_sarve].to_i }
-			@recipe[0].recipe_ingredients.each { |ingre| lacks_tmp[ingre.ingredient.id] = lacks_tmp[ingre.ingredient.id].to_i + ingre.amount * sarve }
-			@lacks = current_end_user.lack_list(lacks_tmp)
-			
+    retry_cnt = 0
+    begin
+    	# if分岐は、画面に表示されているメニューの変更処理
+    	# else分岐は、このアクションに初めてアクセスした時の処理
+			if params[:menu_change]
+				# 変更前のレシピのsarveを取得
+				sarve = params[:sarve].to_i
+				# 新しいレシピデータの取得
+				ids = flash[:recipes].map(&:to_i)
+				ids.clear if ids.size >= 32
+				new_recipes = Recipe.where('cooking_time <= ? AND id NOT IN (?)', current_end_user.cooking_time_limit, ids)
+				new_recipe = (new_recipes.size > 0 ? new_recipes[rand(0..(new_recipes.size - 1))] : Recipe.find(rand(0..10)))
+				@recipe =  [new_recipe, sarve]
+				
+				# lacksの編集
+				lacks_tmp = flash[:lacks].map { |id, amount| [id.to_i, amount] }.to_h
+				RecipeIngredient.where(recipe_id: params[:id].to_i).each { |ingre| lacks_tmp[ingre.ingredient.id] -= ingre.amount * params[:old_sarve].to_i }
+				@recipe[0].recipe_ingredients.each { |ingre| lacks_tmp[ingre.ingredient.id] = lacks_tmp[ingre.ingredient.id].to_i + ingre.amount * sarve }
+				@lacks = current_end_user.lack_list(lacks_tmp)
+				
 			#次のflashのセット
-			flash[:lacks] = lacks_tmp
-			flash[:recipes] = ids << new_recipe.id
-		else
-			days = params[:days] ? params[:days].to_i : 7
-			@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
-			if (week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + days - 1))).size > 0
-				week_menu.each do |menu|
-					@recipes.insert((menu.cooking_date - @set_today).to_i, [menu.recipe, menu.sarve])
+				flash[:lacks] = lacks_tmp
+				flash[:recipes] = ids << new_recipe.id
+			else
+				days = params[:days] ? params[:days].to_i : 7 # パラーメータで献立を提案する日数が指定されていないは7
+				@recipes = recommend(days, current_end_user.family_size, type: :recipe_only).map { |recipe| [recipe, current_end_user.family_size] }
+			#提案日数の範囲で、すでにユーザが登録している献立を取得
+				if (week_menu = current_end_user.user_menus.where(cooking_date: (@set_today)..(@set_today + days - 1))).size > 0
+					week_menu.each do |menu|
+						@recipes.insert((menu.cooking_date - @set_today).to_i, [menu.recipe, menu.sarve])
+					end
+					@recipes.slice!(-(week_menu.size)..-1)
 				end
-				@recipes.slice!(-(week_menu.size)..-1)
+				recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
+				lacks_tmp = multiple_recipe_ingredients(recipes_h)
+				@lacks = current_end_user.lack_list(lacks_tmp)
+				flash[:lacks] = lacks_tmp
+				flash[:recipes] = recipes_h.keys
 			end
-			recipes_h = @recipes.map{|recipe, sarve| [recipe.id, sarve]}.to_h
-			lacks_tmp = multiple_recipe_ingredients(recipes_h)
-			@lacks = current_end_user.lack_list(lacks_tmp)
-			flash[:lacks] = lacks_tmp
-			flash[:recipes] = recipes_h.keys
-		end
+    rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+      e.exception_log
+      redirect_to exceptions_path
+    end
 	end
 	
 	def create
+	# if分岐はnew_weekアクションから飛んできた場合
+	# elseはそれ以外
 		before = Rails.application.routes.recognize_path(request.referrer)[:action]
 		if before == "new_week"
 			# paramsから{recipe_id => sarve}を作成
