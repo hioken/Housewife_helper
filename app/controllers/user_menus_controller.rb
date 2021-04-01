@@ -15,7 +15,6 @@ class UserMenusController < ApplicationController
 	def new
     retry_cnt = 0
     begin
-    	raise
 			@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
 			@recipes = recommend(4, @sarve) # レシピデータを取得
     rescue => e
@@ -88,10 +87,23 @@ class UserMenusController < ApplicationController
 			user_menus = []
 			recipes_h.keys.each_with_index {|id, i| user_menus << current_end_user.user_menus.new(recipe_id: id, cooking_date: today + i, sarve: recipes_h[id]) }
 			
-			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを削除
-			current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1)).delete_all
+			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuの日付を取得
+			duplicate_days = current_end_user.user_menus.where(cooking_date: today..(today + recipes_h.size - 1)).map { |user_menu| user_menu.cooking_date }
 			
-			user_menus.each { |user_menu| user_menu.save }
+			failure_cnt = 0
+			user_menus.each do |user_menu|
+				begin
+				# 日付が被っている献立を消去して、新しい献立を追加
+					UserMenu.transaction do
+						current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date).destroy! if duplicate_days.include?(user_menu.cooking_date)
+						user_menu.save!
+					end
+				rescue => e
+					e.exception_log if failure_cnt < 3
+					failure_cnt	+= 1
+				end
+			end
+			flash[:exception_message] = "#{failure_cnt}件の献立の追加/更新に失敗しました。" if failure_cnt > 0
 			redirect_to user_menus_path
 		else
 			# 新しいuser_menuのインスタンスを作成
