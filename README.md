@@ -1,24 +1,7 @@
-# README
+# アプリケーションについて
+- [概要](#info_1)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# 設計書一覧
+- [設計書](https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing)
+- [ER図](https://cacoo.com/diagrams/edb5Dqr5aYgNoUyf#89F93)
+- [ワイヤーフレーム](https://cacoo.com/diagrams/52W9xRDKiHJahDG5#91212)

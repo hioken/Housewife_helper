@@ -3,9 +3,21 @@ class ApplicationController < ActionController::Base
   before_action :time_set
   before_action :check_untreated
   
+  # 定数
+  RETRY_COUNT = 3
+  ERROR_MESSAGE = {
+    unexpected: '予期せぬエラーが発生しました。早急に原因を調査して修正致しますので、時間をおいて再度ご利用ください。ご迷惑をおかけして申し訳ございません。',
+    end_user_update: 'ユーザー情報の更新に失敗しました。アプリケーションの不具合により、現在そちらの選択肢は利用できません、ご迷惑おかけいたします。',
+    fridge_item_update: '食材の数量の更新に誤作動が生じたため、更新を取り消しました。',
+    fridge_item_create: '食材の追加に失敗しました。',
+    user_menu_update: '献立の追加/更新に失敗しました。',
+    user_menu_cooked: '調理済み処理に失敗しました。'
+  }
+  
+  # methods
   def after_sign_in_path_for(resource)
     if (date = Outline.find_by(user: current_end_user.id))
-      date.destroy 
+      date.destroy!
     end
     Outline.create(user: current_end_user.id, today: Date.today)
     time_set
@@ -26,8 +38,50 @@ class ApplicationController < ActionController::Base
       @unconfirmed = []
     end
   end
+  
+  def set_rescue_variable(message)
+    @exception_message = message
+  end
 end
 
+# 例外処理用メソッド
+module LogSecretary
+  def exception_log(tracing: true)
+    text = "\n"
+    text << "\tError:    #{self.class}\n"
+    text << "\tModel:    #{self.record.class}\n" if self.class.name.deconstantize == "ActiveRecord" && self.respond_to?(:record)
+    text << "\tMassage:  #{self.message}\n"
+      
+    if tracing
+      text << "\tBacktrace:\n"
+      p self.class
+      limit = ((self.class == ActiveRecord::RecordInvalid || self.class == ArgumentError) ? 16 : 30) # backtraceの出力行数
+      cnt = 0
+      self.backtrace.each do |trace|
+        text << "\t\t" + trace + "\n"
+        cnt += 1
+        if cnt > limit
+          cnt = "over #{limit}"
+          text << "\t\t......\n"
+          break
+        end
+      end
+      text << "\ttrace_count: #{cnt.to_s}\n"
+    end
+    Rails.application.config.exception_logger.info(text)
+  end
+end
+
+module ActiveRecord
+  include LogSecretary
+end
+
+class Exception
+  include LogSecretary
+end
+
+
+# ruby組み込みclassに追加するメソッド
 class Integer
   # 割り切れるか
   def divisible?(number)
@@ -91,3 +145,4 @@ class Hash
     end
   end
 end
+

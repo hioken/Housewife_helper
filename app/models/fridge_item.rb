@@ -1,9 +1,9 @@
 class AmountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if record.ingredient.unit == 'g'
-      record.errors.add(attribute, 'が想定されていない数値です。') if value < 100
+      record.errors.add(attribute, "is #{record.amount}, expected (amount > 100)") if value < 100
     else
-      record.errors.add(attribute, 'が想定されていない数値です。') if value < 1
+      record.errors.add(attribute, "is #{record.amount}, expected (amount > 1)") if value < 1
     end
   end
 end
@@ -13,9 +13,9 @@ class FridgeItem < ApplicationRecord
   belongs_to :end_user
   belongs_to :ingredient
   
-  validates :amount, amount: true
-  # Methods
+  validates :amount, amount: true # AmountValicatorを検証
   
+  # Methods
   def self.lack_ingredients(user, ingredients, size: 1, ingredient_load: false)
     # 引数 => user: current_end_user, ingredients: 冷蔵庫と比較したい食材のリレーション, size: ingredientsのamountの量の倍率(人数), ingredient_load: falseならingredientをロードしない 
     # ロードする場合のSQLの発行を抑えるため1行で書いている

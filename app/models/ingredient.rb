@@ -24,4 +24,12 @@ class Ingredient < ApplicationRecord
   def id_unit
     "#{self.id},#{self.unit}"
   end
+  
+  def self.exception_ingredient(model, id)
+    begin
+      raise "Model: #{model}, 想定されていない食材コード: #{id}"
+    rescue RuntimeError => e
+      e.exception_log(tracing: false)
+    end
+  end
 end

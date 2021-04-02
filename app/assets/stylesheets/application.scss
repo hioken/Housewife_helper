@@ -1295,12 +1295,13 @@ footer {
   background-color: #fcfcfc;
 }
 
-.c_list__info > li:first-child {
+.c_list__info > .c_list__head {
   font-weight: 600;
   margin-left: 8px;
+  color: #00594B;
 }
 
-.c_list__info > li:nth-child(n + 2) {
+.c_list__info > .c_list__item {
   margin-left: 32px;
   list-style-type: circle;
 }

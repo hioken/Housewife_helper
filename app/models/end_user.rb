@@ -6,6 +6,12 @@ class EndUser < ApplicationRecord
   has_many :fridge_items, dependent: :destroy
   has_many :user_menus, dependent: :destroy
   
+  with_options presence: true do
+  	validates :user_name
+  	validates :cooking_time_limit, numericality: {greater_than: 0}
+  	validates :family_size, numericality: {greater_than: 0, less_than: 13}
+  end
+  
   # Methods
 	def pick(genre_scope, *columns)
 		constraint = {end_user_id: self.id}
@@ -19,7 +25,8 @@ class EndUser < ApplicationRecord
   end
 	
 	def need_ingredients(key: false)
-	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
+		@set_today = Outline.find_by(user: self.id).today
+	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(cooking_date: @set_today..Float::INFINITY, is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
 	  ingredient_ids = []
 	  needs.map! do |id, amount, sarve|
 	    ingredient_ids << id
@@ -55,30 +62,38 @@ class EndUser < ApplicationRecord
 	end
 	  
   def manage(ingredients, mode: :add)
-    raise unless ingredients.class == Hash
+    raise ArgumentError, "expected Hash, give #{ingredients.class}" if ingredients.class != Hash
     if mode == :add
       existings = self.fridge_items.where(ingredient_id: ingredients.keys)
       existings.each do |existing|
-        existing.update(amount: (existing.amount + ingredients[existing.ingredient_id]))
+      	if FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(existing.ingredient_id)
+      		existing.update!(amount: FridgeItem::BOOLEAN_AMOUNT)
+      	else
+        	existing.update!(amount: (existing.amount + ingredients[existing.ingredient_id]))
+        end
         ingredients.delete(existing.ingredient_id)
       end
       
       ingredients.each do |id, amount|
         next unless FridgeItem::GENRE_SCOPE[:semi_all].include?(id)
-        self.fridge_items.new(ingredient_id: id, amount: amount).save
+      	if FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(id)
+        	self.fridge_items.new(ingredient_id: id, amount: FridgeItem::BOOLEAN_AMOUNT).save!
+        else
+        	self.fridge_items.new(ingredient_id: id, amount: amount).save!
+        end
       end
     end
     
     if mode == :cut
-      ingredients.delete_if{ |key, value| FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(key) } if self == FridgeItem
-      existings = self.fridge_items.where(ingredient_id: ingredients.keys)
-      delete_ids = []
-      existings.each do |existing|
-        existing.amount -= ingredients[existing.ingredient_id]
-        existing.amount <= 0 ? delete_ids << existing.id : existing.save
-      end
-      
-      self.fridge_items.where(id: delete_ids).delete_all
+    	ingredients.delete_if{ |key, value| FridgeItem::GENRE_SCOPE[:grain_seasoning].include?(key) }
+    	existings = self.fridge_items.where(ingredient_id: ingredients.keys)
+    	delete_ids = []
+    	existings.each do |existing|
+    	  existing.amount -= ingredients[existing.ingredient_id]
+    	  existing.amount <= 0 ? delete_ids << existing.id : existing.save!
+    	end
+    	
+    	self.fridge_items.where(id: delete_ids).delete_all
     end
   end
 end

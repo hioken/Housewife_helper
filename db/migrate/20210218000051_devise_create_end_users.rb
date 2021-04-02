@@ -34,7 +34,7 @@ class DeviseCreateEndUsers < ActiveRecord::Migration[6.1]
 
       t.string :user_name, null: false, default: 'kenta'
       t.integer :family_size, null: false, default: 2
-      t.integer :cooking_time_limit
+      t.integer :cooking_time_limit, null: false, default: 9999
 
       t.timestamps null: false
     end

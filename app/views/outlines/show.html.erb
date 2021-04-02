@@ -30,7 +30,7 @@
   	<li><a href="/outlines#info_1">アプリケーション概要</a></li>
   	<li><a href="/outlines#info_2">各機能</a></li>
   	<li><a href="/outlines#info_3">なぜ作ろうと思ったか</a></li>
-  	<li><a href="/outlines#info_4">作成に当たって</a></li>
+  	<li><a href="/outlines#info_4">作成に当たって意識したこと/その他</a></li>
   </ul>
   
   <div class="c_box__info">
@@ -54,19 +54,17 @@
     <div>
       <h3>献立提案機能</h3>
       <ul class="c_list__info">
-        <li></li>
-        <li>ユーザーの設定調理時間と冷蔵庫の中身を考慮して、なるべく冷蔵庫の中身でレシピの内容を賄えるレシピを選別、提案する</li>
-        <li>今日の献立の案を複数提案、または自動で2 ~ 7日間のレシピを提供する</li>
-        <li>複数日のレシピ提案時に、事前に登録したレシピがある場合は、そちらを提案画面に乗せる</li>
+        <li class="c_list__item">ユーザーの設定調理時間と冷蔵庫の中身を考慮して、なるべく冷蔵庫の中身でレシピの内容を賄えるレシピを選別、提案する</li>
+        <li class="c_list__item">今日の献立の案を複数提案、または自動で2 ~ 7日間のレシピを提供する</li>
+        <li class="c_list__item">複数日のレシピ提案時に、事前に登録したレシピがある場合は、そちらを提案画面に乗せる</li>
       </ul>
       <br>
       <h3>献立管理機能</h3>
       <ul class="c_list__info">
-        <li></li>
-        <li>献立を登録する</li>
-        <li>献立の調理済みフラグをオンにして、冷蔵庫の中から、料理に使った材料を引く</li>
-        <li>登録した献立の一覧を表示して、取り消し、または調理済み処理ができる</li>
-        <li>期限が過ぎたレシピについて、取り消しか調理済みかをアナウンスする</li>
+        <li class="c_list__item">献立を登録する</li>
+        <li class="c_list__item">献立の調理済みフラグをオンにして、冷蔵庫の中から、料理に使った材料を引く</li>
+        <li class="c_list__item">登録した献立の一覧を表示して、取り消し、または調理済み処理ができる</li>
+        <li class="c_list__item">期限が過ぎたレシピについて、取り消しか調理済みかをアナウンスする</li>
       </ul>
     </div>
   </div>
@@ -83,21 +81,31 @@
       そして、このアイデアとクラシルのサービスが、以下の理由で相性が良いと思い、ポートフォリオと、自分がどういうサービスを作りたいかというアピールをかねて、作成しました。<br>
       </span>
       <ul class="c_list__info">
-        <li>クラシルとの利点</li>
-        <li>レシピによって単位がまちまちだと、冷蔵庫管理システムと連携した時に、量の管理に問題が生じてしまうと思いました。<br></li>
-        <li>そして、その問題を解決しようと投稿のスタイルを制限すると、投稿側に不便をかけてしまうと考えました。<br></li>
-        <li>その点、クラシルはレシピ投稿者がサービス提供側であるため、多少投稿側のUIの低下は許容でき、また投稿形式の管理も他のサービスに比べて容易だと考えました。<br></li>
+        <li class="c_list__head">クラシルとの利点</li>
+        <li class="c_list__item">レシピによって単位がまちまちだと、冷蔵庫管理システムと連携した時に、量の管理に問題が生じてしまうと思いました。<br></li>
+        <li class="c_list__item">そして、その問題を解決しようと投稿のスタイルを制限すると、投稿側に不便をかけてしまうと考えました。<br></li>
+        <li class="c_list__item">その点、クラシルはレシピ投稿者がサービス提供側であるため、多少投稿側のUIの低下は許容でき、また投稿形式の管理も他のサービスに比べて容易だと考えました。<br></li>
       </ul>
     </div>
   </div>
   
   <div class="c_box__info">
     <div class="c_box__info_title">
-      <h2 id="info_3", class="c_title__info">作成に当たって</h2>
+      <h2 id="info_4", class="c_title__info">作成に当たって</h2>
     </div>
     <hr class="c_line_in_box">
     <div>
       <span class="c_text_info">
+        <ul class="c_list__info">
+          <li class="c_list__head">作成に当たって意識した事</li>
+          <li class="c_list__item">SQLの発行数をなるべく減らす</li>
+          <li class="c_list__item">定数はApplicationRecordで一元管理する</li>
+          <li class="c_list__item">保存するデータでは矛盾が出ない事、画面で表示するだけの情報では計算処理が軽くなる事を優先</li>
+          <li class="c_list__item">メソッドの引数と戻り値がなるべくシンプルになる事</li>
+          <li class="c_list__item">メソッドにキーワード引数で分岐を用意して、戻り値の型を変更する等、細かい変更にも対応できるようにした</li>
+          <li class="c_list__head">その他</li>
+          <li class="c_list__item">HTML, CSSはほとんど知り合い書いてもらいました。</li>
+        </ul>
       </span>
     </div>
   </div>
