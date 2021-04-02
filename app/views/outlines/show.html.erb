@@ -1,25 +1,11 @@
 <div class="c_container_info">
-  <div><p style="font-family: 'Yu Mincho';">お忙しい中、お目通しいただきありがとうございます！<br>興味を持っていただいた項目だけでもご一読いただけると幸いです。</p></div>
-  
-  <ul class="cp_list" title="Link list" style="column-count: 2;">
-  	<li>本アプリケーション説明はリンクリスト下にございます</li>
-  	<li> - <%= link_to "トップページ", top_path %></li>
-  	<li> - <%= link_to "マイページ(冷蔵庫機能)", end_users_path %></li>
-  	<li> - <%= link_to "冷蔵庫追加ページ", new_fridge_item_path %></li>
-  	<li> - <%= link_to "買いものリストページ", shopping_list_path %></li>
-  	<li> - <%= link_to "レシピ一覧ページ", recipes_path %></li>
-  	<li> - <%= link_to "レシピ詳細ページ", recipe_path(1) %></li>
-  	<li> - <%= link_to "献立一覧ページ", user_menus_path %></li>
-  	<li> - <%= link_to "献立生成ページ(本日分)", new_user_menu_path %></li>
-  	<li> - <%= link_to "献立生成ページ(1週間分)", new_week_user_menu_path %></li>
-  	<li> - <%= link_to "日付を進める", edit_outlines_path %></li>
-  </ul>
-  
+  <div><p style="font-family: 'Yu Mincho';">お忙しい中、ご覧頂きありがとうございます！<br>関心を持っていただいた箇所だけでも、ご閲覧頂ければ幸いです。</p></div>
+
   <ul class="cp_list" title="Documents list" style="column-count: 2;">
-    <li> - <a href="https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing">設計書</a></li>
-    <li> - <a href="https://docs.google.com/document/d/15QbBmD9cz0fZxOTJzNqsOCVsaaV9IhqFrHodw8bfh5Y/edit?usp=sharing">要件定義(初期段階)</a></li>
-    <li> - <a href="https://cacoo.com/diagrams/52W9xRDKiHJahDG5#91212">ワイヤーフレーム</a></li>
-    <li> - <a href="https://cacoo.com/diagrams/edb5Dqr5aYgNoUyf#89F93">ER図</a></li>
+    <li> - <a href="https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing" target="_blank">設計書</a></li>
+    <li> - <a href="https://docs.google.com/document/d/15QbBmD9cz0fZxOTJzNqsOCVsaaV9IhqFrHodw8bfh5Y/edit?usp=sharing" target="_blank">要件定義(初期段階)</a></li>
+    <li> - <a href="https://cacoo.com/diagrams/52W9xRDKiHJahDG5#91212" target="_blank">ワイヤーフレーム</a></li>
+    <li> - <a href="https://cacoo.com/diagrams/edb5Dqr5aYgNoUyf#89F93" target="_blank">ER図</a></li>
   </ul>
 </div>
 
@@ -29,10 +15,10 @@
   <ul class="cp_list" title="Info index">
   	<li><a href="/outlines#info_1">アプリケーション概要</a></li>
   	<li><a href="/outlines#info_2">各機能</a></li>
-  	<li><a href="/outlines#info_3">なぜ作ろうと思ったか</a></li>
+  	<li><a href="/outlines#info_3">作成理由</a></li>
   	<li><a href="/outlines#info_4">作成に当たって意識したこと/その他</a></li>
   </ul>
-  
+
   <div class="c_box__info">
     <div class="c_box__info_title">
       <h2 id="info_1", class="c_title__info">アプリケーション概要</h2>
@@ -41,11 +27,11 @@
     <div>
       <span class="c_text_info">
       　レシピ掲載 × 献立保存 × 冷蔵庫管理システムのウェブアプリケーションのサンプルです。<br>
-      　Dely様に応募するにあたって、自分の作りたいアプリケーションのイメージをアピールするために作成しました。<br>
+      　貴社に応募するにあたり、自身の作成したいアプリケーションのイメージをアピールする為に作成致しました。<br>
       </span>
     </div>
   </div>
-  
+
   <div class="c_box__info">
     <div class="c_box__info_title">
       <h2 id="info_2", class="c_title__info">各機能</h2>
@@ -68,43 +54,45 @@
       </ul>
     </div>
   </div>
-  
-  
+
+
   <div class="c_box__info">
     <div class="c_box__info_title">
-      <h2 id="info_3", class="c_title__info">なぜ作ろうと思ったのか</h2>
+      <h2 id="info_3", class="c_title__info">作成理由</h2>
     </div>
     <hr class="c_line_in_box">
     <div>
       <span class="c_text_info">
-      　以前からレシピ掲載サイト × 献立保存 × 冷蔵庫管理システムを実現できるアプリがあれば便利だと思っていました。冷蔵庫の管理からレシピ決めまで全て任せれるアプリがあれば、買い物から料理まですべての工程で悩む必要がなくなり、素晴らしいと、、良い文章思いつかん<br>
-      そして、このアイデアとクラシルのサービスが、以下の理由で相性が良いと思い、ポートフォリオと、自分がどういうサービスを作りたいかというアピールをかねて、作成しました。<br>
+      　レシピ掲載サイト × 献立保存 × 冷蔵庫管理システムを実現できるアプリがあれば便利だと思い作成致しました。冷蔵庫の管理からレシピ決めまで全て任せられるアプリがあれば、買い物から調理まですべての工程で悩む必要がありません。<br>
+      そしてこのアイデアと、クラシルのサービスが以下の理由で相性が良いと思いました。自身がどのようなサービスを作成したいか、ポートフォリオとしてイメージをご提示致します。<br>
       </span>
       <ul class="c_list__info">
-        <li class="c_list__head">クラシルとの利点</li>
-        <li class="c_list__item">レシピによって単位がまちまちだと、冷蔵庫管理システムと連携した時に、量の管理に問題が生じてしまうと思いました。<br></li>
+        <li class="c_list__head">クラシルと相性が良いと思った点</li>
+        <li class="c_list__item">レシピによって単位が不均一だと、冷蔵庫管理システムと連携した時に、量の管理に問題が生じてしまいます。<br></li>
         <li class="c_list__item">そして、その問題を解決しようと投稿のスタイルを制限すると、投稿側に不便をかけてしまうと考えました。<br></li>
-        <li class="c_list__item">その点、クラシルはレシピ投稿者がサービス提供側であるため、多少投稿側のUIの低下は許容でき、また投稿形式の管理も他のサービスに比べて容易だと考えました。<br></li>
+        <li class="c_list__item">その点、クラシルはレシピ投稿者がサービス提供側であるため、多少は投稿側のUIの低下は許容でき、また投稿形式の管理も他のサービスに比べて容易だと考えました。<br></li>
       </ul>
     </div>
   </div>
-  
+
   <div class="c_box__info">
     <div class="c_box__info_title">
-      <h2 id="info_4", class="c_title__info">作成に当たって</h2>
+      <h2 id="info_4", class="c_title__info">作成に当たり</h2>
     </div>
     <hr class="c_line_in_box">
     <div>
       <span class="c_text_info">
         <ul class="c_list__info">
-          <li class="c_list__head">作成に当たって意識した事</li>
+          <li class="c_list__head">作成に当たり意識した事</li>
+          <li class="c_list__item">起こりうる例外に対して例外処理を記述して、アプリケーション内でのrailsのエラー画面を表示させない</li>
+          <li class="c_list__item">例外が怒った際に、処理をデフォルトとは別のlogファイルに出力することで、バグ修正をやりやすくした</li>
           <li class="c_list__item">SQLの発行数をなるべく減らす</li>
           <li class="c_list__item">定数はApplicationRecordで一元管理する</li>
           <li class="c_list__item">保存するデータでは矛盾が出ない事、画面で表示するだけの情報では計算処理が軽くなる事を優先</li>
           <li class="c_list__item">メソッドの引数と戻り値がなるべくシンプルになる事</li>
           <li class="c_list__item">メソッドにキーワード引数で分岐を用意して、戻り値の型を変更する等、細かい変更にも対応できるようにした</li>
           <li class="c_list__head">その他</li>
-          <li class="c_list__item">HTML, CSSはほとんど知り合い書いてもらいました。</li>
+          <li class="c_list__item">HTML, CSSはほとんど知り合いに記載して頂きました。</li>
         </ul>
       </span>
     </div>
