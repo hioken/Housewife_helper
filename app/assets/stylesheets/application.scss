@@ -1264,18 +1264,57 @@ footer {
 }
 
 /* 概要 */
-.c_link_list {
-  width: 720px;
+.c_container_info {
+  width: 744px;
   margin: 32px auto;
 }
+
+.c_line {
+  border-top: 2px solid black;
+  width: 88%;
+  margin: 16px auto;
+}
+
+.c_line_in_box {
+  border-top: 2px dashed #00796B;
+  margin: 4px 0;
+}
+
+.c_box__info {
+  border: 3px solid #00796B;
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 12px;
+}
+
+.c_box__info_title {
+  color: #00594B;
+}
+
+.c_list__info {
+  background-color: #fcfcfc;
+}
+
+.c_list__info > .c_list__head {
+  font-weight: 600;
+  margin-left: 8px;
+  color: #00594B;
+}
+
+.c_list__info > .c_list__item {
+  margin-left: 32px;
+  list-style-type: circle;
+}
+
 
 ul.cp_list {
 	position: relative;
 	padding: 0 0.5em;
 	margin-top: 2em;
 	list-style-type: none;
-	border: solid 2px #00796B;
+	border: solid 4px #00796B;
 }
+
 ul.cp_list::after {
 	position: absolute;
 	content:attr(title);

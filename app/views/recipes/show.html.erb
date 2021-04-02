@@ -63,9 +63,11 @@
       <h2>コツ・ポイント</h2>
       <p>ここに説明文が入る予定です。今回は割愛しています。</p>
 
+      <% if false %>
       <div class="a_box__link c_link__admin">
         <%= link_to "管理者として、このレシピを更新/削除", root_path, class:"a_link" %>
       </div>
+      <% end %>
     </div>
 
       <div class="c_box__lack">
@@ -129,7 +131,7 @@
             <% if @todays_menu %>
               <%= link_to "本日の献立です /調理済みにする/", cooked_user_menu_path(@todays_menu.id), method: :patch, class:"a_link" %>
             <% else %>
-              <%= link_to "料理した(冷蔵庫からこのレシピの食材を削除)", recipe_path(id: @recipe.id, size: @size, cooked: true), method: :get, remote: true, class: "a_link" %>
+              <%= link_to "料理した(冷蔵庫から食材を減らします)", recipe_path(id: @recipe.id, size: @size, cooked: true), method: :get, remote: true, class: "a_link", style: "font-size: 14px;" %>
             <% end %>
           </div>
         </div>

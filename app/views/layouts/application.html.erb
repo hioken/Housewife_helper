@@ -13,8 +13,8 @@
   <body>
     <header>
       <div class="c_head a_flex">
-        <%= link_to root_path do %>
-          <h1 style="color: black;">Page</h1>
+        <%= link_to top_path do %>
+          <h2 style="color: black;">FoodManager</h2>
         <% end %>
         <%= link_to "マイページ", end_users_path, class:"b_link__h" %>
         <%= link_to "レシピ一覧", recipes_path, class:"b_link__h" %>
@@ -23,6 +23,7 @@
         <%= form_tag(url: "",:method => 'get') do %>
           <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
         <% end %>
+        <%= link_to "本ポートフォリオ概要", outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
         <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
         <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
       </div>
@@ -77,5 +78,11 @@
         <% end %>
       </div>
     </footer>
+    
+    <% if flash[:exception_message] %>
+      <script>
+        alert("<%= flash[:exception_message] %>");
+      </script>
+    <% end %>
   </body>
 </html>

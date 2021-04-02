@@ -37,7 +37,7 @@
   <div class="c_box__menu_new_bottom">
     <% if today_menu = UserMenu.find_by(end_user_id: current_end_user.id, cooking_date: @set_today) %>
       <div class="a_flex" style="border: solid 0.2rem #C0C0C0; padding: 4px;">
-        <%= link_to(root_path, class:"a_link__black") do %>
+        <%= link_to(recipe_path(today_menu), class:"a_link__black") do %>
         <p>本日の献立は決定済です</p>
         <div class="a_box__link" style="width: 80px;">
           <%= link_to "確認", recipe_path(today_menu), class:"a_link" %>
