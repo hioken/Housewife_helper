@@ -25,7 +25,8 @@ class EndUser < ApplicationRecord
   end
 	
 	def need_ingredients(key: false)
-	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
+		@set_today = Outline.find_by(user: self.id).today
+	  needs = self.user_menus.joins(recipe: :recipe_ingredients).where(cooking_date: @set_today..Float::INFINITY, is_cooked: false, 'recipe_ingredients.ingredient_id': ApplicationRecord::GENRE_SCOPE[:semi_all]).pluck(:ingredient_id, :amount, :sarve)
 	  ingredient_ids = []
 	  needs.map! do |id, amount, sarve|
 	    ingredient_ids << id
