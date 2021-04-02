@@ -3,13 +3,20 @@ class UserMenusController < ApplicationController
     retry_cnt = 0
     begin
 			@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-			@lacks = current_end_user.lack_list
     rescue => e
       retry_cnt += 1
       retry if retry_cnt <= RETRY_COUNT
       e.exception_log
       redirect_to exceptions_path
     end
+    begin
+			@lacks = current_end_user.lack_list
+		rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+			e.exception_log
+			@lacks = [['不足食材リストの取得に失敗しました。']]
+		end
 	end
 	
 	def new
