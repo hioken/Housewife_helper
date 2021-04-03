@@ -118,6 +118,7 @@ class UserMenusController < ApplicationController
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
+		  flash[:exception_message] = '調理済みの本日の献立の履歴を削除して、新たに献立を登録しました。' if duplicate.cooking_date == @set_today && duplicate.is_cooked == true
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存
 			if user_menu.cooking_date >= @set_today

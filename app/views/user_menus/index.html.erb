@@ -22,11 +22,13 @@
             </div>
             <div class="c_box__link_menu">
               <div class="a_box__link c_link__menu_index">
-                <%= link_to "料理済み", cooked_user_menu_path(user_menu), method: :patch, class:"a_link" %>
-              </div>
-              <div class="a_box__link c_link__menu_index">
                 <%= link_to "取り消し", user_menu_path(user_menu), method: :delete, class:"a_link" %>
               </div>
+              <% if user_menu.cooking_date == @set_today %>
+                <div class="a_box__link c_link__menu_index">
+                  <%= link_to "料理済み", cooked_user_menu_path(user_menu), method: :patch, class:"a_link" %>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>

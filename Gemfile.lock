@@ -88,6 +88,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     erubi (1.10.0)
     ffi (1.14.2)
     globalid (0.4.2)
@@ -111,6 +115,7 @@ GEM
     mini_mime (1.0.2)
     minitest (5.14.3)
     msgpack (1.4.2)
+    mysql2 (0.5.3)
     nio4r (2.5.5)
     nokogiri (1.11.1-x86_64-linux)
       racc (~> 1.4)
@@ -229,8 +234,10 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   devise
+  dotenv-rails
   jbuilder (~> 2.7)
   listen (~> 3.3)
+  mysql2
   pry-byebug
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
