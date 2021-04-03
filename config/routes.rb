@@ -9,12 +9,15 @@ Rails.application.routes.draw do
   
   # resources :recipes, except: [:destroy]
   get 'top', to: 'recipes#top', as: :top
+  
+  patch 'recipes/:id/cooked', to: 'recipes#cooked', as: :cooked_recipe
   resources :recipes, except: [:destroy, :edit, :update, :new, :create]
+  
   patch 'user_menu/:id/cooked', to: 'user_menus#cooked', as: :cooked_user_menu
   get 'user_menus/new_week', to: 'user_menus#new_week', as: :new_week_user_menu
   resources :user_menus, except: [:show, :edit]
   
-  # resource :ingredients, only: [:new, :create]
   devise_for :end_users, skip: :password
+  # resource :ingredients, only: [:new, :create]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

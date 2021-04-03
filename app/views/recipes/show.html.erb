@@ -70,33 +70,10 @@
       <% end %>
     </div>
 
-      <div class="c_box__lack">
-        <% if @lack_ingredients %>
-          <div class="c_box__lack_food_inner">
-            <h2 class="b_center__lack">不足材料一覧</h2>
-            <br/>
-            <table class="table c_table__lack">
-              <thead>
-                  <tr class="active">
-                      <th style="width: 20%;">材料</th>
-                      <th style="width: 10%;">数量</th>
-                      <th style="width: 10%;"></th>
-                  </tr>
-              </thead>
-              <tbody>
-                <% @lack_ingredients.each do |ingredient| %>
-                <tr>
-                  <td class="b_center__lack"><%= ingredient[0] %></td>
-                  <% if ingredient[2] != 'option' %>
-                    <td class="b_center__lack"><%= ingredient[1].regular_amount(ingredient[2]) %></td>
-                    <td class="b_center__lack"><%= ingredient[2] %></td>
-                  <% end %>
-                </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        <% end %>
+    <div class="c_box__lack">
+        <div id="lack_box" class="c_box__lack_food_inner">
+          <%= render 'lack_list', lack_ingredients: @lack_ingredients %>
+        </div>
 
       <div class = "c_form__sarve">
         <div class="c_form__date_inner">
@@ -128,10 +105,10 @@
             </div>
           <% end %>
           <div class="a_box__link c_link__done">
-            <% if @todays_menu %>
-              <%= link_to "本日の献立です /調理済みにする/", cooked_user_menu_path(@todays_menu.id), method: :patch, class:"a_link" %>
+            <% if @todays_menu && @todays_menu.recipe == @recipe %>
+              <%= link_to "<本日の献立> 調理済みにする", cooked_user_menu_path(@todays_menu.id), method: :patch, class:"a_link" %>
             <% else %>
-              <%= link_to "料理した(冷蔵庫から食材を減らします)", recipe_path(id: @recipe.id, size: @size, cooked: true), method: :get, remote: true, class: "a_link", style: "font-size: 14px;" %>
+              <%= link_to "料理した(冷蔵庫から食材を減らします)", cooked_recipe_path(id: @recipe.id, size: @size), method: :patch, remote: true, class: "a_link", style: "font-size: 14px;" %>
             <% end %>
           </div>
         </div>
