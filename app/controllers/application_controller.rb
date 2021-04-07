@@ -42,6 +42,18 @@ class ApplicationController < ActionController::Base
   def set_rescue_variable(message)
     @exception_message = message
   end
+  
+  def exception_redirect
+    retry_cnt = 0
+    begin
+      yield
+    rescue => e
+      retry_cnt += 1
+      retry if retry_cnt <= RETRY_COUNT
+      e.exception_log
+      redirect_to exceptions_path
+    end
+  end
 end
 
 # 例外処理用メソッド

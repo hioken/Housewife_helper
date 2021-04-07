@@ -1,5 +1,19 @@
 <div class="c_container_info">
   <div><p style="font-family: 'Yu Mincho';">お忙しい中、ご覧頂きありがとうございます！<br>関心を持っていただいた箇所だけでも、ご閲覧頂ければ幸いです。</p></div>
+  
+  <ul class="cp_list" title="Link list" style="column-count: 2;">
+  	<li>本アプリケーション説明はリンクリスト下にございます</li>
+  	<li> - <%= link_to "トップページ", top_path %></li>
+  	<li> - <%= link_to "マイページ(冷蔵庫機能)", end_users_path %></li>
+  	<li> - <%= link_to "冷蔵庫追加ページ", new_fridge_item_path %></li>
+  	<li> - <%= link_to "買いものリストページ", shopping_list_path %></li>
+  	<li> - <%= link_to "レシピ一覧ページ", recipes_path %></li>
+  	<li> - <%= link_to "レシピ詳細ページ", recipe_path(1) %></li>
+  	<li> - <%= link_to "献立一覧ページ", user_menus_path %></li>
+  	<li> - <%= link_to "献立生成ページ(本日分)", new_user_menu_path %></li>
+  	<li> - <%= link_to "献立生成ページ(1週間分)", new_week_user_menu_path %></li>
+  	<li> - <%= link_to "日付を進める", edit_outlines_path %></li>
+  </ul>
 
   <ul class="cp_list" title="Documents list" style="column-count: 2;">
     <li> - <a href="https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing" target="_blank">設計書</a></li>
