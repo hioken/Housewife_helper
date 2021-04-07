@@ -1,14 +1,9 @@
 class UserMenusController < ApplicationController
 	def index
-    retry_cnt = 0
-    begin
+    exception_redirect do
 			@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
+    retry_cnt = 0
     begin
 			@lacks = current_end_user.lack_list
 		rescue => e
@@ -20,21 +15,14 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new
-    retry_cnt = 0
-    begin
+		exception_redirect do
 			@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
 			@recipes = recommend(4, @sarve) # レシピデータを取得
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
 	end
 	
 	def new_week
-    retry_cnt = 0
-    begin
+		exception_redirect do
     	# if分岐は、画面に表示されているメニューの変更処理
     	# else分岐は、このアクションに初めてアクセスした時の処理
 			if params[:menu_change]
@@ -72,11 +60,6 @@ class UserMenusController < ApplicationController
 				flash[:lacks] = lacks_tmp
 				flash[:recipes] = recipes_h.keys
 			end
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
 	end
 	
