@@ -78,11 +78,12 @@
         <% end %>
       </div>
     </footer>
-    
-    <% if flash[:exception_message] %>
-      <script>
-        alert("<%= flash[:exception_message] %>");
-      </script>
-    <% end %>
   </body>
+  <!--例外処理の通知-->
+  <% if flash[:exception_message] %>
+    <script>
+      alert("<%= flash[:exception_message] %>");
+    </script>
+  <% end %>
+  <% flash[:exception_message] = nil %>
 </html>

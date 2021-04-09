@@ -50,31 +50,16 @@ class FridgeItemsController < ApplicationController
   end
 
   def update
-    retry_cnt = 0
     @fridge_item = FridgeItem.find(params[:id])
     if params[:fridge_item][:amount] != "0" # 更新対象が0にならなければ(まだ冷蔵庫に対象が残っていれば)、そのまま更新
-      begin
+      active_record_exception_rescue(ERROR_MESSAGE[:fridge_item_update], 'layouts/exception.js.erb') do
         @fridge_item.update!(fridge_item_params)
-      rescue ActiveRecord::RecordInvalid => e
-        e.exception_log
-        set_rescue_variable(ERROR_MESSAGE[:fridge_item_update])
-        render 'layouts/exception.js.erb'
-      rescue => e
-        retry_cnt += 1
-        retry if retry_cnt <= RETRY_COUNT && e.class != ArgumentError
-        e.exception_log
-        redirect_to exceptions_path
       end
     else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
       destroied_id = @fridge_item.ingredient_id
       columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']
-      begin
+      active_record_exception_rescue(ERROR_MESSAGE[:fridge_item_update], 'layouts/exception.js.erb') do
         @fridge_item.destroy!
-      rescue => e
-        retry_cnt += 1
-        retry if retry_cnt <= RETRY_COUNT
-        e.exception_log
-        redirect_to exceptions_path
       end
       if destroied_id > 4999 or destroied_id < 100
         @foods = current_end_user.pick(:grain_seasoning, *columns)

@@ -3,7 +3,7 @@ class RecipesController < ApplicationController
   end
 
   def index
-    exception_redirect do
+    unknown_exception_rescue do
       @recipes = Recipe.all
       @ingredients = {}
       @recipes.each { |recipe| @ingredients[recipe.id] = {}}
@@ -16,7 +16,7 @@ class RecipesController < ApplicationController
 
   def show
     retry_cnt = 0
-    exception_redirect do
+    unknown_exception_rescue do
       @recipe = Recipe.find(params[:id])
       @recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
       @size = params[:size] ? params[:size].to_i : current_end_user.family_size
@@ -27,15 +27,11 @@ class RecipesController < ApplicationController
   
   def cooked
 	  ingredients = Recipe.find(params[:id]).recipe_ingredients_hash(params[:size].to_i)
-	  begin
+	  active_record_exception_rescue(ERROR_MESSAGE[:user_menu_cooked], 'layouts/exception') do
 	    FridgeItem.transaction do
 	      current_end_user.manage(ingredients, mode: :cut)
 	    end
       @lack_ingredients = current_end_user.lack_list(ingredients)
-	  rescue => e
-	    e.exception_log
-	    @exception_message = ERROR_MESSAGE[:user_menu_cooked]
-	    render 'layouts/exception'
 	  end
   end
 

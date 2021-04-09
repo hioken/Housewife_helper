@@ -39,11 +39,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def set_rescue_variable(message)
-    @exception_message = message
-  end
-  
-  def exception_redirect
+  def unknown_exception_rescue
     retry_cnt = 0
     begin
       yield
@@ -52,6 +48,28 @@ class ApplicationController < ActionController::Base
       retry if retry_cnt <= RETRY_COUNT
       e.exception_log
       redirect_to exceptions_path
+    end
+  end
+  
+  def active_record_exception_rescue(message, template = false, action: true)
+    retry_cnt = 0
+    begin
+      yield
+    rescue => e
+      if e.class.name.deconstantize == "ActiveRecord"
+        e.exception_log
+        flash.now[:exception_message] = message
+        render template if template && action
+      else
+        retry_cnt += 1
+        retry if retry_cnt <= RETRY_COUNT
+        e.exception_log
+        redirect_to exceptions_path if action
+      end
+      if !(action)
+        flash.now = nil
+        flash[:exception_message] = message
+      end
     end
   end
 end
