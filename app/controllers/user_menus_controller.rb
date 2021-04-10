@@ -1,14 +1,9 @@
 class UserMenusController < ApplicationController
 	def index
-    retry_cnt = 0
-    begin
+    unknown_exception_rescue do
 			@user_menus = current_end_user.user_menus.eager_load(:recipe).where(is_cooked: false)
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
+    retry_cnt = 0
     begin
 			@lacks = current_end_user.lack_list
 		rescue => e
@@ -20,21 +15,14 @@ class UserMenusController < ApplicationController
 	end
 	
 	def new
-    retry_cnt = 0
-    begin
+		unknown_exception_rescue do
 			@sarve = params[:sarve] ? params[:sarve].to_i : current_end_user.family_size
 			@recipes = recommend(4, @sarve) # レシピデータを取得
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
 	end
 	
 	def new_week
-    retry_cnt = 0
-    begin
+		unknown_exception_rescue do
     	# if分岐は、画面に表示されているメニューの変更処理
     	# else分岐は、このアクションに初めてアクセスした時の処理
 			if params[:menu_change]
@@ -72,11 +60,6 @@ class UserMenusController < ApplicationController
 				flash[:lacks] = lacks_tmp
 				flash[:recipes] = recipes_h.keys
 			end
-    rescue => e
-      retry_cnt += 1
-      retry if retry_cnt <= RETRY_COUNT
-      e.exception_log
-      redirect_to exceptions_path
     end
 	end
 	
@@ -118,7 +101,7 @@ class UserMenusController < ApplicationController
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-		  flash[:exception_message] = '調理済みの本日の献立の履歴を削除して、新たに献立を登録しました。' if duplicate.cooking_date == @set_today && duplicate.is_cooked == true
+		  flash[:exception_message] = '調理済みの本日の献立の履歴を削除して、新たに献立を登録しました。' if duplicate&.cooking_date == @set_today && duplicate&.is_cooked == true
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存
 			if user_menu.cooking_date >= @set_today
@@ -175,7 +158,7 @@ class UserMenusController < ApplicationController
 			
 			if destroy_ids.size > 0; current_end_user.user_menus.where(id: destroy_ids).delete_all; end # 取り消しするidの献立を削除
 			if cooked_ids.size > 0 # 調理済みにするidの献立の処理
-				begin
+				active_record_exception_rescue(ERROR_MESSAGE[:user_menu_cooked], action: false) do
 					UserMenu.transaction do
 						cooked_u_ms = current_end_user.user_menus.eager_load(:recipe).where(id: cooked_ids)
 						cooked_u_ms.each do |user_menu| 
@@ -185,23 +168,17 @@ class UserMenusController < ApplicationController
 						c_ingredients = multiple_recipe_ingredients(recipe_h)
 						current_end_user.manage(c_ingredients, mode: :cut) if c_ingredients.size > 0
 					end
-				rescue => e
-					e.exception_log
-					flash[:exception_message] = ERROR_MESSAGE[:user_menu_cooked]
 				end
 			end
 		else #user_menusからの処理
-			begin
+			active_record_exception_rescue(ERROR_MESSAGE[:user_menu_cooked], action: false) do
 			# 献立の取得と、manageの引数を作成
-				user_menu = UserMenu.find(params[:id])
-				ingredients = user_menu.menu_ingredients
 				UserMenu.transaction do
+					user_menu = UserMenu.find(params[:id])
+					ingredients = user_menu.menu_ingredients
 					user_menu.update!(is_cooked: true) # 献立を調理済みに更新
 					current_end_user.manage(ingredients, mode: :cut) # 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
 				end
-			rescue Exception => e
-				e.exception_log
-				flash[:exception_message] = ERROR_MESSAGE[:user_menu_cooked]
 			end
 		end
 		redirect_back fallback_location: end_users_path
