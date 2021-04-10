@@ -101,7 +101,7 @@ class UserMenusController < ApplicationController
 			
 			# 新しいuser_menuを保存する際に、日付が被ってしまうuser_menuを取得
 		  duplicate = current_end_user.user_menus.find_by(cooking_date: user_menu.cooking_date)
-		  flash[:exception_message] = '調理済みの本日の献立の履歴を削除して、新たに献立を登録しました。' if duplicate.cooking_date == @set_today && duplicate.is_cooked == true
+		  flash[:exception_message] = '調理済みの本日の献立の履歴を削除して、新たに献立を登録しました。' if duplicate&.cooking_date == @set_today && duplicate&.is_cooked == true
 			
 			# 被るuser_menuを削除、新しいuser_menuを保存
 			if user_menu.cooking_date >= @set_today
@@ -173,9 +173,9 @@ class UserMenusController < ApplicationController
 		else #user_menusからの処理
 			active_record_exception_rescue(ERROR_MESSAGE[:user_menu_cooked], action: false) do
 			# 献立の取得と、manageの引数を作成
-				user_menu = UserMenu.find(params[:id])
-				ingredients = user_menu.menu_ingredients
 				UserMenu.transaction do
+					user_menu = UserMenu.find(params[:id])
+					ingredients = user_menu.menu_ingredients
 					user_menu.update!(is_cooked: true) # 献立を調理済みに更新
 					current_end_user.manage(ingredients, mode: :cut) # 食材をmanage(mode: :cut)で、必要リストと冷蔵庫から削除
 				end

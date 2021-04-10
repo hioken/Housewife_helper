@@ -1,9 +1,14 @@
 class AmountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    if record.ingredient.unit == 'g'
-      record.errors.add(attribute, "is #{record.amount}, expected (amount > 100)") if value < 100
+    if value
+      if record.ingredient.unit == 'g'
+        record.errors.add(attribute, "is #{record.amount}, expected (amount > 100)") if value < 100
+        record.errors.add(attribute, "is #{record.amount}, expected (amount % 20 == 0)") if value % 20 != 0
+      else
+        record.errors.add(attribute, "is #{record.amount}, expected (amount > 1)") if value < 1
+      end
     else
-      record.errors.add(attribute, "is #{record.amount}, expected (amount > 1)") if value < 1
+      record.errors.add(attribute, "is #{record.amount}(#{record.amount.class})")
     end
   end
 end

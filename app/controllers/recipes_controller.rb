@@ -15,7 +15,6 @@ class RecipesController < ApplicationController
   end
 
   def show
-    retry_cnt = 0
     unknown_exception_rescue do
       @recipe = Recipe.find(params[:id])
       @recipe_ingredients = @recipe.recipe_ingredients.eager_load(:ingredient)
@@ -26,8 +25,8 @@ class RecipesController < ApplicationController
   end
   
   def cooked
-	  ingredients = Recipe.find(params[:id]).recipe_ingredients_hash(params[:size].to_i)
 	  active_record_exception_rescue(ERROR_MESSAGE[:user_menu_cooked], 'layouts/exception') do
+	    ingredients = Recipe.find(params[:id]).recipe_ingredients_hash(params[:size].to_i)
 	    FridgeItem.transaction do
 	      current_end_user.manage(ingredients, mode: :cut)
 	    end
