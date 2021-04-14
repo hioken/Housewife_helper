@@ -118,5 +118,5 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   
-  #config.exception_logger = Logger.new(Rails.root.join('log/exception_log.log'))
+  config.exception_logger = Logger.new(Rails.root.join('log/exception_log_production.log'))
 end
