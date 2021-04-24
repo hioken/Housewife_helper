@@ -1,4 +1,4 @@
-class CreateIngredients < ActiveRecord::Migration[6.1]
+class CreateIngredients < ActiveRecord::Migration[6.0]
   def change
     create_table :ingredients, id: false do |t|
       t.column :id, 'bigint PRIMARY KEY'
