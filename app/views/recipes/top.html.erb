@@ -18,7 +18,7 @@
       <% 3.times do |image_cnt| %>
         <div class="c_photo__box_rank">
           <%= link_to recipes_path do %>
-            <%= image_tag "image_#{image_cnt}.jpeg", size: '200x200',class:"c_photo__rank" %>
+            <%= image_tag asset_path("image_#{image_cnt}.jpeg"), size: '200x200',class:"c_photo__rank" %>
           <% end %>
         </div>
       <% end %>

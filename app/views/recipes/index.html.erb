@@ -27,7 +27,7 @@
               <% end %>
             <%= link_to(recipe_path(recipe), class:"a_link__black c_link__ranking_item") do %>
               <div class="c_box__photo_ranking">
-                <%= image_tag "image_#{image_cnt}.jpeg", size: "240x240",class:"c_photo__ranking_item" %>
+                <%= image_tag asset_path("image_#{image_cnt}.jpeg"), size: "240x240",class:"c_photo__ranking_item" %>
                 <h3 class="a_image__info">画像はランダムです</h3>
                 <div class="c_num__ranking">
                   <h2></h2>
