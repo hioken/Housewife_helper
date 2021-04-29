@@ -13,10 +13,10 @@ class EndUser < ApplicationRecord
   end
   
   # Methods
-	def pick(genre_scope, *columns)
-		constraint = {end_user_id: self.id}
-		constraint[:ingredient_id] = self.class::GENRE_SCOPE[genre_scope] if self.class::GENRE_SCOPE[genre_scope]
-		self.fridge_items.joins(:ingredient).where(constraint).pluck(*columns)
+	def fridge_data(genre_scope = false)
+		constraint = {'fridge_items.end_user_id': self.id}
+		constraint[:id] = self.class::GENRE_SCOPE[genre_scope] if self.class::GENRE_SCOPE[genre_scope]
+		Ingredient.joins(:fridge_items).where(constraint).pluck(:id, :name, :amount, :unit, :html_color, 'fridge_items.id')
 	end
 	
 	def fridge_hash(arg_ingredients = false)

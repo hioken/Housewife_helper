@@ -63,24 +63,23 @@ class FridgeItemsController < ApplicationController
       end
     else # 更新対象が0になった場合、削除して、対象があった列のhtmlをまるまる更新
       destroied_id = @fridge_item.ingredient_id
-      columns = [:ingredient_id, :name, :amount, :unit, :html_color, 'fridge_items.id']
       error = active_record_exception_rescue(ERROR_MESSAGE[:fridge_item_update], 'layouts/exception.js.erb') do
         @fridge_item.destroy!
       end
       if destroied_id > 4999 or destroied_id < 100
-        @foods = current_end_user.pick(:grain_seasoning, *columns)
+        @foods = current_end_user.firdge_data(:grain_seasoning)
         @food_box_id = 'seasonings'
         @food_genre = '調味料/穀物'
       elsif destroied_id > 2999
-        @foods = current_end_user.pick(:other, *columns)
+        @foods = current_end_user.firdge_data(:other)
         @food_box_id = 'others'
         @food_genre = 'その他' 
       elsif destroied_id > 999
-        @foods = current_end_user.pick(:vegetable, *columns)
+        @foods = current_end_user.firdge_data(:vegetable)
         @food_box_id = 'vegetables'
         @food_genre = '野菜'
       elsif destroied_id > 99
-        @foods = current_end_user.pick(:meat_fish, *columns)
+        @foods = current_end_user.firdge_data(:meat_fish)
         @food_box_id = 'meats_fishes'
         @food_genre = '肉/魚'
       else
