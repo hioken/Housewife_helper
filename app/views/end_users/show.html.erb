@@ -1,0 +1,97 @@
+<div class="c_box__user">
+  <div class="a_flex c_box__user_inner">
+    <%= image_tag asset_path("hamu.jpg"), size: "100x100",class:"c_photo__user" %>
+    <div class="c_introduction__user">
+      <strong>名前</strong>
+      <p>自己紹介です。</p>
+    </div>
+  </div>
+</div>
+
+
+<div class="c_radio">
+  <input id="fridge" type="radio" name="b_item__radio" checked>
+  <label class="a_pointer b_item__radio" for="fridge">冷蔵庫</label>
+  <input id="favorite" type="radio" name="b_item__radio">
+  <label class="a_pointer b_item__radio" for="favorite">お気に入り</label>
+  <input id="report" type="radio" name="b_item__radio">
+  <label class="a_pointer b_item__radio" for="report">れぽーと</label>
+
+  <div class="b_content__radio" id="favorite_content">
+    <h1># 飾りです、この項目に機能はございません #</h1>
+    <div class="a_flex b_box__radio">
+      <% 2.times do %>
+        <div class="b_box__radio_inner">
+          <%= link_to(top_path, class:"b_link__radio a_link__black") do %>
+            <%= image_tag asset_path("image_1.jpeg"), size: "240x240",class:"b_photo__radio" %>
+            <h3>メニュー名</h3>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="b_content__radio" id="report_content">
+    <h1># 飾りです、この項目に機能はございません #</h1>
+    <div class="a_flex b_box__radio">
+      <% 3.times do %>
+        <div class="b_box__radio_inner">
+          <%= link_to(top_path, class:"b_link__radio a_link__black") do %>
+            <%= image_tag asset_path("image_1.jpeg"), size: "240x240",class:"b_photo__radio" %>
+            <h3>メニュー名</h3>
+            <p class="a_text__abbreviation">ここにレポート文が入ります。ここにレポート文が入ります。ここにレポート文が入ります。ここにレポート文が入ります。ここにレポート文が入ります。</p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="b_content__radio" id="fridge_content">
+      <div class="c_box__fridge">
+        <h3>My 冷蔵庫</h3>
+        <div class="a_box__link c_link__material">
+          <%= link_to "食材を追加", new_fridge_item_path, class:"a_pointer a_link" %>
+        </div>
+
+        <div class="a_flex c_box__fridge_inner">
+          <div id="meats_fishes" class="b_box__food">
+            <%= render 'fridge_items', food_genre: '肉/魚', foods: @meats_fishes %>
+          </div>
+          <div id="vegetables" class="b_box__food">
+            <%= render 'fridge_items', food_genre: '野菜', foods: @vegetables %>
+          </div>
+          <div id="others" class="b_box__food">
+            <%= render 'fridge_items', food_genre: 'その他', foods: @others %>
+          </div>
+          <div id="seasonings" class="b_box__food">
+            <%= render 'fridge_items', food_genre: '調味料/穀物', foods: @seasonings %>
+          </div>
+        </div>
+
+        <div class="c_box__setting">
+          <div id="user_edit_box" class="c_box__setting_inner">
+            <h3>設定の変更</h3>
+            <div>
+              <%= form_with(model: current_end_user, url: end_users_path, local: false) do |f| %>
+                <div class="a_flex c_form__setting">
+                <div class="c_form__setting_inner">
+                  <p class="b_text__setting">ご家庭の人数</p>
+                  <div class="b_field__setting">
+                    <%= f.select :family_size, [["1人", 1], ["2人", 2], ["3人", 3], ["4人", 4], ["5人", 5], ["6人", 6], ["7人", 7], ["8人", 8], ["9人", 9], ["10人", 10], ["11人", 11], ["12人", 12]] %>
+                  </div>
+                  <p class="b_text__setting">調理時間</p>
+                  <div class="b_field__setting">
+                    <%= f.select :cooking_time_limit, [["30分", 30], ["45分", 45], ["60分", 60], ["90分", 90], ["120分", 120], ['制限なし', 9999]] %>
+                  </div>
+                </div>
+                <div class="a_actions a_pointer b_submit__setting">
+                  <%= f.submit "変更", name: nil %>
+                </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

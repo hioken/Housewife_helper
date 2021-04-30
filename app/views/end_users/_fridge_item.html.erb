@@ -1,0 +1,45 @@
+<h3><%= name %></h3>
+<% if ingredient_id.between?(100, 4999) %>
+  <div class="a_flex b_count__food">
+    <p>食材の数</p>
+    <div class="a_flex b_count__material">
+      <% regam = (unit == 'g' ? amount / 400 : amount / 4) %>
+      <% regam.times do %>
+        <div class="b_count__material_inner" style="background-color: <%= html_color %>;"></div>
+      <% end %>
+      <% unless amount.divisible?(4) or unit == 'g' %>
+        <div class="b_count__material_inner_half" style="background-color:<%= html_color %>;" ></div>
+      <% end %>
+    </div>
+  </div>
+  <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
+    <div class="a_flex b_form__count">
+      <div class="b_field__count">
+        <%= f.select :amount, amount.amount_select(unit) %>
+      </div>
+      <div class="a_actions a_pointer b_submit__count">
+        <%= f.hidden_field :ingredient_id, value: ingredient_id %>
+        <%= f.submit "使用" %>
+      </div>
+    </div>
+    <% end %>
+<% else %>
+  <div class="a_flex b_count__food">
+    <p>あります</p>
+  </div>
+  <%= form_with model: FridgeItem.new, url: fridge_item_path(id), method: :patch, local: false do |f| %>
+    <div class="a_flex b_form__count">
+      <div class="a_actions a_pointer b_submit__count">
+        <%= f.hidden_field :ingredient_id, value: ingredient_id %>
+        <%= f.hidden_field :amount, value: 0 %>
+        <%= f.submit "使い切り", style: "width: 100%; margin: auto;" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<!--メソッドリスト-->
+
+<!--divisible?: app/contorollers/application_controller.rb-->
+<!--amount_select: app/contorollers/application_controller.rb-->
+<!--gram_select: app/contorollers/application_controller.rb-->

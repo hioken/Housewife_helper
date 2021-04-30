@@ -1,0 +1,54 @@
+<div>
+  <div>
+    <div class="a_box__add_new">
+      <h3>食材を追加</h3>
+      <%= form_with  url: fridge_items_path, method: :post do |f| %> 
+        <div class="a_flex a_box__add_new_inner">
+          <div class="a_box__add_item">
+            <p>肉</p>
+            <%= render "fridge_item", f: f, foods: @meats, amounts: @amounts, genre: '肉一覧', value_num: '0' %>
+          </div>
+          <div class="a_box__add_item">
+            <p>海鮮</p>
+            <%= render "fridge_item", f: f, foods: @fishes, amounts: @amounts, genre: '海鮮一覧', value_num: '1' %>
+          </div>
+          <div class="a_box__add_item">
+            <p>野菜</p>
+            <%= render "fridge_item", f: f, foods: @vegetables, amounts: @amounts, genre: '野菜一覧', value_num: '2' %>
+          </div>
+          <div class="a_box__add_item">
+            <p>その他</p>
+            <%= render "fridge_item", f: f, foods: @others, amounts: @amounts, genre: 'きのこ/その他一覧', value_num: '3' %>
+          </div>
+          <div class="a_box__add_item">
+            <p>調味料/穀物</p>
+            <%= render "fridge_item", f: f, foods: @grains_seasonings, amounts: @haves, genre: '調味料/穀物一覧', value_num: '4' %>
+          </div>
+          <div class="a_actions a_pointer a_submit__add_item">
+            <%= f.submit "追加" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  let column_num = 4;
+  $(document).on("click", ".add", function() {
+    column_num += 1;
+    var add_num = String(column_num);
+    $(this).parent().clone(true).insertAfter($(this).parent().parent().find('div:last'));
+    var select = $(this).parent().parent().find('div:last').find('select')
+    $(select[0]).attr('name', `fridge_items[value_${add_num}[id_unit]]`);
+    $(select[1]).attr('name', `fridge_items[value_${add_num}[amount]]`);
+  });
+  $(document).on("click", ".delete", function() {
+    var target = $(this).parent().parent().find('div:last');
+    if (target.parent().children().length > 1) {
+        target.remove();
+    }
+  });
+</script>
+
+

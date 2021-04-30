@@ -1,0 +1,55 @@
+<div class="c_box__menu_new">
+  <h2>本日の献立を選択してください</h2>
+    <div class="c_flex__recommend c_box__menu_new_inner">
+      <div class="c_box__menu_new_bottom_inner" style="width: 100%;">
+        <h3>人数を変更</h3>  
+        <%= form_with url: new_user_menu_path, method: :get do |f| %>
+          <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner" style="margin: 0;">
+              <%= f.select :sarve, [1,2,3,4,5,6,7,8,9,10], selected: @sarve %>
+              <%= f.submit "人に献立の人数を変更", style: "width: 144px; margin: 0 4px;" %>
+          </div>
+        <% end %>
+      </div>
+      <%= form_with model: UserMenu.new, class: "c_flex__recommend" do |f| %>
+        <% image_cnt = 0 %>
+        <% @recipes.each_with_index do |recipe, i| %>
+          <% image_cnt = (image_cnt + 1) % 4 %>
+          <div id="menu_<%= i %>" class="b_box__menu_new_item c_box__menu_new_item_inner" style="width: 50%; margin: 24px 0;">
+            <div>
+              <%= render "new_item", recipe: recipe[0], image_cnt: image_cnt %>
+              <% if recipe[1] > 0 %>
+                <p>冷蔵庫で<%= recipe[1] %>%賄えます</p>
+              <% end %>
+            </div>
+            <div>
+              <%= f.radio_button :recipe_id, recipe[0].id, checked: (i == 0) %><span><b>このレシピを今日の献立にする</b></span>
+            </div>
+          </div>
+        <% end %>
+        <div style="width:80%; height: 1px"></div>
+        <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner" style="width: 20%;">
+          <%= f.hidden_field :cooking_date, value: @set_today %>
+          <%= f.hidden_field :sarve, value: @sarve %>
+          <%= f.submit "決定" %>
+        </div>
+      <% end %>
+    </div>
+  <div class="c_box__menu_new_bottom">
+    <% if today_menu = UserMenu.find_by(end_user_id: current_end_user.id, cooking_date: @set_today) %>
+      <div class="a_flex" style="border: solid 0.2rem #C0C0C0; padding: 4px;">
+        <%= link_to(recipe_path(today_menu), class:"a_link__black") do %>
+        <p>本日の献立は決定済です</p>
+        <div class="a_box__link" style="width: 80px;">
+          <%= link_to "確認", recipe_path(today_menu), class:"a_link" %>
+        </div>
+        <% end %>
+      </div>
+    <% end %>
+    <%= form_with url: new_week_user_menu_path, method: :get, class: "c_form__to_week" do |f| %>
+      <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner">
+          <%= f.select :days, [2,3,4,5,6,7], selected: 7 %>
+          <%= f.submit "日分の献立をおまかせ" %>
+      </div>
+    <% end %>
+  </div>
+</div>

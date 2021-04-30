@@ -11,6 +11,79 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <div class="c_head a_flex">
+        <%= link_to top_path do %>
+          <h2 style="color: black;">FoodManager</h2>
+        <% end %>
+        <%= link_to "マイページ", end_users_path, class:"b_link__h" %>
+        <%= link_to "レシピ一覧", recipes_path, class:"b_link__h" %>
+        <%= link_to "献立確認", user_menus_path, class:"b_link__h" %>
+        <%= link_to "献立をおまかせ", new_user_menu_path , class:"b_link__h" %>
+        <%= form_tag(url: "",:method => 'get') do %>
+          <%= text_field_tag :dammy, '', class: 'c_form', placeholder: '飾りです、検索できません。。。' %>
+        <% end %>
+        <%= link_to "本ポートフォリオ概要", outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
+        <%= link_to "日付を進める", edit_outlines_path, class:"b_link__h", style: "margin-left: auto;" %>
+        <%= link_to "Log out", destroy_end_user_session_path, method: :delete, class:"b_link__h" %>
+      </div>
+    </header>
+
+    <% if @unconfirmed.size > 0 %>
+      <div class="c_box__announce">
+        <div class="c_box__announce_inner c_fadein">
+          <h3>昨日以降で未確認の献立がございます</h3>
+          <p>調理済みを選択した場合、冷蔵庫からレシピの材料が取り出されます</p>
+        </div>
+        <div class="c_box__announce_inner c_fadein">
+          <% image_cnt = 0 %>
+          <%= form_with url: cooked_user_menu_path('multiple'), method: :patch do |f| %>
+            <% @unconfirmed.each do |user_menu| %>
+            <% image_cnt = (image_cnt + 1) % 4 %>
+              <table class="table c_table__announce">
+                <tbody>
+                  <tr>
+                    <th style="width: 80%;">
+                      <div>
+                        <%= image_tag asset_path("image_#{image_cnt}"), size: '100x100',class:"c_photo__rank" %>
+                        <p><%= user_menu.recipe.name %></p>
+                      </div>
+                    </th>
+                    <td style="width: 20%;">
+                      <div class="c_field__announce">
+                        <%= f.select "announce[#{user_menu.id.to_s}]", [["調理済", 1],["取消", 0]] %>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            <% end %>
+            <div class="a_actions a_pointer c_submit__announce">
+              <%= f.submit "確定" , name: nil %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <body>
+      <%= yield %>
+    </body>
+
+    <footer>
+      <div class="c_foot a_flex">
+        <div><%= link_to "本ポートフォリオの概要と各ページのリンクはこちら！", outlines_path, class:"c_link__f" %></div>
+        <% if end_user_signed_in? %>
+          <div><p class="c_today">現在の日付: <%= @set_today %></p></div>
+        <% end %>
+      </div>
+    </footer>
   </body>
+  <!--例外処理の通知-->
+  <% if flash[:exception_message] %>
+    <script>
+      alert("<%= flash[:exception_message] %>");
+    </script>
+  <% end %>
+  <% flash[:exception_message] = nil %>
 </html>

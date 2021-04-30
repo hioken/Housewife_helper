@@ -1,0 +1,21 @@
+<div>
+  <%= form_with model: @outline, url: outlines_path, method: :patch, class: "a_flex c_box__test_link" do |f| %>
+  <!--<div class="a_flex c_box__test_link">-->
+    <div class="a_box__link b_link__tester" style="width: 240px; display: flex; justify-content: space-around;">
+      <% days = (1..7).to_a.map { |i| ["#{i}日", @set_today + i]} %>
+      <%= f.select :today, days %>
+      <%= f.submit "日付を進める", class: "a_link b_link__test", style: "width: 96px;" %>
+    </div>
+    <div class="a_box__link b_link__tester">
+      <%= link_to "マイページに戻る", end_users_path, class:"a_link b_link__test" %>
+    </div>
+  <% end %>
+  <!--</div>-->
+
+  <div class="c_border__test">
+    <div class="c_border__test_inner">
+      <h3>以下の機能のデモ用に日付を進める事機能を用意しております</h3>
+      <p>- 昨日以前の献立を登録している場合、献立を取り消すか、調理済みにして冷蔵庫から材料を取り出す機能</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="a_box__user b_space__box">
+  <div class="a_box__user_inner">
+    <h2>Log in</h2>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, value: 'a@a' %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, value: 'password' %>
+      </div>
+
+
+      <div class="a_actions">
+        <%= f.submit "Log in" %>
+      </div>
+    <% end %>
+    <p>seedの承認情報を入力済みです</p>
+  </div>
+</div>

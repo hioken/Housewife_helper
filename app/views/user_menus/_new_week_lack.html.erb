@@ -1,0 +1,6 @@
+<% lacks.each do |ingre| %>
+  <div class="c_box__week_lack_food">
+    <% amounts = (ingre[2] == 'option' ? '' : "#{ingre[1].regular_amount(ingre[2]).to_s.rjust(3, '-')}　#{ingre[2].rjust(3, '　')}") %>
+    <p><%= ingre[0].rjust(8, '　') + '　　' + amounts %></p>
+  </div>
+<% end %>
