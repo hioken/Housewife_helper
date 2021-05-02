@@ -45,7 +45,7 @@
         <% end %>
       </div>
     <% end %>
-    <%= form_with url: new_week_user_menu_path, method: :get, class: "c_form__to_week" do |f| %>
+    <%= form_with url: new_week_user_menu_path, method: :get, local: true, class: "c_form__to_week" do |f| %>
       <div class="a_actions a_pointer a_flex c_box__menu_new_bottom_inner">
           <%= f.select :days, [2,3,4,5,6,7], selected: 7 %>
           <%= f.submit "日分の献立をおまかせ" %>

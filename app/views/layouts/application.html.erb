@@ -37,7 +37,7 @@
         </div>
         <div class="c_box__announce_inner c_fadein">
           <% image_cnt = 0 %>
-          <%= form_with url: cooked_user_menu_path('multiple'), method: :patch do |f| %>
+          <%= form_with url: cooked_user_menu_path('multiple'), method: :patch, local: true do |f| %>
             <% @unconfirmed.each do |user_menu| %>
             <% image_cnt = (image_cnt + 1) % 4 %>
               <table class="table c_table__announce">

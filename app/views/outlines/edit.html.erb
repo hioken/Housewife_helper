@@ -1,5 +1,5 @@
 <div>
-  <%= form_with model: @outline, url: outlines_path, method: :patch, class: "a_flex c_box__test_link" do |f| %>
+  <%= form_with model: @outline, url: outlines_path, method: :patch, local: true, class: "a_flex c_box__test_link" do |f| %>
   <!--<div class="a_flex c_box__test_link">-->
     <div class="a_box__link b_link__tester" style="width: 240px; display: flex; justify-content: space-around;">
       <% days = (1..7).to_a.map { |i| ["#{i}日", @set_today + i]} %>
