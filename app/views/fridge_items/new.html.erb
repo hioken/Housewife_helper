@@ -2,7 +2,7 @@
   <div>
     <div class="a_box__add_new">
       <h3>食材を追加</h3>
-      <%= form_with  url: fridge_items_path, method: :post do |f| %> 
+      <%= form_with  url: fridge_items_path, method: :post, local: true do |f| %> 
         <div class="a_flex a_box__add_new_inner">
           <div class="a_box__add_item">
             <p>肉</p>

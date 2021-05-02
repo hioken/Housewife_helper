@@ -13,7 +13,7 @@
           <h2><%= user_menu.recipe.name %></h2>
           <div class="a_flex c_box__menu_button">
             <div class="  c_box__update_num">
-              <%= form_with model: user_menu do |f| %>
+              <%= form_with model: user_menu, local: true do |f| %>
                 <div class="a_actions a_pointer a_flex c_box__update_num_inner">
                   <%= f.select :sarve, [1,2,3,4,5,6,7,8,9,10,11,12] %>
                   <%= f.submit "人に変更" %>

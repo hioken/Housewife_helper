@@ -1,6 +1,6 @@
 <div>
   <% image_cnt = 0 %>
-  <%= form_with url: user_menus_path, method: :post do |f| %>
+  <%= form_with url: user_menus_path, method: :post, local: true do |f| %>
     <div>
       <div class="c_box__one_week_top">
         <div class="a_flex c_box__one_week_top_inner">
