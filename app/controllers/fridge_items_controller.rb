@@ -67,19 +67,19 @@ class FridgeItemsController < ApplicationController
         @fridge_item.destroy!
       end
       if destroied_id > 4999 or destroied_id < 100
-        @foods = current_end_user.firdge_data(:grain_seasoning)
+        @foods = current_end_user.fridge_data(:grain_seasoning)
         @food_box_id = 'seasonings'
         @food_genre = '調味料/穀物'
       elsif destroied_id > 2999
-        @foods = current_end_user.firdge_data(:other)
+        @foods = current_end_user.fridge_data(:other)
         @food_box_id = 'others'
         @food_genre = 'その他' 
       elsif destroied_id > 999
-        @foods = current_end_user.firdge_data(:vegetable)
+        @foods = current_end_user.fridge_data(:vegetable)
         @food_box_id = 'vegetables'
         @food_genre = '野菜'
       elsif destroied_id > 99
-        @foods = current_end_user.firdge_data(:meat_fish)
+        @foods = current_end_user.fridge_data(:meat_fish)
         @food_box_id = 'meats_fishes'
         @food_genre = '肉/魚'
       else
