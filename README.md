@@ -1,10 +1,10 @@
 # アプリケーション情報
-- Rails: 6.1.1
+- Rails: 6.0.3.6
 - Ruby: 3.0.0
 - 開発環境: Ubuntu 18.04 / Cloud9
 
 # アプリケーションについて
-- [概要](#info_1)
+- [概要](35.72.176.213)
 
 # 設計書一覧
 - [設計書](https://docs.google.com/spreadsheets/d/1uDmid2_25bXgGmZ1OKY-HubaZ2G_mgB80Y8gZgFwqiE/edit?usp=sharing)
